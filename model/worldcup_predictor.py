@@ -8,12 +8,12 @@ from Kaggle. For details, please refer to
 https://www.kaggle.com/martj42/international-football-results-from-1872-to-2017
 """
 
-import itertools
-import operator
+
 import numpy as np
 import pandas as pd
 from collections import defaultdict
 from datetime import datetime
+from itertools import combinations
 from scipy.stats import skellam
 
 GROUPS = {'A': ['Egypt', 'Russia', 'Saudi Arabia', 'Uruguay'],
@@ -187,7 +187,7 @@ def win_knockout_match(winner, loser, matches, defense):
     return regular + overtime + 1 / 2 * kicks
 
 
-def _win_phase(prev_phase, best16, matches, defense):
+def _win_stage(prev_stage, best16, matches, defense):
     """
     Computes the probability of all countries winning any stage of the knockout
     phase, using the law of total probability: 
@@ -195,16 +195,16 @@ def _win_phase(prev_phase, best16, matches, defense):
                                 *P[Country i proceeds to stage A]
                                 *P[Country j proceeds to stage A] }
     """
-    prev_matches = len(prev_phase.keys())
-    curr_matches = int(prev_matches / 2)
-    proceed = {i: defaultdict(float) for i in range(curr_matches)}
+    prev_matches = len(prev_stage.keys())
+    new_matches = int(prev_matches / 2)
+    proceed = {i: defaultdict(float) for i in range(new_matches)}
     for pivot_group in range(prev_matches):
         rival_group = pivot_group + np.power(-1, pivot_group)
         new_group = int(pivot_group / 2)
-        for pivot in prev_phase[pivot_group].keys():
-            pivot_arrive = prev_phase[pivot_group][pivot]
-            for rival in prev_phase[rival_group].keys():
-                rival_arrive = prev_phase[rival_group][rival]
+        for pivot in prev_stage[pivot_group].keys():
+            pivot_arrive = prev_stage[pivot_group][pivot]
+            for rival in prev_stage[rival_group].keys():
+                rival_arrive = prev_stage[rival_group][rival]
                 pivot_win = win_knockout_match(best16[pivot], best16[rival],
                                                 matches, defense)
                 proceed[new_group][pivot] += pivot_win*pivot_arrive*rival_arrive
@@ -221,7 +221,7 @@ def _simulate_round_robin(matches, defense):
     colnames = ['W', 'D', 'L', 'Pts', 'GD', 'GS']
     for key in GROUPS.keys():
         table = pd.DataFrame(index=GROUPS[key], columns=colnames, data=0)
-        for pair in itertools.combinations(GROUPS[key], 2):
+        for pair in combinations(GROUPS[key], 2):
             scores = _realize_matches(pair, matches, defense)[0]
             if scores[0] > scores[1]:
                 table.loc[pair[0]] += [1,0,0,3,scores[0]-scores[1],scores[0]]
@@ -295,10 +295,10 @@ def predict_worldcup(matches, defense, best16={}, numsim=100):
     for i in range(numsim):
         if not best16.keys():
             best16 = _simulate_round_robin(matches, defense)
-        gets_quarters = _win_phase(gets_round16, best16, matches, defense)
-        gets_semis = _win_phase(gets_quarters, best16, matches, defense)
-        gets_final = _win_phase(gets_semis, best16, matches, defense)
-        gets_cup = _win_phase(gets_final, best16, matches, defense)
+        gets_quarters = _win_stage(gets_round16, best16, matches, defense)
+        gets_semis = _win_stage(gets_quarters, best16, matches, defense)
+        gets_final = _win_stage(gets_semis, best16, matches, defense)
+        gets_cup = _win_stage(gets_final, best16, matches, defense)
         
         quarters = _merge_simulation(gets_quarters, quarters, best16, numsim)
         semis = _merge_simulation(gets_semis, semis, best16, numsim)
