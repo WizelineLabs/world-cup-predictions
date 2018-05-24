@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 from collections import defaultdict
 from datetime import datetime
-from itertools import combinations
+from itertools import chain, combinations
 from scipy.stats import skellam
 
 GROUPS = {'A': ['Egypt', 'Russia', 'Saudi Arabia', 'Uruguay'],
@@ -25,10 +25,27 @@ GROUPS = {'A': ['Egypt', 'Russia', 'Saudi Arabia', 'Uruguay'],
           'G': ['Belgium', 'England', 'Panama', 'Tunisia'],
           'H': ['Colombia', 'Japan', 'Poland', 'Senegal']}
 
-def _fetch_matches(filename, threshold, date_format='%Y-%m-%d'):
+def fetch_matches(filename, threshold, date_format='%Y-%m-%d'):
     """
+    Fetch data about past international football results.
+
     Reads the results of international football matches, keeping only
     non-friendly matches that took place after threshold (inclusive).
+
+    - **parameters**, **types**, **return** and **return types**::
+
+    :param filename: The name of the csv file.
+    :type filename: string
+
+    :param threshold: Earliest date of interest (inclusive).
+    :type threshold: string
+    
+    :param date_format: Format in which threshold and the dataset and threshold
+    are specified.
+    :type date_format: string
+
+    :return: A table with recent non-friendly matches.
+    :rtype: dataframe
     """
     past = pd.read_csv(filename)
     threshold = datetime.strptime(threshold, date_format)
@@ -39,9 +56,21 @@ def _fetch_matches(filename, threshold, date_format='%Y-%m-%d'):
     return past[recent & ~friendly]
 
 
-def _get_defense_capabilities(matches):
+def get_defense_capabilities(matches):
     """
-    Calculates the average number of goals all countries concede to rivals.
+    Measures the defense capabilities of all countries.
+
+    Calculates the average number of goals all countries concede to rivals: the
+    lower this number is, the better the defense of a country.
+
+    - **parameters**, **types**, **return** and **return types**::
+
+    :param matches: A table with recent non-friendly matches.
+    :type matches: dataframe
+
+    :return: A dictionary containing the average number of goals conceded by
+    each country.
+    :rtype: dict(float)
     """
     avg_goals_against = defaultdict(float)
     home_countries = {ctry for ctry in matches['home_team'].unique()}
@@ -239,14 +268,17 @@ def _simulate_round_robin(matches, defense):
     return best16
 
 
-def _merge_simulation(simulation, aggregator, best16, total):
+def _merge_simulation(simulation, aggregator, best16, total, groups=False):
     """
     Approximates the unconditional probability of reaching any given stage of
     the knockout phase by averaging plausible scenarios, one at a time.
     """
     for group in simulation.keys():
         for key in simulation[group].keys():
-            aggregator[best16[key]] += simulation[group][key] / total
+        	if groups:
+        		aggregator[best16[key]][key[-1]] += 1 / total
+        	else:
+        		aggregator[best16[key]] += simulation[group][key] / total
     return aggregator
 
 
@@ -278,19 +310,22 @@ def predict_worldcup(matches, defense, best16={}, numsim=100):
     :type numsim: int
 
     :return: A tuple containing dictionaries with the probabilities of reaching
-    any given stage of the knockout phase (quarters, semis, final) and
-    ultimately winning the worldcup.
+    any given stage of the knockout phase (round of 16, quarters, semis, final)
+    and ultimately winning the worldcup.
     :rtype: tuple
     """
     if best16.keys():
         numsim = 1
     order = ['A1', 'B2', 'C1', 'D2', 'E1', 'F2', 'G1', 'H2']
     order += ['B1', 'A2', 'D1', 'C2', 'F1', 'E2', 'H1', 'G2']
+    countries = list(chain(*GROUPS.values()))
     gets_round16 = {i: {order[i]:1} for i in range(len(order))}
-    quarters = defaultdict(float)
-    semis = defaultdict(float)
-    final = defaultdict(float)
-    champion = defaultdict(float)
+
+    round16 = {country: {'1': 0, '2': 0} for country in countries}
+    quarters = {country: 0 for country in countries}
+    semis = {country: 0 for country in countries}
+    final = {country: 0 for country in countries}
+    champion = {country: 0 for country in countries}
 
     for i in range(numsim):
         if not best16.keys():
@@ -299,10 +334,20 @@ def predict_worldcup(matches, defense, best16={}, numsim=100):
         gets_semis = _win_stage(gets_quarters, best16, matches, defense)
         gets_final = _win_stage(gets_semis, best16, matches, defense)
         gets_cup = _win_stage(gets_final, best16, matches, defense)
-        
+
+        round16 = _merge_simulation(gets_round16, round16, best16, numsim, True)
         quarters = _merge_simulation(gets_quarters, quarters, best16, numsim)
         semis = _merge_simulation(gets_semis, semis, best16, numsim)
         final = _merge_simulation(gets_final, final, best16, numsim)
         champion = _merge_simulation(gets_cup, champion, best16, numsim)
         best16 = {}
-    return quarters, semis, final, champion
+    return round16, quarters, semis, final, champion
+
+if __name__ == '__main__':
+	np.random.seed(11111)
+	# Only non-friendly matches that happened in the last two years
+	history = fetch_matches('./results.csv', '2016-06-14', '%Y-%m-%d')
+	avg_goals_against = get_defense_capabilities(history)
+	#sensible values for numsim: [100, 1000]
+	round16, quarters, semis, final, champion = predict_worldcup(history, avg_goals_against, numsim=10)
+	print(round16)
