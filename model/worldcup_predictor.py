@@ -40,8 +40,7 @@ def fetch_matches(filename, threshold, date_format='%Y-%m-%d'):
     :param threshold: Earliest date of interest (inclusive).
     :type threshold: string
     
-    :param date_format: Format in which threshold and the dataset and threshold
-    are specified.
+    :param date_format: Format in which threshold and the dataset are specified.
     :type date_format: string
 
     :return: A table with recent non-friendly matches.
@@ -342,12 +341,3 @@ def predict_worldcup(matches, defense, best16={}, numsim=100):
         champion = _merge_simulation(gets_cup, champion, best16, numsim)
         best16 = {}
     return round16, quarters, semis, final, champion
-
-if __name__ == '__main__':
-	np.random.seed(11111)
-	# Only non-friendly matches that happened in the last two years
-	history = fetch_matches('./results.csv', '2016-06-14', '%Y-%m-%d')
-	avg_goals_against = get_defense_capabilities(history)
-	#sensible values for numsim: [100, 1000]
-	round16, quarters, semis, final, champion = predict_worldcup(history, avg_goals_against, numsim=10)
-	print(round16)
