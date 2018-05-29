@@ -8,7 +8,6 @@ from Kaggle. For details, please refer to
 https://www.kaggle.com/martj42/international-football-results-from-1872-to-2017
 """
 
-
 import numpy as np
 import pandas as pd
 from collections import defaultdict
@@ -24,6 +23,9 @@ GROUPS = {'A': ['Egypt', 'Russia', 'Saudi Arabia', 'Uruguay'],
           'F': ['Germany', 'Korea Republic', 'Mexico', 'Sweden'],
           'G': ['Belgium', 'England', 'Panama', 'Tunisia'],
           'H': ['Colombia', 'Japan', 'Poland', 'Senegal']}
+
+ORDER = ['A1', 'B2', 'C1', 'D2', 'E1', 'F2', 'G1', 'H2']
+ORDER += ['B1', 'A2', 'D1', 'C2', 'F1', 'E2', 'H1', 'G2']
 
 def fetch_matches(filename, threshold, date_format='%Y-%m-%d'):
     """
@@ -76,14 +78,14 @@ def get_defense_capabilities(matches):
     away_countries = {ctry for ctry in matches['away_team'].unique()}
     countries = home_countries.union(away_countries)
 
-    for country in countries:
+    for ctry in countries:
         # goals against as home team
-        as_home = matches[matches['home_team'] == country]['away_score']
+        as_home = matches[matches['home_team'] == ctry]['away_score']
         # goals against as away team
-        as_away = matches[matches['away_team'] == country]['home_score']
+        as_away = matches[matches['away_team'] == ctry]['home_score']
         goals_against = as_home.sum() + as_away.sum()
         number_matches = len(as_home) + len(as_away)
-        avg_goals_against[country] = goals_against / number_matches
+        avg_goals_against[ctry] = goals_against / number_matches
     return avg_goals_against
 
 
@@ -239,7 +241,7 @@ def _win_stage(prev_stage, best16, matches, defense):
     return proceed
 
 
-def _simulate_round_robin(matches, defense):
+def _simulate_round_robins(matches, defense):
     """
     Runs a simulation of all 48 matches in the groups phase (six matches for
     each of the eight groups) and returns the resulting winners and runners-up.
@@ -281,7 +283,23 @@ def _merge_simulation(simulation, aggregator, best16, total, groups=False):
     return aggregator
 
 
-def predict_worldcup(matches, defense, best16={}, numsim=100):
+def _set_results(simulation, actuals, stage):
+    """
+    Replaces the probabilities the countries have of reaching a given stage in
+    the knockout phase with the actual results of the pertinent match in the
+    previous stage.
+    """
+    for winner, loser in actuals:
+        winner_group = int(ORDER.index(winner) / np.power(2, stage))
+        loser_group = int(ORDER.index(loser) / np.power(2, stage))
+        if winner_group != loser_group:
+            raise SystemExit('{0} vs {1} is not possible'.format(winner, loser))
+        simulation[winner_group][winner] = 1
+        simulation[loser_group][loser] = 0
+    return simulation
+
+
+def predict_worldcup(matches, defense, best16={}, actuals={}, numsim=100):
     """
     Probabilities of winning the worldcup.
 
@@ -304,40 +322,36 @@ def predict_worldcup(matches, defense, best16={}, numsim=100):
     corresponding positions- that passed to the knockout phase.
     :type best16: dict(string)
 
+    :param actuals: A list with the actual results of the matches that have
+    already been played in the knockout phase. The results are represented as
+    pairs of IDs, where the first one indicates the country that won the match.
+    :type actuals: list(tuple)
+
     :param numsim: The number of simulations to run in case the winners and the
     runners-up are unknown.
     :type numsim: int
 
     :return: A tuple containing dictionaries with the probabilities of reaching
-    any given stage of the knockout phase (round of 16, quarters, semis, final)
-    and ultimately winning the worldcup.
+    the knockout phase (either as winner or as runner-up) and of winning each of
+    its stages (round of 16, quarters, semis and final).
     :rtype: tuple
     """
     if best16.keys():
         numsim = 1
-    order = ['A1', 'B2', 'C1', 'D2', 'E1', 'F2', 'G1', 'H2']
-    order += ['B1', 'A2', 'D1', 'C2', 'F1', 'E2', 'H1', 'G2']
     countries = list(chain(*GROUPS.values()))
-    gets_round16 = {i: {order[i]:1} for i in range(len(order))}
-
-    round16 = {country: {'1': 0, '2': 0} for country in countries}
-    quarters = {country: 0 for country in countries}
-    semis = {country: 0 for country in countries}
-    final = {country: 0 for country in countries}
-    champion = {country: 0 for country in countries}
+    funnel = {0: {i: {ORDER[i]: 1} for i in range(len(ORDER))}}
+    rrobin = {ctry: {'1': 0, '2': 0} for ctry in countries}
+    knockout = {step: {ctry: 0 for ctry in countries} for step in range(1, 5)}
 
     for i in range(numsim):
         if not best16.keys():
-            best16 = _simulate_round_robin(matches, defense)
-        gets_quarters = _win_stage(gets_round16, best16, matches, defense)
-        gets_semis = _win_stage(gets_quarters, best16, matches, defense)
-        gets_final = _win_stage(gets_semis, best16, matches, defense)
-        gets_cup = _win_stage(gets_final, best16, matches, defense)
-
-        round16 = _merge_simulation(gets_round16, round16, best16, numsim, True)
-        quarters = _merge_simulation(gets_quarters, quarters, best16, numsim)
-        semis = _merge_simulation(gets_semis, semis, best16, numsim)
-        final = _merge_simulation(gets_final, final, best16, numsim)
-        champion = _merge_simulation(gets_cup, champion, best16, numsim)
+            best16 = _simulate_round_robins(matches, defense)
+        rrobin = _merge_simulation(funnel[0], rrobin, best16, numsim, True)
+        for step in range(1, 5):
+            funnel[step] = _win_stage(funnel[step-1], best16, matches, defense)
+            if step - 1 in actuals.keys() and len(actuals[step-1]) > 0:
+                funnel[step] = _set_results(funnel[step], actuals[step-1], step)
+            knockout[step] = _merge_simulation(funnel[step], knockout[step],
+                                                best16, numsim)
         best16 = {}
-    return round16, quarters, semis, final, champion
+    return rrobin, knockout
