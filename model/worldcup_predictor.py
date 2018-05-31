@@ -391,7 +391,7 @@ def _get_candidate(place, chances, ranking):
 def advance_to_knockout(rrobin, ranking):
 	"""
 	Reports credible winners and runners-up for all eight groups.
-	
+
 	Picks the countries that will most likely advance to the knockout phase, by
 	analyzing the simulated round robins. The winner of a group is the country
 	that most frequently became winner in the simulations. This country is then
@@ -399,17 +399,17 @@ def advance_to_knockout(rrobin, ranking):
 	times is selected as the runner-up.
 
 	- **parameters**, **types**, **return** and **return types**::
-    
-    :param rrobin: A dictionary with the probabilities a country has of
-    advancing to the knockout phase as a winner or runner-up.
-    :type rrobin: dict(dict(float))
-    
-    :param ranking: A table containing the number of times a country has become
-    winner, runner-up, 3rd place and a contender in previous worldcups.
-    :type ranking: dataframe
 
-    :return: A dictionary with the credible winner and runner-up of each group.
-    :rtype: dict(string)
+	:param rrobin: A dictionary with the probabilities a country has of
+	advancing to the knockout phase as a winner or runner-up.
+	:type rrobin: dict(dict(float))
+
+	:param ranking: A table containing the number of times a country has become
+	winner, runner-up, 3rd place and a contender in previous worldcups.
+	:type ranking: dataframe
+
+	:return: A dictionary with the credible winner and runner-up of each group.
+	:rtype: dict(string)
 	"""
 	advance = {}
 	rrobin = pd.DataFrame(rrobin).transpose()
