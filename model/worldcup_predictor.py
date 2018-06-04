@@ -27,6 +27,8 @@ GROUPS = {'A': ['Egypt', 'Russia', 'Saudi Arabia', 'Uruguay'],
 ORDER = ['A1', 'B2', 'C1', 'D2', 'E1', 'F2', 'G1', 'H2']
 ORDER += ['B1', 'A2', 'D1', 'C2', 'F1', 'E2', 'H1', 'G2']
 
+STRENGTH = pd.Series.from_csv('./country_strength.csv').to_dict()
+
 def fetch_matches(filename, threshold, date_format='%Y-%m-%d'):
     """
     Fetch data about past international football results.
@@ -92,7 +94,7 @@ def get_defense_capabilities(matches):
 def _triangulate(source_data, source_status, target, defense):
     """
     Extrapolates how many goals source would score against target based on past
-    performance, adjusting for defense strength.
+    performance, adjusting for team defense and confederation strengths.
     """
     inflated_sum = 0
     source = {word == source_status: word for word in ['home', 'away']}
@@ -100,7 +102,8 @@ def _triangulate(source_data, source_status, target, defense):
         source_score = source_data[source[True]+'_score'].iloc[i]
         pivot = source_data[source[not True]+'_team'].iloc[i]
         weight = defense[target] / defense[pivot]
-        inflated_sum += weight * source_score
+        confederation = STRENGTH[pivot] / STRENGTH[target]
+        inflated_sum += weight *  confederation * source_score
     return inflated_sum
 
 
@@ -355,3 +358,67 @@ def predict_worldcup(matches, defense, best16={}, actuals={}, numsim=100):
                                                 best16, numsim)
         best16 = {}
     return rrobin, knockout
+
+
+def _break_virtual_tie(contenders, ranking):
+	"""
+	Favors the country with more achievements in previous worldcups, considering
+	the number of times it has become winner, runner-up, 3rd place and a
+	contender (ordered by descending importance).
+	"""
+	contrast = ranking.loc[contenders]
+	priorities = ['Winner', 'Runner Up', '3rd Place', 'Appearances']
+	contrast.sort_values(priorities, ascending=False, inplace=True)
+	return contrast.index[0]
+
+
+def _get_candidate(place, chances, ranking):
+	"""
+	Selects the country that is most likely to advance either as winner or as
+	runner up. Virtual ties (within 5%) are resolved by using the results of
+	previous worldcups.
+	"""
+	chances.sort_values([place], ascending=False, inplace=True)
+	maxval = chances[place][0]
+	contenders = list(chances[chances[place] + 0.05 >= maxval].index)
+	if len(contenders) > 1:
+		candidate = _break_virtual_tie(contenders, ranking)
+	else:
+		candidate = contenders[0]
+	return candidate
+
+
+def advance_to_knockout(rrobin, ranking):
+	"""
+	Reports credible winners and runners-up for all eight groups.
+
+	Picks the countries that will most likely advance to the knockout phase, by
+	analyzing the simulated round robins. The winner of a group is the country
+	that most frequently became winner in the simulations. This country is then
+	disregarded, and the country that advanced to the knockout phase the most
+	times is selected as the runner-up.
+
+	- **parameters**, **types**, **return** and **return types**::
+
+	:param rrobin: A dictionary with the probabilities a country has of
+	advancing to the knockout phase as a winner or runner-up.
+	:type rrobin: dict(dict(float))
+
+	:param ranking: A table containing the number of times a country has become
+	winner, runner-up, 3rd place and a contender in previous worldcups.
+	:type ranking: dataframe
+
+	:return: A dictionary with the credible winner and runner-up of each group.
+	:rtype: dict(string)
+	"""
+	advance = {}
+	rrobin = pd.DataFrame(rrobin).transpose()
+	rrobin['Adv'] = rrobin.apply(lambda x: np.sum(x), axis=1)
+	for key in GROUPS.keys():
+		chances = rrobin.loc[GROUPS[key]]
+		winner = _get_candidate('1', chances, ranking)
+		advance[key+'1'] = winner
+		chances.drop(winner, inplace=True)
+		runner_up =_get_candidate('Adv', chances, ranking)
+		advance[key+'2'] = runner_up
+	return advance
