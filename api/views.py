@@ -9,11 +9,6 @@ from api.models import HistoricalGame, Team, Group, WorldCupGame, Prediction, Vo
 from api.serializers import HistoricalGameSerializer, TeamSerializer, GroupSerializer, WorldCupGameSerializer, PredictionSerializer, VoteSerializer, UserSerializer
 
 class HistoricalGameViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-    Additionally we also provide an extra `highlight` action.
-    """
     queryset = HistoricalGame.objects.all()
     serializer_class = HistoricalGameSerializer
     # permission_classes = (
@@ -31,22 +26,27 @@ class HistoricalGameViewSet(viewsets.ModelViewSet):
 class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
+    http_method_names = ['get']
 
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+    http_method_names = ['get']
 
 class WorldCupGameViewSet(viewsets.ModelViewSet):
     queryset = WorldCupGame.objects.all()
     serializer_class = WorldCupGameSerializer
+    http_method_names = ['get']
 
 class PredictionViewSet(viewsets.ModelViewSet):
     queryset = Prediction.objects.all()
     serializer_class = PredictionSerializer
+    http_method_names = ['get']
 
 class VoteViewSet(viewsets.ModelViewSet):
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
+    http_method_names = ['get', 'post', 'put']
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

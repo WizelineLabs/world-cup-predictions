@@ -15,8 +15,8 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Team
         fields = ('id', 'name', 'group', 'rank', 'points',
-          'pass_group_1st_prob', 'pass_group_2nd_prob', 'pass_round16_prob', 
-          'pass_quarters_prob', 'pass_semi_prob', 'pass_final_prob')
+          'pass_group_winner_prob', 'pass_group_runner_prob', 'pass_round16_prob', 
+          'pass_quarters_prob', 'pass_semi_prob', 'pass_final_prob', 'shaded')
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     teams = serializers.StringRelatedField(many=True)

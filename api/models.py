@@ -33,12 +33,13 @@ class Team(models.Model):
   group_label = models.ForeignKey(Group, related_name='teams', on_delete=models.CASCADE, null=True)
   rank = models.IntegerField(null=True)
   points = models.IntegerField(default=0)
-  pass_group_1st_prob = models.FloatField(null=True)
-  pass_group_2nd_prob = models.FloatField(null=True)
+  pass_group_winner_prob = models.FloatField(null=True)
+  pass_group_runner_prob = models.FloatField(null=True)
   pass_round16_prob = models.FloatField(null=True)
   pass_quarters_prob = models.FloatField(null=True)
   pass_semi_prob = models.FloatField(null=True)
   pass_final_prob = models.FloatField(null=True)
+  shaded = models.BooleanField(default=False)
   def __str__(self):
     return '%s' % (self.name)
 

@@ -18,10 +18,6 @@ from rest_framework.schemas import get_schema_view
 from rest_framework.documentation import include_docs_urls
 from django.contrib import admin
 
-API_TITLE = 'Pastebin API'
-API_DESCRIPTION = 'A Web API for creating and viewing highlighted code snippets.'
-schema_view = get_schema_view(title=API_TITLE)
-
 urlpatterns = [
     url(r'^api/', include('api.urls')),
     url(r'^admin/', admin.site.urls),
