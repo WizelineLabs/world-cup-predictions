@@ -74,6 +74,8 @@ class User(AbstractUser):
   winner_choice = models.ForeignKey(Team, on_delete=models.CASCADE, null=True)
   def __str__(self):
     return '%s' % (self.email)
+  # def get_rank(self):
+  #   return self.score + 1
 
 class Vote(models.Model):
   HOME_WIN = 'H'

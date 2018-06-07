@@ -27,9 +27,11 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class WorldCupGameSerializer(serializers.HyperlinkedModelSerializer):
     home = serializers.CharField(source='home_team.name')
     away = serializers.CharField(source='away_team.name')
+    home_flag = serializers.CharField(source='home_team.flag_code')
+    away_flag = serializers.CharField(source='away_team.flag_code')
     class Meta:
         model = WorldCupGame
-        fields = ('id', 'home', 'away', 'home_score', 'away_score', 'round', 'date')
+        fields = ('id', 'home', 'home_flag', 'away', 'away_flag', 'home_score', 'away_score', 'round', 'date')
 
 class PredictionSerializer(serializers.HyperlinkedModelSerializer):
     game_id = serializers.IntegerField(source='game.id')
@@ -45,9 +47,10 @@ class VoteSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('user_id', 'game_id', 'choice', 'correct')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    # rank = User.get_rank()
     class Meta:
         model = User
-        fields = ('id', 'email', 'score', 'winner_choice')
+        fields = ('id', 'email', 'score', 'winner_choice','rank')
 
 class LeaderboardSerializer(serializers.HyperlinkedModelSerializer):
     class Meta :
