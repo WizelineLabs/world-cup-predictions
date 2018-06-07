@@ -3,7 +3,7 @@ from rest_framework import generics, permissions, renderers, viewsets
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from django.conf import settings
-
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes, detail_route
@@ -50,7 +50,8 @@ class WorldCupGameViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 class PredictionViewSet(viewsets.ModelViewSet):
-    queryset = Prediction.objects.all()
+    now = timezone.now()
+    queryset = Prediction.objects.filter(game__date__lte=now)
     serializer_class = PredictionSerializer
     http_method_names = ['get']
 
