@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.db.models import Q, Count, Window, F
+from django.db.models.functions import DenseRank
 
 # Create your models here.
 
@@ -66,9 +69,7 @@ class Prediction(models.Model):
   away_win = models.FloatField(default=0)
   draw = models.FloatField(default=0)
 
-class User(models.Model):
-  email = models.CharField(max_length=200, db_index=True)
-  name = models.CharField(max_length=200, null=True)
+class User(AbstractUser):
   score = models.IntegerField(default=0)
   winner_choice = models.ForeignKey(Team, on_delete=models.CASCADE, null=True)
   def __str__(self):

@@ -47,4 +47,18 @@ class VoteSerializer(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'score' 'winner_choice')
+        fields = ('id', 'email', 'score', 'winner_choice')
+
+class LeaderboardSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta :
+        model = User
+        fields = ('first_name', 'last_name', 'score')
+
+class SocialSerializer(serializers.Serializer):
+    """
+    Serializer which accepts an OAuth2 access token.
+    """
+    access_token = serializers.CharField(
+        allow_blank=False,
+        trim_whitespace=True,
+    )

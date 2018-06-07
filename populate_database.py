@@ -531,28 +531,28 @@ def populate_flag_codes():
         team.flag_code = item['code']
         team.save()
 def populate_teams(world_cup_predictions):
-    # pass_group = world_cup_predictions[0]
-    # pass_round16 = world_cup_predictions[1][1]
-    # pass_quarters = world_cup_predictions[1][2]
-    # pass_semis = world_cup_predictions[1][3]
-    # champion = world_cup_predictions[1][4]
+    pass_group = world_cup_predictions[0]
+    pass_round16 = world_cup_predictions[1][1]
+    pass_quarters = world_cup_predictions[1][2]
+    pass_semis = world_cup_predictions[1][3]
+    champion = world_cup_predictions[1][4]
 
-    # credible_round_16 = advance_to_knockout(
-    #     pass_group, pd.read_csv('./records.csv', index_col=0))
-    # for team, probs in pass_group.items():
-    #     Team.objects.create(
-    #         name=team,
-    #         group_label_id=groups[team],
-    #         pass_group_winner_prob=probs['1'],
-    #         pass_group_runner_prob=probs['2'],
-    #         pass_round16_prob=pass_round16[team],
-    #         pass_quarters_prob=pass_quarters[team],
-    #         pass_semi_prob=pass_semis[team],
-    #         pass_final_prob=champion[team])
-    # for key, value in credible_round_16.items():
-    #     team = Team.objects.get(name=value)
-    #     team.shaded = True
-    #     team.save()
+    credible_round_16 = advance_to_knockout(
+        pass_group, pd.read_csv('./records.csv', index_col=0))
+    for team, probs in pass_group.items():
+        Team.objects.create(
+            name=team,
+            group_label_id=groups[team],
+            pass_group_winner_prob=probs['1'],
+            pass_group_runner_prob=probs['2'],
+            pass_round16_prob=pass_round16[team],
+            pass_quarters_prob=pass_quarters[team],
+            pass_semi_prob=pass_semis[team],
+            pass_final_prob=champion[team])
+    for key, value in credible_round_16.items():
+        team = Team.objects.get(name=value)
+        team.shaded = True
+        team.save()
     populate_flag_codes()
 
 
@@ -565,15 +565,15 @@ def populate_worldCup_matches(matches):
             date=dt.strptime(match['date'], date_format))
 
 
-# np.random.seed(10101)
-# historical_matches = fetch_matches('results.csv', threshold)
-# defense = get_defense_capabilities(historical_matches)
-# world_cup_predictions = predict_worldcup(historical_matches, defense)
+np.random.seed(10101)
+historical_matches = fetch_matches('results.csv', threshold)
+defense = get_defense_capabilities(historical_matches)
+world_cup_predictions = predict_worldcup(historical_matches, defense)
 
-# populate_groups()
-# populate_historical_matches(historical_matches)
-# populate_teams(world_cup_predictions)
-# populate_worldCup_matches(group_matches)
+populate_groups()
+populate_historical_matches(historical_matches)
+populate_teams(world_cup_predictions)
+populate_worldCup_matches(group_matches)
 
 populate_flag_codes()
 #   "knockout": {
