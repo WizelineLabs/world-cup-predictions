@@ -50,12 +50,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     # rank = User.get_rank()
     class Meta:
         model = User
-        fields = ('id', 'email', 'score', 'winner_choice','rank')
+        fields = ('id', 'first_name', 'last_name', 'email',  'score', 'avatar', 'winner_choice')
 
 class LeaderboardSerializer(serializers.HyperlinkedModelSerializer):
     class Meta :
         model = User
-        fields = ('first_name', 'last_name', 'score')
+        fields = ('first_name', 'last_name', 'score', 'avatar')
 
 class SocialSerializer(serializers.Serializer):
     """

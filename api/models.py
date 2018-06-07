@@ -70,6 +70,7 @@ class Prediction(models.Model):
   draw = models.FloatField(default=0)
 
 class User(AbstractUser):
+  avatar = models.CharField(null=True, max_length=200)
   score = models.IntegerField(default=0)
   winner_choice = models.ForeignKey(Team, on_delete=models.CASCADE, null=True)
   def __str__(self):
