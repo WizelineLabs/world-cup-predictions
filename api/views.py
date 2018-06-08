@@ -54,25 +54,9 @@ class PredictionViewSet(viewsets.ModelViewSet):
 class VoteViewSet(viewsets.ModelViewSet):
     serializer_class = VoteSerializer
     permission_classes = (permissions.IsAuthenticated, )
-    http_method_names = ['get', 'post', 'put']
+    http_method_names = ['get']
     def get_queryset(self):
         return self.request.user.votes.all()
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-    # def create(self, validated_data):
-    #     print(validated_data)
-    #     vote = Vote.objects.create(
-    #         user=self.request.user,
-    #         game=WorldCupGame.objects.get(pk=validated_data.game_id),
-    #         choice=validated_data.choice,
-    #     )
-    #     return vote
 
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
@@ -100,12 +84,40 @@ def choose_winner(request):
         winner_id = request.data['wildcard']
         user.winner_choice = Team.objects.get(pk=winner_id)
         user.save()
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_201_CREATED)
+
+@api_view(http_method_names=['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def guess_game_result(request):
+    now = timezone.now()
+    game_id = request.data['game_id']
+    game = WorldCupGame.objects.get(pk=game_id)
+    if game.date > now:
+        try:
+            nfe = settings.NON_FIELD_ERRORS_KEY
+        except AttributeError:
+            nfe = 'non_field_errors'
+        return Response(
+                {'errors': {nfe: "Can not update your guess now. Game has already started"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+    else:
+        user = request.user
+        choice = request.data['choice']
+        try:
+            vote = Vote.objects.filter(user=user, game=game)[0]
+            vote.choice = choice
+            vote.save()
+        except:
+            Vote.objects.create(user=user, game=game, choice=choice)
+
+        return Response(status=status.HTTP_201_CREATED)
 
 class LeaderboardViewSet(viewsets.ModelViewSet):
     queryset = User.objects.filter(is_superuser=False).order_by('-score', 'first_name', 'last_name')
     serializer_class = LeaderboardSerializer
     permission_classes = (permissions.IsAuthenticated, )
+    http_method_names = ['get']
 
 @api_view(http_method_names=['POST'])
 @permission_classes([AllowAny])

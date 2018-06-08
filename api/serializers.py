@@ -45,12 +45,7 @@ class VoteSerializer(serializers.ModelSerializer):
     game_id = serializers.IntegerField(source='game.id')
     class Meta:
         model = Vote
-        fields = ('game_id', 'choice', 'correct')
-    def create(self, validated_data):
-        game = validated_data.pop('game_id')
-        instance = Vote.objects.create(**validated_data)
-        instance.game = game
-        return instance
+        fields = ('id', 'game_id', 'choice', 'correct')
 
 class UserSerializer(serializers.ModelSerializer):
     total_votes = serializers.SerializerMethodField()
