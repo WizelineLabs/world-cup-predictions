@@ -29,6 +29,11 @@ class TeamViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
     http_method_names = ['get']
 
+class TopContendersViewSet(viewsets.ModelViewSet):
+    queryset = Team.objects.order_by('-pass_final_prob')[:5]
+    serializer_class = TeamSerializer
+    http_method_names = ['get']
+
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer

@@ -13,6 +13,7 @@ router.register(r'user', views.UserViewSet, 'user')
 router.register(r'prediction', views.PredictionViewSet)
 router.register(r'vote', views.VoteViewSet, 'votes')
 router.register(r'leaderboard', views.LeaderboardViewSet)
+router.register(r'topcontenders', views.TopContendersViewSet)
 # The API URLs are now determined automatically by the router.
 # Additionally, we include the login URLs for the browsable API.
 urlpatterns = [
