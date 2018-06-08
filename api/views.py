@@ -47,10 +47,11 @@ class PredictionViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 class VoteViewSet(viewsets.ModelViewSet):
-    queryset = Vote.objects.all()
     serializer_class = VoteSerializer
     permission_classes = (permissions.IsAuthenticated, )
     http_method_names = ['get', 'post', 'put']
+    def get_queryset(self):
+        return self.request.user.votes.all()
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -135,7 +136,7 @@ def exchange_token(request, backend):
 
 class Logout(APIView):
     queryset = User.objects.all()
-
+    permission_classes = (permissions.IsAuthenticated, )
     def get(self, request, format=None):
         # simply delete the token to force a login
         request.user.auth_token.delete()
