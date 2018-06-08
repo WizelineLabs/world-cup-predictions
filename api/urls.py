@@ -19,5 +19,6 @@ router.register(r'topcontenders', views.TopContendersViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^social/(?P<backend>[^/]+)/$', views.exchange_token, name='google_login'),
+    url(r'^wildcard/', views.choose_winner, name='choose_wildcard'),
     url(r'^logout/', views.Logout.as_view()),
 ]

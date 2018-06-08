@@ -77,8 +77,30 @@ class VoteViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated, )
+    http_method_names = ['get']
     def get_queryset(self):
         return User.objects.filter(pk=self.request.user.id)
+
+@api_view(http_method_names=['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def choose_winner(request):
+    now = timezone.now()
+    world_cup_start = WorldCupGame.objects.get(pk=1).date
+    if(now > world_cup_start):
+        try:
+            nfe = settings.NON_FIELD_ERRORS_KEY
+        except AttributeError:
+            nfe = 'non_field_errors'
+        return Response(
+                {'errors': {nfe: "Can not choose winner now. World Cup started"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+    else:
+        user = request.user
+        winner_id = request.data['wildcard']
+        user.winner_choice = Team.objects.get(pk=winner_id)
+        user.save()
+        return Response(status=status.HTTP_200_OK)
 
 class LeaderboardViewSet(viewsets.ModelViewSet):
     queryset = User.objects.filter(is_superuser=False).order_by('-score', 'first_name', 'last_name')
