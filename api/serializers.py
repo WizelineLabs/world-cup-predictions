@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from api.models import User, HistoricalGame, WorldCupGame, Prediction, Vote, Group, Team
+from datetime import timedelta
+from django.utils import timezone
 
 class HistoricalGameSerializer(serializers.ModelSerializer):
     # owner = serializers.ReadOnlyField(source='owner.username')
@@ -54,22 +56,30 @@ class UserSerializer(serializers.ModelSerializer):
     total_votes = serializers.SerializerMethodField()
     correct_votes = serializers.SerializerMethodField()
     rank = serializers.SerializerMethodField()
+    finished_matches = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'email', 'score', 'avatar', 'winner_choice', 'total_votes', 'correct_votes', 'rank')
+        fields = ('id', 'first_name', 'last_name', 'email', 'score', 'avatar', 'winner_choice', 'total_votes', 'correct_votes', 'rank' , 'finished_matches')
+
     def get_total_votes(self, obj):
         return obj.votes.all().count()
     def get_correct_votes(self, obj):
         return obj.votes.filter(correct=True).count()
     def get_rank(self, obj):
         return (User.objects.filter(score__gt=obj.score).count() + 1)
+    def get_finished_matches(self, obj):
+        return WorldCupGame.objects.filter(date__lte=timezone.now()-timedelta(hours=2, minutes=30)).count()
 
 class LeaderboardSerializer(serializers.ModelSerializer):
+    total_votes = serializers.SerializerMethodField()
     correct_votes = serializers.SerializerMethodField()
     rank = serializers.SerializerMethodField()
     class Meta :
         model = User
-        fields = ('first_name', 'last_name', 'score', 'avatar', 'correct_votes', 'rank')
+        fields = ('first_name', 'last_name', 'score', 'avatar','total_votes', 'correct_votes', 'rank')
+    
+    def get_total_votes(self, obj):
+        return obj.votes.all().count()
     def get_correct_votes(self, obj):
         return obj.votes.filter(correct=True).count()
     def get_rank(self, obj):
