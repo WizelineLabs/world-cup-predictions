@@ -52,11 +52,28 @@ class VoteViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'put']
     def get_queryset(self):
         return self.request.user.votes.all()
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+    # def create(self, validated_data):
+    #     print(validated_data)
+    #     vote = Vote.objects.create(
+    #         user=self.request.user,
+    #         game=WorldCupGame.objects.get(pk=validated_data.game_id),
+    #         choice=validated_data.choice,
+    #     )
+    #     return vote
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated, )
+    def get_queryset(self):
+        return User.objects.filter(pk=self.request.user.id)
 
 class LeaderboardViewSet(viewsets.ModelViewSet):
     queryset = User.objects.filter(is_superuser=False).order_by('-score', 'first_name', 'last_name')
