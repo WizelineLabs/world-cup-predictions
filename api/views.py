@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from rest_framework import generics, permissions, renderers, viewsets
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -6,29 +5,21 @@ from django.conf import settings
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, permission_classes, detail_route
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from requests.exceptions import HTTPError
 
 from social_django.utils import psa
 
 from api.models import HistoricalGame, Team, Group, WorldCupGame, Prediction, Vote, User
-#from snippets.permissions import IsOwnerOrReadOnly
 from api.serializers import HistoricalGameSerializer, TeamSerializer, GroupSerializer, WorldCupGameSerializer, PredictionSerializer, VoteSerializer, UserSerializer, SocialSerializer, LeaderboardSerializer
 
 class HistoricalGameViewSet(viewsets.ModelViewSet):
     queryset = HistoricalGame.objects.all()
     serializer_class = HistoricalGameSerializer
-    # permission_classes = (
-    #     permissions.IsAuthenticatedOrReadOnly,
-    #     IsOwnerOrReadOnly, )
-
-    # @detail_route(renderer_classes=[renderers.StaticHTMLRenderer])
-    # def highlight(self, request, *args, **kwargs):
-    #     snippet = self.get_object()
-    #     return Response(snippet.highlighted)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -41,7 +32,6 @@ class TeamViewSet(viewsets.ModelViewSet):
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = (permissions.IsAuthenticated, )
     http_method_names = ['get']
 
 class WorldCupGameViewSet(viewsets.ModelViewSet):
@@ -53,20 +43,24 @@ class PredictionViewSet(viewsets.ModelViewSet):
     now = timezone.now()
     queryset = Prediction.objects.filter(game__date__lte=now)
     serializer_class = PredictionSerializer
+    permission_classes = (permissions.IsAuthenticated, )
     http_method_names = ['get']
 
 class VoteViewSet(viewsets.ModelViewSet):
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
+    permission_classes = (permissions.IsAuthenticated, )
     http_method_names = ['get', 'post', 'put']
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticated, )
 
 class LeaderboardViewSet(viewsets.ModelViewSet):
     queryset = User.objects.filter(is_superuser=False).order_by('-score', 'first_name', 'last_name')
     serializer_class = LeaderboardSerializer
+    permission_classes = (permissions.IsAuthenticated, )
 
 @api_view(http_method_names=['POST'])
 @permission_classes([AllowAny])
@@ -138,3 +132,11 @@ def exchange_token(request, backend):
                 {'errors': {nfe: "Authentication Failed"}},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+class Logout(APIView):
+    queryset = User.objects.all()
+
+    def get(self, request, format=None):
+        # simply delete the token to force a login
+        request.user.auth_token.delete()
+        return Response({'data': 'logged out'}, status=status.HTTP_200_OK)

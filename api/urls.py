@@ -18,5 +18,6 @@ router.register(r'leaderboard', views.LeaderboardViewSet)
 # Additionally, we include the login URLs for the browsable API.
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^social/(?P<backend>[^/]+)/$', views.exchange_token, name='google_login')
+    url(r'^social/(?P<backend>[^/]+)/$', views.exchange_token, name='google_login'),
+    url(r'^logout/', views.Logout.as_view()),
 ]
