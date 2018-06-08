@@ -1,0 +1,6 @@
+Django>=2.0.5
+djangorestframework
+mysqlclient
+numpy
+pandas
+scipy

@@ -15,14 +15,14 @@ from datetime import datetime
 from itertools import chain, combinations
 from scipy.stats import skellam
 
-GROUPS = {'A': ['Egypt', 'Russia', 'Saudi Arabia', 'Uruguay'],
-          'B': ['Iran', 'Morocco','Portugal', 'Spain'],
-          'C': ['Australia', 'Denmark', 'France', 'Peru'],
-          'D': ['Argentina', 'Croatia', 'Iceland', 'Nigeria'],
-          'E': ['Brazil', 'Costa Rica', 'Serbia', 'Switzerland'],
-          'F': ['Germany', 'Korea Republic', 'Mexico', 'Sweden'],
-          'G': ['Belgium', 'England', 'Panama', 'Tunisia'],
-          'H': ['Colombia', 'Japan', 'Poland', 'Senegal']}
+GROUPS = {'A': ['Russia', 'Saudi Arabia', 'Egypt', 'Uruguay'],
+          'B': ['Portugal', 'Spain','Morocco', 'Iran'],
+          'C': ['France', 'Australia', 'Peru', 'Denmark'],
+          'D': ['Argentina', 'Iceland', 'Croatia', 'Nigeria'],
+          'E': ['Brazil', 'Switzerland', 'Costa Rica', 'Serbia'],
+          'F': ['Germany', 'Mexico', 'Sweden', 'Korea Republic'],
+          'G': ['Belgium', 'Panama', 'Tunisia', 'England'],
+          'H': ['Poland', 'Senegal', 'Colombia', 'Japan']}
 
 ORDER = ['A1', 'B2', 'C1', 'D2', 'E1', 'F2', 'G1', 'H2']
 ORDER += ['B1', 'A2', 'D1', 'C2', 'F1', 'E2', 'H1', 'G2']
