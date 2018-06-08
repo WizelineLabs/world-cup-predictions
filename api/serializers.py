@@ -4,10 +4,6 @@ from datetime import timedelta
 from django.utils import timezone
 
 class HistoricalGameSerializer(serializers.ModelSerializer):
-    # owner = serializers.ReadOnlyField(source='owner.username')
-    # highlight = serializers.HyperlinkedIdentityField(
-    #     view_name='snippet-highlight', format='html')
-
     class Meta:
         model = HistoricalGame
         fields = ('id', 'home_team', 'away_team', 'home_score', 'away_score')

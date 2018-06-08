@@ -21,7 +21,4 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^api/', include('api.urls')),
     url(r'^admin/', admin.site.urls),
-    #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    #url(r'^schema/$', schema_view),
-    #url(r'^docs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION))
 ]

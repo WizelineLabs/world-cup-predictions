@@ -47,10 +47,6 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'rest_framework.permissions.IsAuthenticated',
-#     ),
-
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
@@ -80,7 +76,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-    'social_core.pipeline.social_auth.associate_by_email',  # <- this line not included by default
+    'social_core.pipeline.social_auth.associate_by_email',
     'social_core.pipeline.user.create_user',
     'api.pipeline.save_avatar',
     'social_core.pipeline.social_auth.associate_user',
