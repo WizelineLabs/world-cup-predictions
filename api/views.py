@@ -21,9 +21,6 @@ class HistoricalGameViewSet(viewsets.ModelViewSet):
     queryset = HistoricalGame.objects.all()
     serializer_class = HistoricalGameSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
 class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.order_by('-pass_final_prob')
     serializer_class = TeamSerializer
@@ -69,7 +66,7 @@ class UserViewSet(viewsets.ModelViewSet):
 @permission_classes([permissions.IsAuthenticated])
 def choose_winner(request):
     now = timezone.now()
-    world_cup_start = WorldCupGame.objects.get(pk=1).date
+    world_cup_start = WorldCupGame.objects.get(pk=2).date
     if(now > world_cup_start):
         try:
             nfe = settings.NON_FIELD_ERRORS_KEY
