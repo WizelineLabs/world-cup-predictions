@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from api.models import User, HistoricalGame, WorldCupGame, Prediction, Vote, Group, Team
 
-class HistoricalGameSerializer(serializers.HyperlinkedModelSerializer):
+class HistoricalGameSerializer(serializers.ModelSerializer):
     # owner = serializers.ReadOnlyField(source='owner.username')
     # highlight = serializers.HyperlinkedIdentityField(
     #     view_name='snippet-highlight', format='html')
@@ -10,7 +10,7 @@ class HistoricalGameSerializer(serializers.HyperlinkedModelSerializer):
         model = HistoricalGame
         fields = ('id', 'home_team', 'away_team', 'home_score', 'away_score')
 
-class TeamSerializer(serializers.HyperlinkedModelSerializer):
+class TeamSerializer(serializers.ModelSerializer):
     group = serializers.CharField(source='group_label.group_label')
     class Meta:
         model = Team
@@ -18,13 +18,13 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
           'pass_group_winner_prob', 'pass_group_runner_prob', 'pass_round16_prob', 
           'pass_quarters_prob', 'pass_semi_prob', 'pass_final_prob', 'shaded', 'flag_code')
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     teams = serializers.StringRelatedField(many=True)
     class Meta:
         model = Group
         fields = ('id', 'group_label', 'teams')
 
-class WorldCupGameSerializer(serializers.HyperlinkedModelSerializer):
+class WorldCupGameSerializer(serializers.ModelSerializer):
     home = serializers.CharField(source='home_team.name')
     away = serializers.CharField(source='away_team.name')
     home_flag = serializers.CharField(source='home_team.flag_code')
@@ -33,29 +33,47 @@ class WorldCupGameSerializer(serializers.HyperlinkedModelSerializer):
         model = WorldCupGame
         fields = ('id', 'home', 'home_flag', 'away', 'away_flag', 'home_score', 'away_score', 'round', 'date')
 
-class PredictionSerializer(serializers.HyperlinkedModelSerializer):
+class PredictionSerializer(serializers.ModelSerializer):
     game_id = serializers.IntegerField(source='game.id')
     class Meta:
         model = Prediction
         fields = ('game_id', 'home_win', 'away_win', 'draw')
 
-class VoteSerializer(serializers.HyperlinkedModelSerializer):
-    user_id = serializers.IntegerField(source='user.id')
+class VoteSerializer(serializers.ModelSerializer):
     game_id = serializers.IntegerField(source='game.id')
     class Meta:
         model = Vote
-        fields = ('user_id', 'game_id', 'choice', 'correct')
+        fields = ('game_id', 'choice', 'correct')
+    def create(self, validated_data):
+        game = validated_data.pop('game_id')
+        instance = Vote.objects.create(**validated_data)
+        instance.game = game
+        return instance
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    # rank = User.get_rank()
+class UserSerializer(serializers.ModelSerializer):
+    total_votes = serializers.SerializerMethodField()
+    correct_votes = serializers.SerializerMethodField()
+    rank = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'email',  'score', 'avatar', 'winner_choice')
+        fields = ('id', 'first_name', 'last_name', 'email', 'score', 'avatar', 'winner_choice', 'total_votes', 'correct_votes', 'rank')
+    def get_total_votes(self, obj):
+        return obj.votes.all().count()
+    def get_correct_votes(self, obj):
+        return obj.votes.filter(correct=True).count()
+    def get_rank(self, obj):
+        return (User.objects.filter(score__gt=obj.score).count() + 1)
 
-class LeaderboardSerializer(serializers.HyperlinkedModelSerializer):
+class LeaderboardSerializer(serializers.ModelSerializer):
+    correct_votes = serializers.SerializerMethodField()
+    rank = serializers.SerializerMethodField()
     class Meta :
         model = User
-        fields = ('first_name', 'last_name', 'score', 'avatar')
+        fields = ('first_name', 'last_name', 'score', 'avatar', 'correct_votes', 'rank')
+    def get_correct_votes(self, obj):
+        return obj.votes.filter(correct=True).count()
+    def get_rank(self, obj):
+        return (User.objects.filter(score__gt=obj.score).count() + 1)
 
 class SocialSerializer(serializers.Serializer):
     """
