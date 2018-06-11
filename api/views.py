@@ -73,14 +73,15 @@ def choose_winner(request):
         except AttributeError:
             nfe = 'non_field_errors'
         return Response(
-                {'errors': {nfe: "Can not choose winner now. World Cup started"}},
+                {'errors': {nfe: "Can not use your wildcard now. Second Game of World Cup has started"}},
                 status=status.HTTP_400_BAD_REQUEST,
             )
     else:
         user = request.user
-        winner_id = request.data['wildcard']
-        user.winner_choice = Team.objects.get(pk=winner_id)
-        user.save()
+        if request.data['wildcard']:
+            winner_id = request.data['wildcard']
+            user.winner_choice = Team.objects.get(pk=winner_id)
+            user.save()
         return Response(status=status.HTTP_201_CREATED)
 
 @api_view(http_method_names=['POST'])
@@ -89,7 +90,7 @@ def guess_game_result(request):
     now = timezone.now()
     game_id = request.data['game_id']
     game = WorldCupGame.objects.get(pk=game_id)
-    if game.date > now:
+    if now > game.date:
         try:
             nfe = settings.NON_FIELD_ERRORS_KEY
         except AttributeError:
