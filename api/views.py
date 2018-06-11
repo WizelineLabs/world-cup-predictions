@@ -90,7 +90,7 @@ def guess_game_result(request):
     now = timezone.now()
     game_id = request.data['game_id']
     game = WorldCupGame.objects.get(pk=game_id)
-    if game.date > now:
+    if now > game.date:
         try:
             nfe = settings.NON_FIELD_ERRORS_KEY
         except AttributeError:
