@@ -572,6 +572,7 @@ def populate_worldCup_matches(matches):
 
 np.random.seed(10101)
 
+create_superuser()
 games = WorldCupGame.objects.all()
 teams = Team.objects.all()
 groups = Group.objects.all()

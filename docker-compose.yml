@@ -12,11 +12,6 @@ services:
       - "5001:3306"
     restart: always
   app:
-    healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:3306"]
-        interval: 60s
-        timeout: 10s
-        retries: 10
     command: >
       bash -c
         "
