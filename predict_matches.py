@@ -18,7 +18,10 @@ defense = get_defense_capabilities(historical_matches)
 
 def populate_group_predictions(group_matches):
   for match in group_matches:
-    prediction_outcome = predict_group_match(str(match.home_team), str(match.away_team), historical_matches, defense)
+    try:
+      prediction_outcome = predict_group_match(str(match.home_team), str(match.away_team), historical_matches, defense)
+    except:
+      pass
     try:
       prediction = Prediction.objects.get(pk=match.id)
       prediction.home_win = prediction_outcome['win']
@@ -35,7 +38,10 @@ def populate_group_predictions(group_matches):
 
 def populate_knockout_predictions(knockout_matches):
   for match in knockout_matches:
-    home_win = win_knockout_match(str(match.home_team), str(match.away_team), historical_matches, defense)
+    try:
+      home_win = win_knockout_match(str(match.home_team), str(match.away_team), historical_matches, defense)
+    except:
+      pass
     try:
       prediction = Prediction.objects.get(pk=match.id)
       prediction.home_win = home_win
