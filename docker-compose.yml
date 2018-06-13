@@ -12,9 +12,16 @@ services:
       - "5001:3306"
     restart: always
   app:
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:3306"]
+        interval: 60s
+        timeout: 10s
+        retries: 10
     command: >
       bash -c
-        "python manage.py migrate
+        "
+        ./wait-for-mysql.sh db 3306 russia world_cup
+        python manage.py migrate
         python populate_database.py
         python update_paul_user.py
         python manage.py runserver 0.0.0.0:8000"
@@ -24,14 +31,25 @@ services:
       - PYTHONDONTWRITEBYTECODE=1
     volumes:
       - .:/app
-    restart: always
+    restart: on-failure
     ports:
       - "8002:8000"
     networks:
       - backend
     depends_on:
       - db
-
+  frontend:
+    build: ./world-cup-predictions-front
+    command: "http-server ./dist"
+    restart: always
+    depends_on:
+      - app
+    networks:
+      - backend
+    ports:
+      - "8080:8080"
+    env_file:
+      ./world-cup-predictions-front/.env
 networks:
   backend:
     driver: bridge

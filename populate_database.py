@@ -540,16 +540,18 @@ def populate_teams(world_cup_predictions):
 
     credible_round_16 = advance_to_knockout(
         pass_group, pd.read_csv('./records.csv', index_col=0))
+    index = 0
     for team, probs in pass_group.items():
         Team.objects.create(
             name=team,
-            group_label_id=groups[team],
+            group_label=Group.objects.get(pk=int(index/4)+1),
             pass_group_winner_prob=probs['1'],
             pass_group_runner_prob=probs['2'],
             pass_round16_prob=pass_round16[team],
             pass_quarters_prob=pass_quarters[team],
             pass_semi_prob=pass_semis[team],
             pass_final_prob=champion[team])
+        index = index + 1
     for key, value in credible_round_16.items():
         team = Team.objects.get(name=value)
         team.shaded = True
