@@ -1,0 +1,21 @@
+node_modules
+*/*/node_modules
+npm-debug.log
+config/local.js
+shared/test
+Dockerfile
+docs
+test
+README.md
+yarn.lock
+
+# Ignore publication/
+publication/*
+# except for publication/shared/* and publication/dependencies.txt
+!publication/shared
+!publication/dependencies.txt
+
+# Vim swap files
+*.swp
+
+.env
