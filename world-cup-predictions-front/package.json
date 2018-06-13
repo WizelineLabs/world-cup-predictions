@@ -5,18 +5,18 @@
   "author": "Eduardo Lopez <eduardo.lopez@wizeline.com>",
   "private": true,
   "scripts": {
-    "dev":
-      "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
-    "unit":
-      "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "start": "node server.js",
+    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit",
     "build": "node build/build.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "connect-history-api-fallback": "^1.5.0",
     "dotenv": "^5.0.1",
+    "express": "^4.16.3",
     "flag-icon-css": "^3.0.0",
     "moment": "^2.22.1",
     "vue": "^2.5.2",
@@ -94,5 +94,9 @@
     "node": ">= 6.0.0",
     "npm": ">= 3.0.0"
   },
-  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
 }

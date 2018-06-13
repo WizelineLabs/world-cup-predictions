@@ -8,7 +8,6 @@ ENV GOOGLE_AUTH_KEY=117022430272-o9c3skq0riig5hf0ip8tbk9v8umuqepq.apps.googleuse
 
 COPY . /usr/src/app/
 RUN npm install && npm run build
-RUN npm install http-server -g
 
-#ENTRYPOINT ["http-server", "./dist"]
+ENTRYPOINT ["npm", "start"]
 
