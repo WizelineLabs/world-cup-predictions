@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: world_cup
+      MYSQL_ROOT_PASSWORD: 'russia'
+    networks:
+      - backend
+    ports:
+      - "5001:3306"
+    restart: always
+  app:
+    command: >
+      bash -c
+        "python manage.py migrate
+        python populate_database.py
+        python update_paul_user.py
+        python manage.py runserver 0.0.0.0:8000"
+    build: .
+    environment:
+      - DJANGO_SETTINGS_MODULE=world_cup_predictions.settings
+      - PYTHONDONTWRITEBYTECODE=1
+    volumes:
+      - .:/app
+    restart: always
+    ports:
+      - "8002:8000"
+    networks:
+      - backend
+    depends_on:
+      - db
+
+networks:
+  backend:
+    driver: bridge

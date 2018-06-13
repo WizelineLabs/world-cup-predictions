@@ -8,9 +8,12 @@ django.setup()
 
 from api.models import Team, HistoricalGame, WorldCupGame, User, Vote, Prediction, Group
 from model.worldcup_predictor import predict_group_match, predict_worldcup, fetch_matches, get_defense_capabilities, advance_to_knockout
+from predict_matches import populate_group_predictions, populate_knockout_predictions
 from datetime import datetime as dt
+import pytz
 import numpy as np
 import pandas as pd
+from django.contrib.auth import get_user_model
 
 threshold = '2016-06-14'
 date_format = '%Y-%m-%dT%H:%M:%S'
@@ -48,14 +51,6 @@ groups = {
     'Colombia': 8,
     'Japan': 8
 }
-# GROUPS = {'A': ['Russia', 'Saudi Arabia', 'Egypt', 'Uruguay'],
-#           'B': ['Portugal', 'Spain','Morocco', 'Iran'],
-#           'C': ['France', 'Australia', 'Peru', 'Denmark'],
-#           'D': ['Argentina', 'Iceland', 'Croatia', 'Nigeria'],
-#           'E': ['Brazil', 'Switzerland', 'Costa Rica', 'Serbia'],
-#           'F': ['Germany', 'Mexico', 'Sweden', 'Korea Republic'],
-#           'G': ['Belgium', 'Panama', 'Tunisia', 'England'],
-#           'H': ['Poland', 'Senegal', 'Colombia', 'Japan']}
 group_matches = [
     {
         'round': 'A',
@@ -509,6 +504,12 @@ flags = [
     },
 ]
 
+def create_superuser():
+    User = get_user_model()
+    try:
+        super_user = User.objects.filter(email='admin@wizeline.com')[0]
+    except:
+        User.objects.create_superuser('admin', 'admin@wizeline.com', 'mosalah22abotrika')
 
 def populate_groups():
     for i in range(8):
@@ -558,305 +559,33 @@ def populate_teams(world_cup_predictions):
 
 def populate_worldCup_matches(matches):
     for match in matches:
+        match['date'] = dt.strptime(match['date'], date_format)
+        match['date'] = match['date'].replace(tzinfo=pytz.UTC)
         WorldCupGame.objects.create(
             home_team_id=match['home_team'],
             away_team_id=match['away_team'],
             round=match['round'],
-            date=dt.strptime(match['date'], date_format))
+            date=match['date'])
 
 
 np.random.seed(10101)
-historical_matches = fetch_matches('results.csv', threshold)
-defense = get_defense_capabilities(historical_matches)
-world_cup_predictions = predict_worldcup(historical_matches, defense)
 
-populate_groups()
-populate_historical_matches(historical_matches)
-populate_teams(world_cup_predictions)
-populate_worldCup_matches(group_matches)
+games = WorldCupGame.objects.all()
+teams = Team.objects.all()
+groups = Group.objects.all()
+if not games or not teams or not groups:
+    historical_matches = fetch_matches('results.csv', threshold)
+    defense = get_defense_capabilities(historical_matches)
+    world_cup_predictions = predict_worldcup(historical_matches, defense)
+    populate_groups()
+    populate_historical_matches(historical_matches)
+    populate_teams(world_cup_predictions)
+    populate_worldCup_matches(group_matches)
+    populate_flag_codes()
 
-populate_flag_codes()
-#   "knockout": {
-#     "round_16": {
-#       "name": "Round of 16",
-#       "matches": [
-#         {
-#           "name": 49,
-#           "type": "qualified",
-#           "home_team": "winner_a",
-#           "away_team": "runner_b",
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-06-30T17:00:00+03:00",
-#           "stadium": 11,
-#           "channels": [4],
-#           "finished": false,
-#           "matchday": 4
-#         },
-#         {
-#           "name": 50,
-#           "type": "qualified",
-#           "home_team": "winner_c",
-#           "away_team": "runner_d",
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-06-30T21:00:00+03:00",
-#           "stadium": 5,
-#           "channels": [4,6],
-#           "finished": false,
-#           "matchday": 4
-#         },
-#         {
-#           "name": 51,
-#           "type": "qualified",
-#           "home_team": "winner_b",
-#           "away_team": "runner_a",
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-01T17:00:00+03:00",
-#           "stadium": 1,
-#           "channels": [3],
-#           "finished": false,
-#           "matchday": 4
-#         },
-#         {
-#           "name": 52,
-#           "type": "qualified",
-#           "home_team": "winner_d",
-#           "away_team": "runner_c",
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-01T21:00:00+03:00",
-#           "stadium": 6,
-#           "channels": [4,6],
-#           "finished": false,
-#           "matchday": 4
-#         },
-#         {
-#           "name": 53,
-#           "type": "qualified",
-#           "home_team": "winner_e",
-#           "away_team": "runner_f",
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-02T18:00:00+04:00",
-#           "stadium": 7,
-#           "channels": [3,6],
-#           "finished": false,
-#           "matchday": 4
-#         },
-#         {
-#           "name": 54,
-#           "type": "qualified",
-#           "home_team": "winner_g",
-#           "away_team": "runner_h",
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-02T21:00:00+03:00",
-#           "stadium": 10,
-#           "channels": [3,6],
-#           "finished": false,
-#           "matchday": 4
-#         },
-#         {
-#           "name": 55,
-#           "type": "qualified",
-#           "home_team": "winner_f",
-#           "away_team": "runner_e",
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-03T17:00:00+03:00",
-#           "stadium": 3,
-#           "channels": [4,6],
-#           "finished": false,
-#           "matchday": 4
-#         },
-#         {
-#           "name": 56,
-#           "type": "qualified",
-#           "home_team": "winner_h",
-#           "away_team": "runner_g",
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-03T21:00:00+03:00",
-#           "stadium": 2,
-#           "channels": [3,6],
-#           "finished": false,
-#           "matchday": 4
-#         }
-#       ]
-#     },
-#     "round_8": {
-#       "name": "Quarter-finals",
-#       "matches": [
-#         {
-#           "name": 57,
-#           "type": "winner",
-#           "home_team": 49,
-#           "away_team": 50,
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-06T17:00:00+03:00",
-#           "stadium": 6,
-#           "channels": [3],
-#           "finished": false,
-#           "matchday": 5
-#         },
-#         {
-#           "name": 58,
-#           "type": "winner",
-#           "home_team": 53,
-#           "away_team": 54,
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-06T21:00:00+03:00",
-#           "stadium": 5,
-#           "channels": [3],
-#           "finished": false,
-#           "matchday": 5
-#         },
-#         {
-#           "name": 59,
-#           "type": "winner",
-#           "home_team": 51,
-#           "away_team": 52,
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-07T21:00:00+03:00",
-#           "stadium": 11,
-#           "channels": [4],
-#           "finished": false,
-#           "matchday": 5
-#         },
-#         {
-#           "name": 60,
-#           "type": "winner",
-#           "home_team": 55,
-#           "away_team": 56,
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-07T18:00:00+04:00",
-#           "stadium": 7,
-#           "channels": [4],
-#           "finished": false,
-#           "matchday": 5
-#         }
-#       ]
-#     },
-#     "round_4": {
-#       "name": "Semi-finals",
-#       "matches": [
-#         {
-#           "name": 61,
-#           "type": "winner",
-#           "home_team": 57,
-#           "away_team": 58,
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-10T21:00:00+03:00",
-#           "stadium": 3,
-#           "channels": [4],
-#           "finished": false,
-#           "matchday": 6
-#         },
-#         {
-#           "name": 62,
-#           "type": "winner",
-#           "home_team": 59,
-#           "away_team": 60,
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-11T21:00:00+03:00",
-#           "stadium": 1,
-#           "channels": [3],
-#           "finished": false,
-#           "matchday": 6
-#         }
-#       ]
-#     },
-#     "round_2_loser": {
-#       "name": "Third place play-off",
-#       "matches": [
-#         {
-#           "name": 63,
-#           "type": "loser",
-#           "home_team": 61,
-#           "away_team": 62,
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-14T17:00:00+03:00",
-#           "stadium": 3,
-#           "channels": [4],
-#           "finished": false,
-#           "matchday": 7
-#         }
-#       ]
-#     },
-#     "round_2": {
-#       "name": "Final",
-#       "matches": [
-#         {
-#           "name": 64,
-#           "type": "winner",
-#           "home_team": 61,
-#           "away_team": 62,
-#           "home_result": null,
-#           "away_result": null,
-#           "home_penalty": null,
-#           "away_penalty": null,
-#           "winner": null,
-#           "date": "2018-07-15T18:00:00+03:00",
-#           "stadium": 1,
-#           "channels": [3, 4],
-#           "finished": false,
-#           "matchday": 7
-#         }
-#       ]
-#     }
-#   }
-# }
+group_matches = WorldCupGame.objects.filter(pk__lte=48)
+knockout_matches = WorldCupGame.objects.filter(pk__gt=48)
+populate_group_predictions(group_matches)
+populate_knockout_predictions(knockout_matches)
+
+print('Database Population Done')

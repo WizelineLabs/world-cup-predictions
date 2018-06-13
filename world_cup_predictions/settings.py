@@ -124,8 +124,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'world_cup',
         'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+        'PASSWORD': 'russia',
+        'HOST': 'db',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
