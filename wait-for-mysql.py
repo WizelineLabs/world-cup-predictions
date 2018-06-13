@@ -29,7 +29,6 @@ message = """
 	database connect:
 	host = %s
 	user = %s
-	password = %s
 	port = %s
 	db = %s
 	################################ \n\n\n
