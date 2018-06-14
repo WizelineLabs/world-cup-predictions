@@ -37,3 +37,4 @@ def create_votes_from_predictions(predictions):
 
 predictions = Prediction.objects.all()
 create_votes_from_predictions(predictions)
+print('Paul User updated')

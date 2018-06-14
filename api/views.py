@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from django.conf import settings
 from django.utils import timezone
+from datetime import timedelta
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
@@ -43,7 +44,7 @@ class WorldCupGameViewSet(viewsets.ModelViewSet):
 
 class PredictionViewSet(viewsets.ModelViewSet):
     now = timezone.now()
-    queryset = Prediction.objects.filter(game__date__lte=now)
+    queryset = Prediction.objects.filter(game__date__lte=timezone.now()-timedelta(hours=2))
     serializer_class = PredictionSerializer
     permission_classes = (permissions.IsAuthenticated, )
     http_method_names = ['get']
@@ -66,14 +67,14 @@ class UserViewSet(viewsets.ModelViewSet):
 @permission_classes([permissions.IsAuthenticated])
 def choose_winner(request):
     now = timezone.now()
-    world_cup_start = WorldCupGame.objects.get(pk=2).date
+    world_cup_start = WorldCupGame.objects.get(pk=17).date
     if(now > world_cup_start):
         try:
             nfe = settings.NON_FIELD_ERRORS_KEY
         except AttributeError:
             nfe = 'non_field_errors'
         return Response(
-                {'errors': {nfe: "Can not use your wildcard now. Second Game of World Cup has started"}},
+                {'errors': {nfe: "Can not use your wildcard now. Second Round of the Group Phase has started"}},
                 status=status.HTTP_400_BAD_REQUEST,
             )
     else:

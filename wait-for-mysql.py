@@ -32,7 +32,7 @@ message = """
 	port = %s
 	db = %s
 	################################ \n\n\n
-""" %  (host, user, password, port, db)
+""" %  (host, user, port, db)
 
 print(message)
 
