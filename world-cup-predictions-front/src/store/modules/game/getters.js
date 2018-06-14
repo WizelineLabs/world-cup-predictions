@@ -101,11 +101,13 @@ const final = (state) => {
   return [];
 };
 
-const firstMatchDate = (state) => {
+const wildcardDate = (state) => {
   const matches = [...state.list].sort(
     (a, b) => new Date(a.date) - new Date(b.date),
   );
-  return matches.length ? matches[0].date : null;
+
+  // The deadline for the submit the wildcard is the 1st match of the 2nd round
+  return matches.length >= 16 ? matches[16].date : null;
 };
 
 export default {
@@ -116,5 +118,5 @@ export default {
   quarters,
   semis,
   final,
-  firstMatchDate,
+  wildcardDate,
 };
