@@ -1,11 +1,15 @@
 <template>
   <v-container class="wcp-leaderboard mb-5">
     <v-layout row wrap>
-      <v-flex xs12 class="mt-3 mb-4 px-4">
+      <v-flex xs6 class="mt-3 mb-4 px-4">
         <div class="wcp-dot blue darken-3"></div>
-        <span class="caption mr-4 ml-2">Top Scorers</span>
+        <span class="wcp-caption mr-4 ml-2">Top Scorers</span>
         <div class="wcp-dot red darken-2"></div>
-        <span class="caption ml-2">Paul (Prediction Tool)</span>
+        <span class="wcp-caption ml-2">Paul (Prediction Tool)</span>
+      </v-flex>
+      <v-flex xs6 class="mt-3 mb-4 text-xs-right">
+        <span class="wcp-caption">Particpants: </span>
+        <span class="wcp-caption">{{participants}}</span>
       </v-flex>
     </v-layout>
 
@@ -111,6 +115,9 @@ export default {
         }
         return item;
       });
+    },
+    participants() {
+      return this.players.length;
     },
     user() {
       return this.$store.state.user.data;
