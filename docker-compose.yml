@@ -11,6 +11,8 @@ services:
     ports:
       - "5001:3306"
     restart: always
+    volumes:
+      - /data/mysql_data:/var/lib/mysql
   app:
     command: >
       bash -c
