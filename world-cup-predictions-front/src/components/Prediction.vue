@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="mb-5">
     <v-layout row wrap>
       <v-flex xs12>
         <h1 class="display-1 mt-5 mb-4 text--darken-2 grey--text">Prediction Tool</h1>
