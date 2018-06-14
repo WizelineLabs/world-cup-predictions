@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container v-if="user && user.id">
+    <v-container v-if="user && user.id" class="mb-5">
       <v-layout row wrap>
         <v-flex xs5>
           <h3 class="headline my-4">
