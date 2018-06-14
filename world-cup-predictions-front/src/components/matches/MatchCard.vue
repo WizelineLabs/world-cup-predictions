@@ -124,11 +124,7 @@ export default {
     },
     matchState() {
       if (this.currentTime < this.matchStartTime) return 'open';
-      else if (
-        (this.winnerResult === null || this.winnerResult === '') &&
-        this.match.home_score === null &&
-        this.match.away_score === null
-      ) {
+      else if (this.winnerResult === null || this.winnerResult === '') {
         return 'locked';
       } else if (!this.choiceSelected) return 'no-voted';
       else if (this.winnerResult) return 'correct';
