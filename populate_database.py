@@ -555,6 +555,10 @@ def populate_teams(world_cup_predictions):
     for key, value in credible_round_16.items():
         team = Team.objects.get(name=value)
         team.shaded = True
+        if key.endswith('1'):
+            team.first = True
+        else:
+            team.second = True
         team.save()
     populate_flag_codes()
 

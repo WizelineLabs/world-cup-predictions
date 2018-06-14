@@ -43,6 +43,8 @@ class Team(models.Model):
   pass_semi_prob = models.FloatField(null=True)
   pass_final_prob = models.FloatField(null=True)
   shaded = models.BooleanField(default=False)
+  first = models.BooleanField(default=False)
+  second = models.BooleanField(default=False)
   flag_code = models.CharField(max_length=10, null=True)
   def __str__(self):
     return '%s' % (self.name)
