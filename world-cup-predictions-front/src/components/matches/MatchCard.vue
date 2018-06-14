@@ -141,7 +141,7 @@ export default {
         case 'open':
           return `${relativeTime} to cast your vote`;
         case 'locked':
-          return 'Locked';
+          return 'Match in progress';
         case 'no-voted':
           return 'No vote made';
         case 'correct':
@@ -372,7 +372,7 @@ export default {
 
   .match-caption {
     color: #1565c0;
-    font-weight: 600;
+    font-weight: 500;
   }
 }
 
@@ -397,7 +397,7 @@ export default {
 
   .match-caption {
     color: #d32f2f;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .winner-selection-button input:checked ~ .winner-selection-button-check {
