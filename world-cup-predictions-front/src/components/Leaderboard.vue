@@ -84,7 +84,7 @@
             <v-flex xs3 class="text-xs-right">
               <v-card flat>
                 <v-card-text class="subheading">
-                  {{player.correct_votes}} out of {{user.finished_matches}}
+                  {{player.correct_votes}} out of {{player.total_votes}}
                   </v-card-text>
               </v-card>
             </v-flex>
@@ -109,7 +109,7 @@ export default {
       const list = this.$store.state.leaderboard.list;
       return list.map((row) => {
         const item = row;
-        if (item.first_name === 'Paul') {
+        if (item.first_name === 'Paul' && item.last_name === 'Prediction') {
           item.isPaul = true;
           item.avatar = '/static/paul.png';
         }
@@ -118,9 +118,6 @@ export default {
     },
     participants() {
       return this.players.length;
-    },
-    user() {
-      return this.$store.state.user.data;
     },
   },
 };
