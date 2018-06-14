@@ -46,10 +46,10 @@ while True:
 			result = cursor.fetchone()
 
 			if result and len(result) > 0:
-				print("database %s create successful", db)
+				print("database %s create successful" % (db))
 				break
 			else:
-				print("database %s not created... waiting...", db)
+				print("database %s not created... waiting..." % (db))
 				time.sleep(1)
 
 			cursor.close()
