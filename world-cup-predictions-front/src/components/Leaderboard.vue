@@ -60,7 +60,7 @@
         </v-card>
       </div>
       <div class="wcp-table-cell-right">
-        <div class="wcp-table-row-border">
+        <div class="wcp-table-row-border" :class="{'current-user': player.isCurrentUser}">
           <v-layout row>
             <v-flex xs2 class="text-xs-center">
               <v-card flat>
@@ -84,7 +84,7 @@
             <v-flex xs3 class="text-xs-right">
               <v-card flat>
                 <v-card-text class="subheading">
-                  {{player.correct_votes}} out of {{user.finished_matches}}
+                  {{player.correct_votes}} out of {{player.total_votes}}
                   </v-card-text>
               </v-card>
             </v-flex>
@@ -109,10 +109,21 @@ export default {
       const list = this.$store.state.leaderboard.list;
       return list.map((row) => {
         const item = row;
-        if (item.first_name === 'Paul') {
+
+        if (
+          this.user &&
+          item.first_name === this.user.first_name &&
+          item.last_name === this.user.last_name
+        ) {
+          item.isCurrentUser = true;
+        } else if (
+          item.first_name === 'Paul' &&
+          item.last_name === 'Prediction'
+        ) {
           item.isPaul = true;
           item.avatar = '/static/paul.png';
         }
+
         return item;
       });
     },
@@ -160,6 +171,15 @@ export default {
     border: 1px solid #dcdedf;
     border-radius: 8px;
     overflow: hidden;
+  }
+
+  .current-user {
+    background-color: rgba(21, 101, 192, 0.3);
+    border-color: transparent;
+  }
+
+  .card {
+    background-color: transparent;
   }
 
   .card__text {

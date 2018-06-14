@@ -1,5 +1,5 @@
 <template>
-  <div class="wildcard mb-4" :class="[`${matchState}`]">
+  <label class="wildcard mb-4" :class="[`${matchState}`]">
     <input
       :id="`wildcard-${team.id}`"
       type="radio"
@@ -27,7 +27,7 @@
       }">
       {{saveStatus}}
     </div>
-  </div>
+  </label>
 </template>
 
 <script>
@@ -86,26 +86,68 @@ export default {
 
 <style lang="scss">
 .wildcard {
+  display: block;
   position: relative;
   user-select: none;
 
   > input {
     cursor: pointer;
     height: 100%;
-    opacity: 0;
     position: absolute;
+    visibility: hidden;
     width: 100%;
   }
 
-  > input:checked ~ .wildcard-container {
+  > input:checked ~ .wildcard-container,
+  &:hover > input:checked ~ .wildcard-container {
     background-color: rgba(21, 101, 192, 0.3);
     border-color: transparent;
+    opacity: 1;
   }
 
   &:hover .wildcard-container {
     background-color: rgba(231, 235, 243, 0.5);
     border: solid 1px #1565c0;
   }
+
+  &.locked > input,
+  &.locked .wildcard-container,
+  &.locked:hover .wildcard-container {
+    background-color: #f1f3f7;
+    border-color: #adb6c0;
+    cursor: default;
+    opacity: 0.7;
+  }
+}
+
+.wildcard-container {
+  align-items: center;
+  border-radius: 8px;
+  border: solid 1px #adb6c0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  min-height: 138px;
+  padding: 8px;
+}
+
+.wildcard-team-container {
+  width: 100%;
+}
+
+.wildcard-flag {
+  background-color: #adb6c0;
+  border-radius: 2px;
+  height: 42px;
+  line-height: 42px;
+  margin: 0;
+  pointer-events: none;
+  width: 56px;
+}
+
+.wildcard-team-name {
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .wildcard-save-status {
@@ -130,34 +172,5 @@ export default {
     opacity: 1;
     top: 102%;
   }
-}
-
-.wildcard-container {
-  align-items: center;
-  border-radius: 8px;
-  border: solid 1px #adb6c0;
-  display: flex;
-  justify-content: center;
-  min-height: 138px;
-  padding: 8px;
-}
-
-.wildcard-team-container {
-  width: 100%;
-}
-
-.wildcard-flag {
-  background-color: #adb6c0;
-  border-radius: 2px;
-  height: 42px;
-  line-height: 42px;
-  margin: 0;
-  pointer-events: none;
-  width: 56px;
-}
-
-.wildcard-team-name {
-  font-size: 16px;
-  line-height: 1.5;
 }
 </style>

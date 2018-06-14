@@ -335,6 +335,10 @@ export default {
     border-color: #d7dbdf;
   }
 
+  .winner-selection-button {
+    cursor: default;
+  }
+
   .winner-selection-button input:checked ~ .winner-selection-button-check {
     background-color: #80a3d6;
     border-color: #80a3d6;
@@ -344,6 +348,10 @@ export default {
 .match-card.no-voted {
   background-color: #f9fafc;
   border-color: #adb6c0;
+
+  .winner-selection-button {
+    cursor: default;
+  }
 
   .winner-selection-button-check {
     background-color: #eef0f5;
@@ -363,6 +371,10 @@ export default {
   .match-prediction {
     color: #003c8f;
     opacity: 0.8;
+  }
+
+  .winner-selection-button {
+    cursor: default;
   }
 
   .winner-selection-button-check {
@@ -388,6 +400,10 @@ export default {
   .match-prediction {
     color: #9a0007;
     opacity: 0.75;
+  }
+
+  .winner-selection-button {
+    cursor: default;
   }
 
   .winner-selection-button-check {

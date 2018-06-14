@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container v-if="user && user.id">
+    <v-container v-if="user && user.id" class="mb-5">
       <v-layout row wrap>
         <v-flex xs5>
           <h3 class="headline my-4">
@@ -13,7 +13,7 @@
         <v-flex xs7 class="text-xs-right pt-36">
           <span class="caption mr-1">CORRECT PREDICTIONS</span>
           <span class="headline mr-5">
-            {{user.correct_votes}} out of {{user.finished_matches}}
+            {{user.correct_votes}} out of {{user.total_votes}}
           </span>
           <span class="caption mr-1">RANK</span>
           <span class="headline mr-5">{{user.rank}}</span>

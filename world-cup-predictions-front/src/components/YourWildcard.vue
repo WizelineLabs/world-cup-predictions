@@ -1,13 +1,19 @@
 <template>
   <v-container>
     <v-layout row wrap class="pa-2 wcp-wildcard-text">
-      <v-flex xs12>
+      <v-flex xs9>
         <p>
           Select the team you think will win the World Cup. If you're correct, we
           will add <strong>30 points</strong> to your grand total.
           <br />
           Wildcard selection closes on <strong>{{wildcardDate | MonthDay}}</strong>
           at <strong>{{wildcardDate | HourMin}} local time</strong>.
+        </p>
+      </v-flex>
+      <v-flex xs3 class="text-xs-right">
+        <p v-if="matchState === 'locked'" class="mr-3">
+          <span class="lock-icon"></span>
+          <span class="pl-1">Locked</span>
         </p>
       </v-flex>
     </v-layout>
@@ -64,5 +70,30 @@ export default {
     font-weight: 500;
     color: #000000;
   }
+}
+
+.lock-icon {
+  color: #696969;
+  display: inline-block;
+  position: relative;
+  margin-left: 3px;
+  margin-top: 10px;
+  width: 13px;
+  height: 10px;
+  border-radius: 1px;
+  border: solid 1px currentColor;
+}
+
+.lock-icon::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: -8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 4px 4px 0 0;
+  border-top: solid 1px currentColor;
+  border-left: solid 1px currentColor;
+  border-right: solid 1px currentColor;
 }
 </style>

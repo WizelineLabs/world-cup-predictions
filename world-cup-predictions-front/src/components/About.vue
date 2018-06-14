@@ -1,6 +1,6 @@
 <template>
-<v-container>
-    <v-layout row wrap justify-center>
+<v-container class="mb-5">
+    <v-layout row wrap justify-center class="mb-4">
       <v-flex xs10>
         <h1 class="display-1 mt-5 mb-4 text--darken-2 grey--text">
           Prediction Game
@@ -25,9 +25,9 @@
         </h3>
         <p class="wcp-text my-4">
           For each right guess, you’ll be granted 10 points. You will also have one extra
-          shot to guess the ultimate winner of the cup. This is a wildcard and will be
-          available before the first match starts. If you guess right, you’ll get 30 extra
-          points!
+          shot to guess the ultimate winner of the cup. This is a wildcard and voting
+          is open until the start of round 2 in the groups stage. If you guess right,
+          you’ll get 30 extra points!
         </p>
         <h3 class="headline pt-3">
           Beat Paul
