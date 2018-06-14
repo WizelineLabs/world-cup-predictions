@@ -43,7 +43,7 @@ def update_scores(users):
     user.score = correct_votes * ONE_CORRECT_VOTE_SCORE
     user.save()
 
-played_games_votes = Vote.objects.filter(game__data__lte=timezone.now())
+played_games_votes = Vote.objects.filter(game__date__lte=timezone.now())
 evaluate_votes(played_games_votes)
 users = User.objects.all()
 update_scores(users)
