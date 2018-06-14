@@ -6,8 +6,8 @@
           Select the team you think will win the World Cup. If you're correct, we
           will add <strong>30 points</strong> to your grand total.
           <br />
-          Wildcard selection closes on <strong>{{firstMatchDate | MonthDay}}</strong>
-          at <strong>{{firstMatchDate | HourMin}} local time</strong>.
+          Wildcard selection closes on <strong>{{wildcardDate | MonthDay}}</strong>
+          at <strong>{{wildcardDate | HourMin}} local time</strong>.
         </p>
       </v-flex>
     </v-layout>
@@ -31,11 +31,11 @@ export default {
     Wildcard,
   },
   computed: {
-    firstMatchDate() {
-      return this.$store.getters['game/firstMatchDate'];
+    wildcardDate() {
+      return this.$store.getters['game/wildcardDate'];
     },
     matchStartTime() {
-      return moment(this.firstMatchDate);
+      return moment(this.wildcardDate);
     },
     matchState() {
       if (this.currentTime < this.matchStartTime) return 'open';
