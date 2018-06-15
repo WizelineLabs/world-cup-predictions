@@ -39,8 +39,11 @@ def evaluate_votes(votes):
 def update_scores(users):
   for user in users:
     correct_votes = user.votes.filter(correct=True).count()
-    user.score = correct_votes * ONE_CORRECT_VOTE_SCORE
-    user.save()
+    correct_score = correct_votes * ONE_CORRECT_VOTE_SCORE
+    if user.score != correct_score:
+      print('score of user %s is not correct, updating' % (user.id))
+      user.score = correct_score
+      user.save()
 
 played_games_votes = Vote.objects.filter(game__date__lte=timezone.now())
 evaluate_votes(played_games_votes)
