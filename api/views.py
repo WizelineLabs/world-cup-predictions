@@ -43,11 +43,13 @@ class WorldCupGameViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 class PredictionViewSet(viewsets.ModelViewSet):
-    now = timezone.now()
-    queryset = Prediction.objects.filter(game__date__lte=timezone.now())
+    queryset = Prediction.objects.all()
     serializer_class = PredictionSerializer
     permission_classes = (permissions.IsAuthenticated, )
     http_method_names = ['get']
+    def get_queryset(self):
+        threshold = timezone.now()
+        return self.queryset.filter(game__date__lte=threshold)
 
 class VoteViewSet(viewsets.ModelViewSet):
     serializer_class = VoteSerializer
