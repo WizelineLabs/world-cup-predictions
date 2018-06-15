@@ -244,18 +244,25 @@ def _win_stage(prev_stage, best16, matches, defense):
     return proceed
 
 
-def _simulate_round_robins(matches, defense):
+def _simulate_round_robins(matches, defense, actuals):
     """
     Runs a simulation of all 48 matches in the groups phase (six matches for
     each of the eight groups) and returns the resulting winners and runners-up.
+    Actual outcomes of matches are used when available (countries participating
+    in a match must appear in alphabetical order).
     """
     best16 = {}
+    realized_matches = 0
     # Wins | Draws | Loses | Points | Goals Difference | Goals Scored
     colnames = ['W', 'D', 'L', 'Pts', 'GD', 'GS']
     for key in GROUPS.keys():
         table = pd.DataFrame(index=GROUPS[key], columns=colnames, data=0)
         for pair in combinations(GROUPS[key], 2):
-            scores = _realize_matches(pair, matches, defense)[0]
+            if pair in actuals.keys():
+                realized_matches += 1
+                scores = actuals[pair]
+            else:
+                scores = _realize_matches(pair, matches, defense)[0]
             if scores[0] > scores[1]:
                 table.loc[pair[0]] += [1,0,0,3,scores[0]-scores[1],scores[0]]
                 table.loc[pair[1]] += [0,0,1,0,scores[1]-scores[0],scores[1]]
@@ -269,6 +276,8 @@ def _simulate_round_robins(matches, defense):
         table.sort_values(['Pts', 'GD', 'GS'], ascending=False, inplace=True)
         best16[key+'1'] = table.index[0]
         best16[key+'2'] = table.index[1]
+    if realized_matches != len(actuals.keys()):
+        raise SystemExit('Key tuples in actuals not in alphabetical order.')
     return best16
 
 
@@ -302,7 +311,7 @@ def _set_results(simulation, actuals, stage):
     return simulation
 
 
-def predict_worldcup(matches, defense, best16={}, actuals={}, numsim=100):
+def predict_worldcup(matches, defense, best16={}, actuals={-1:{}}, numsim=100):
     """
     Probabilities of winning the worldcup.
 
@@ -325,10 +334,13 @@ def predict_worldcup(matches, defense, best16={}, actuals={}, numsim=100):
     corresponding positions- that passed to the knockout phase.
     :type best16: dict(string)
 
-    :param actuals: A list with the actual results of the matches that have
-    already been played in the knockout phase. The results are represented as
+    :param actuals: A dictionary of lists with the actual results of the
+    matches that have already been played in both the groups phase and each
+    round of the knockout phase. For the groups phase (-1), the results are
+    given as a dictionary with tuples of contenders as keys and tuples of scores
+    as values. For the knockout phase (0 to 3), the results are represented as
     pairs of IDs, where the first one indicates the country that won the match.
-    :type actuals: list(tuple)
+    :type actuals: dict()
 
     :param numsim: The number of simulations to run in case the winners and the
     runners-up are unknown.
@@ -348,7 +360,7 @@ def predict_worldcup(matches, defense, best16={}, actuals={}, numsim=100):
 
     for i in range(numsim):
         if not best16.keys():
-            best16 = _simulate_round_robins(matches, defense)
+            best16 = _simulate_round_robins(matches, defense, actuals[-1])
         rrobin = _merge_simulation(funnel[0], rrobin, best16, numsim, True)
         for step in range(1, 5):
             funnel[step] = _win_stage(funnel[step-1], best16, matches, defense)
