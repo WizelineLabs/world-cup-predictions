@@ -9,22 +9,6 @@ const teamsByGroup = (state) => {
     }
     groups[team.group].push(team);
   });
-
-  // Add a property to the winner of each group
-  Object.keys(groups).forEach((groupName) => {
-    const group = groups[groupName];
-
-    // eslint-disable-next-line
-    const advanceTeams = group.filter((team) => team.shaded);
-
-    // eslint-disable-next-line
-    const advanceFirst = advanceTeams.reduce((max, team) => {
-      return team.pass_group_winner_prob > max.pass_group_winner_prob
-        ? team
-        : max;
-    }, advanceTeams[0]);
-    advanceFirst.is_group_winner = true;
-  });
   return groups;
 };
 

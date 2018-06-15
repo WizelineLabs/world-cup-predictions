@@ -21,12 +21,14 @@
             </template>
             <template slot="items" slot-scope="props">
               <tr class="wcp-group-table-row border-0">
+                <!-- Flag and Name Cell -->
                 <td class="pr-0">
                   <div
                     :class="['wcp-flag', 'flag-icon', 'flag-icon-' + props.item.flag_code]"
                   ></div>
                   <span class="wcp-group-table-title">{{ props.item.name }}</span>
                 </td>
+                <!-- Advance Cell -->
                 <td class="wcp-group-table-cell text-xs-center border-r-1">
                   <div
                     class="wcp-group-table-cell-text"
@@ -42,25 +44,27 @@
                   }}
                   </div>
                 </td>
+                <!-- Advance Second Cell -->
                 <td class=" wcp-group-table-cell text-xs-center">
                   <div
                     class="wcp-group-table-cell-text"
                     :class="{
-                      active: props.item.shaded,
-                      'active-text': props.item.shaded && !props.item.is_group_winner,
-                      'grey--text text--darken-1': !props.item.shaded || props.item.is_group_winner
+                      active: props.item.second || props.item.first,
+                      'active-text': props.item.second,
+                      'grey--text text--darken-1': !props.item.second
                     }"
                   >
                   {{ props.item.pass_group_runner_prob | percentage }}
                   </div>
                 </td>
+                <!-- Advance First Cell -->
                 <td class="wcp-group-table-cell text-xs-center">
                   <div
                     class="wcp-group-table-cell-text"
                     :class="{
-                      active: props.item.shaded && props.item.is_group_winner,
-                      'active-text': props.item.shaded && props.item.is_group_winner,
-                      'grey--text text--darken-1': !props.item.shaded || !props.item.is_group_winner
+                      active: props.item.first,
+                      'active-text': props.item.first,
+                      'grey--text text--darken-1': !props.item.first
                     }"
                   >
                   {{props.item.pass_group_winner_prob | percentage }}
