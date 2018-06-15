@@ -53,7 +53,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', 'email', 'score', 'avatar', 'winner_choice', 'total_votes', 'correct_votes', 'rank' , 'finished_matches')
 
     def get_total_votes(self, obj):
-        return obj.votes.all().count()
+        return obj.votes.exclude(correct__isnull=True).count()
     def get_correct_votes(self, obj):
         return obj.votes.filter(correct=True).count()
     def get_rank(self, obj):
