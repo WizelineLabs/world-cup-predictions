@@ -47,10 +47,9 @@ class UserSerializer(serializers.ModelSerializer):
     total_votes = serializers.SerializerMethodField()
     correct_votes = serializers.SerializerMethodField()
     rank = serializers.SerializerMethodField()
-    finished_matches = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'email', 'score', 'avatar', 'winner_choice', 'total_votes', 'correct_votes', 'rank' , 'finished_matches')
+        fields = ('id', 'first_name', 'last_name', 'email', 'score', 'avatar', 'winner_choice', 'total_votes', 'correct_votes', 'rank')
 
     def get_total_votes(self, obj):
         return obj.votes.exclude(correct__isnull=True).count()
@@ -58,8 +57,6 @@ class UserSerializer(serializers.ModelSerializer):
         return obj.votes.filter(correct=True).count()
     def get_rank(self, obj):
         return (User.objects.filter(score__gt=obj.score).count() + 1)
-    def get_finished_matches(self, obj):
-        return WorldCupGame.objects.filter(date__lte=timezone.now()-timedelta(hours=2, minutes=30)).count()
 
 class LeaderboardSerializer(serializers.ModelSerializer):
     total_votes = serializers.SerializerMethodField()
@@ -70,7 +67,7 @@ class LeaderboardSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'score', 'avatar','total_votes', 'correct_votes', 'rank')
     
     def get_total_votes(self, obj):
-        return obj.votes.all().count()
+        return obj.votes.exclude(correct__isnull=True).count()
     def get_correct_votes(self, obj):
         return obj.votes.filter(correct=True).count()
     def get_rank(self, obj):
