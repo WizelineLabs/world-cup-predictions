@@ -22,8 +22,8 @@
           <v-tab :key="1" ripple>
             Group Stage
           </v-tab>
-          <v-tab :key="2" ripple disabled>
-            Knockout Phase (Coming soon)
+          <v-tab :key="2" ripple>
+            Knockout Phase
           </v-tab>
           <v-tabs-items>
             <v-tab-item :key="1">

@@ -38,10 +38,7 @@
                       'grey--text text--darken-1': !props.item.shaded
                     }"
                   >
-                  {{
-                    props.item.pass_group_runner_prob + props.item.pass_group_winner_prob
-                    | percentage
-                  }}
+                    {{props.item.advance | percentage}}
                   </div>
                 </td>
                 <!-- Advance Second Cell -->
