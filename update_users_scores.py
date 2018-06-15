@@ -7,7 +7,6 @@ import django
 django.setup()
 
 from api.models import Team, HistoricalGame, WorldCupGame, User, Vote, Prediction, Group
-from model.worldcup_predictor import predict_group_match, win_knockout_match, fetch_matches, get_defense_capabilities
 from datetime import datetime as dt
 from django.utils import timezone
 

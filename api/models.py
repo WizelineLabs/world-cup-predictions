@@ -1,10 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db.models import Q, Count, Window, F
-from django.db.models.functions import DenseRank
+import logging
 
+logger = logging.getLogger('api.models')
 # Create your models here.
-
+HOME_WIN = 'H'
+AWAY_WIN = 'A'
+DRAW = 'D'
+ONE_CORRECT_VOTE_SCORE = 10
 class Group(models.Model):
   GROUP_A = 'A'
   GROUP_B = 'B'
@@ -65,6 +68,12 @@ class WorldCupGame(models.Model):
     def __str__(self):
         return '%s(%s) - %s(%s)' % (self.home_team, self.home_score, self.away_team, self.away_score)
 
+    def save(self, *args, **kwargs):
+      if(self.home_score is not None and self.away_score is not None):
+        update_users_scores(self)
+      super(WorldCupGame, self).save(*args, **kwargs)
+
+
 class Prediction(models.Model):
   game = models.OneToOneField(WorldCupGame, on_delete=models.CASCADE, primary_key=True, )
   home_win = models.FloatField(default=0)
@@ -77,8 +86,6 @@ class User(AbstractUser):
   winner_choice = models.ForeignKey(Team, on_delete=models.CASCADE, null=True)
   def __str__(self):
     return '%s' % (self.email)
-  # def get_rank(self):
-  #   return self.score + 1
 
 class Vote(models.Model):
   HOME_WIN = 'H'
@@ -100,3 +107,40 @@ class Vote(models.Model):
 
   class Meta:
     unique_together = (("user", "game"),)
+
+
+def update_users_scores(instance):
+  if instance.home_score is not None and instance.away_score is not None:
+    actual_result = get_actual_result(instance)
+    game_id = instance.id
+    users = User.objects.all()
+    for user in users:
+      try:
+        user_vote = user.votes.get(game__id=game_id)
+        correct = evaluate_vote(user_vote, actual_result)
+        if correct:
+          user.score += ONE_CORRECT_VOTE_SCORE
+          user.save()
+      except:
+        pass
+
+def evaluate_vote(vote, actual_result):
+  if vote.correct is None:
+    if vote.choice == actual_result:
+      vote.correct = True
+    else:
+      vote.correct = False
+    vote.save()
+    return vote.correct
+  else:
+    return False
+
+def get_actual_result(game):
+  home_score = game.home_score
+  away_score = game.away_score
+  if home_score > away_score:
+    return HOME_WIN
+  elif home_score < away_score:
+    return AWAY_WIN
+  else:
+    return DRAW
