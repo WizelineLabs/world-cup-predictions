@@ -44,7 +44,7 @@ class WorldCupGameViewSet(viewsets.ModelViewSet):
 
 class PredictionViewSet(viewsets.ModelViewSet):
     now = timezone.now()
-    queryset = Prediction.objects.filter(game__date__lte=timezone.now()-timedelta(hours=2))
+    queryset = Prediction.objects.filter(game__date__lte=timezone.now())
     serializer_class = PredictionSerializer
     permission_classes = (permissions.IsAuthenticated, )
     http_method_names = ['get']
