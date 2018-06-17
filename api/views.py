@@ -69,7 +69,7 @@ class UserViewSet(viewsets.ModelViewSet):
 @permission_classes([permissions.IsAuthenticated])
 def choose_winner(request):
     now = timezone.now()
-    world_cup_start = WorldCupGame.objects.get(pk=17).date
+    world_cup_start = WorldCupGame.objects.get(pk=3).date
     if(now > world_cup_start):
         try:
             nfe = settings.NON_FIELD_ERRORS_KEY
