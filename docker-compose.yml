@@ -17,7 +17,7 @@ services:
     command: >
       bash -c
         "
-        ./wait-for-mysql.sh db 3306 russia world_cup
+        /data/wait-for-mysql.sh db 3306 russia world_cup
         python manage.py makemigrations
         python manage.py migrate
         python populate_database.py
