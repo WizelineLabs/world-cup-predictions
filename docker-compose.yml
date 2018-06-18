@@ -12,7 +12,7 @@ services:
       - "5001:3306"
     restart: always
     volumes:
-      - /data/mysql_data:/var/lib/mysql
+      - ./mysql_data:/var/lib/mysql
   app:
     command: >
       bash -c
@@ -23,12 +23,10 @@ services:
         python populate_database.py
         python update_paul_user.py
         python manage.py runserver 0.0.0.0:8000"
-    build: .
+    build: ./world-cup-predictions-back
     environment:
       - DJANGO_SETTINGS_MODULE=world_cup_predictions.settings
       - PYTHONDONTWRITEBYTECODE=1
-    volumes:
-      - .:/app
     restart: on-failure
     ports:
       - "8002:8000"
