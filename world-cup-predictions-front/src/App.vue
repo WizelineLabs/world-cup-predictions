@@ -1,19 +1,23 @@
 <template>
-  <v-app id="app">
-    <v-toolbar flat extended fixed class="wcp-navbar" extension-height="64px">
-      <v-container class="py-0">
-        <v-layout row wrap class="mt-3 pt-1">
+  <v-app id="app" :class="[`${$vuetify.breakpoint.name}`]">
+    <v-toolbar flat fixed class="wcp-navbar" height="140px">
+      <v-container class="py-0 my-0">
+        <v-layout row wrap class="wcp-navbar-top-container mt-4 pt-1">
           <v-flex xs8>
-            <div class="headline pt-2">
+            <v-layout row wrap>
               <img src="/static/wizeline-logo.svg" alt="Wizeline" />
-              <span class="pl-2">Prediction Game</span>
-              <span class="grey--text text--darken-1 pl-1">Russia World Cup 2018</span>
-            </div>
+              <span class="wcp-logo-text wcp-text-16">Prediction Game</span>
+              <span
+                class="wcp-logo-text wcp-text-16 grey--text text--darken-1 pl-2 hidden-sm-and-down"
+              >
+                Russia World Cup 2018
+              </span>
+            </v-layout>
           </v-flex>
-          <v-flex xs4 class="text-sm-right">
-            <div v-if="!user || !user.id" class="wcp-navbar-text d-inline-block">
+          <v-flex xs4 class="text-xs-right">
+            <span v-if="!user || !user.id" class="wcp-text-16 hidden-sm-and-down pr-2">
               Join the game!
-            </div>
+            </span>
             <v-btn
               v-if="user && user.id"
               class="wcp-btn px-2 grey lighten-1 white--text text-transform-none"
@@ -30,7 +34,7 @@
             </v-btn>
           </v-flex>
         </v-layout>
-        <v-layout row wrap class="mt-1">
+        <v-layout row wrap class="wcp-navbar-bottom-container">
           <v-flex xs12>
             <v-tabs
               class="wcp-navbar-tabs mt-2"
@@ -181,26 +185,40 @@ export default {
 }
 
 .wcp-body-container {
-  padding-top: 129px;
+  padding-top: 140px;
 }
 
 .toolbar.wcp-navbar {
   background-color: #fefefe;
   border-bottom: 1px solid #dcdedf;
 
-  .wcp-navbar-text {
-    font-size: 18px;
-    letter-spacing: 0.2px;
-    line-height: 1.5;
+  .toolbar__content {
+    align-items: start;
   }
+
+  .wcp-navbar-top-container {
+    height: 60px;
+  }
+}
+
+.wcp-logo-text {
+  line-height: 28px;
+  padding-left: 16px;
 }
 
 .wcp-btn {
   font-family: 'ProximaNova-Semibold', 'Roboto', sans-serif;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 500;
+  height: 32px;
   letter-spacing: 0.2px;
   line-height: 1.5;
+  margin: 0;
+  width: 84px;
+}
+
+.wcp-flex {
+  display: flex;
 }
 
 .text-transform-none {
@@ -245,6 +263,11 @@ export default {
   }
 }
 
+.xs .solid-tabs .tabs__item {
+  font-size: 18px;
+  padding: 12px;
+}
+
 .wcp-title {
   font-size: 32px;
   font-weight: normal;
@@ -270,7 +293,99 @@ export default {
   line-height: 1.5;
 }
 
-.wcp-caption {
+.wcp-text-28 {
+  font-size: 28px;
+}
+
+.wcp-text-26 {
+  font-size: 26px;
+}
+
+.wcp-text-24 {
+  font-size: 24px;
+}
+
+.wcp-text-22 {
+  font-size: 22px;
+}
+
+.wcp-text-20 {
+  font-size: 20px;
+}
+
+.wcp-text-18 {
+  font-size: 18px;
+}
+
+.wcp-text-16 {
+  font-size: 16px;
+}
+
+.wcp-text-14 {
   font-size: 14px;
+}
+
+.wcp-text-12 {
+  font-size: 12px;
+}
+
+// Responsiveness
+.xs {
+  .container {
+    padding: 16px;
+  }
+
+  .wcp-logo-text {
+    padding: 4px 0 0;
+    width: 100%;
+  }
+
+  .wcp-navbar-bottom-container {
+    margin: 0 -16px;
+  }
+
+  .wcp-navbar-tabs {
+    position: relative;
+
+    &::before {
+      background: linear-gradient(
+        -90deg,
+        rgba(255, 255, 255, 0.001),
+        rgb(255, 255, 255)
+      );
+      content: '';
+      height: 44px;
+      left: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      width: 30px;
+      z-index: 10;
+    }
+    &::after {
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.001),
+        rgb(255, 255, 255) 80%
+      );
+      content: '';
+      height: 44px;
+      right: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      width: 40px;
+    }
+  }
+
+  .title {
+    font-size: 16px !important;
+  }
+
+  table.table thead th:first-child,
+  table.table tbody td:first-child,
+  table.table thead th:not(:first-child) {
+    padding: 0 12px;
+  }
 }
 </style>

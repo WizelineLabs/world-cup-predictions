@@ -99,9 +99,12 @@ export default {
 
 .wcp-illustration {
   background-image: url('../assets/home_illustration.svg');
+  background-position-y: center;
+  background-size: contain;
   display: inline-block;
   height: 431px;
-  width: 765px;
+  max-width: 765px;
+  width: 100%;
 }
 
 .wcp-btn-lg {
@@ -112,5 +115,16 @@ export default {
   font-size: 24px;
   line-height: 1.25;
   letter-spacing: 1px;
+}
+
+// Responsiveness
+.xs {
+  .wcp-landing-title {
+    font-size: 34px;
+  }
+
+  .wcp-landing-subtitle {
+    font-size: 20px;
+  }
 }
 </style>
