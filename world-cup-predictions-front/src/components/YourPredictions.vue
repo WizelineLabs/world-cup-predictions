@@ -14,6 +14,7 @@
             light
             color="transparent"
             hide-slider
+            show-arrows
           >
             <v-tab :key="1">
               Group Round: 1
@@ -107,8 +108,8 @@ export default {
 }
 
 .solid-tabs.nested-tabs {
-  .tabs__wrapper {
-    margin-left: -12px;
+  .tabs__bar {
+    margin: 0 -12px;
   }
 
   .tabs__item {
@@ -122,6 +123,14 @@ export default {
   .tabs__item--active {
     background-color: #fff;
     color: #0d47a1;
+  }
+}
+
+// Responsiveness
+.xs,
+.sm {
+  .solid-tabs.nested-tabs .tabs__bar {
+    margin: 0 -12px;
   }
 }
 </style>

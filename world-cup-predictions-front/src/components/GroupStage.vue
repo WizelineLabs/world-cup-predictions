@@ -26,7 +26,7 @@
                   <div
                     :class="['wcp-flag', 'flag-icon', 'flag-icon-' + props.item.flag_code]"
                   ></div>
-                  <span class="wcp-group-table-title">{{ props.item.name }}</span>
+                  <span class="wcp-group-table-title hidden-xs-only">{{ props.item.name }}</span>
                 </td>
                 <!-- Advance Cell -->
                 <td class="wcp-group-table-cell text-xs-center border-r-1">
@@ -178,5 +178,16 @@ export default {
   line-height: 24px;
   margin: 0 0 -6px 0;
   width: 32px;
+}
+
+// Responsiveness
+.xs {
+  .wpc-group-table-cell-main {
+    width: 25%;
+  }
+
+  .wpc-group-table-header {
+    width: 25%;
+  }
 }
 </style>
