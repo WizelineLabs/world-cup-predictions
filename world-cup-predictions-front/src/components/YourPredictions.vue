@@ -16,47 +16,47 @@
             hide-slider
             show-arrows
           >
-            <v-tab :key="0">
+            <v-tab key="round1">
               Group Round: 1
             </v-tab>
-            <v-tab :key="1">
+            <v-tab key="round2">
               Group Round: 2
             </v-tab>
-            <v-tab :key="2">
+            <v-tab key="round3">
               Group Round: 3
             </v-tab>
-            <v-tab :key="3" disabled>
+            <v-tab key="roundOf16" disabled>
               Round of 16
             </v-tab>
-            <v-tab :key="4" disabled>
+            <v-tab key="quarters" disabled>
               Quarters
             </v-tab>
-            <v-tab :key="5" disabled>
+            <v-tab key="semis" disabled>
               Semis
             </v-tab>
-            <v-tab :key="6" disabled>
+            <v-tab key="finals" disabled>
               3rd & Final
             </v-tab>
             <v-tabs-items class="mt-4">
-              <v-tab-item :key="0">
+              <v-tab-item key="round1">
                 <matchday1></matchday1>
               </v-tab-item>
-              <v-tab-item :key="1">
+              <v-tab-item key="round2">
                 <matchday2></matchday2>
               </v-tab-item>
-              <v-tab-item :key="2">
+              <v-tab-item key="round3">
                 <matchday3></matchday3>
               </v-tab-item>
-              <v-tab-item :key="3">
+              <v-tab-item key="roundOf16">
                 <round-of16></round-of16>
               </v-tab-item>
-              <v-tab-item :key="4">
+              <v-tab-item key="quarters">
                 <quarters></quarters>
               </v-tab-item>
-              <v-tab-item :key="5">
+              <v-tab-item key="semis">
                 <semis></semis>
               </v-tab-item>
-              <v-tab-item :key="6">
+              <v-tab-item key="finals">
                 <final></final>
               </v-tab-item>
             </v-tabs-items>
@@ -90,6 +90,11 @@ export default {
     return {
       active: '1',
     };
+  },
+  mounted() {
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 400);
   },
 };
 </script>
@@ -133,6 +138,10 @@ export default {
 .xs {
   .wcp-tab-text {
     padding: 8px 0;
+  }
+
+  .solid-tabs.nested-tabs .tabs__bar {
+    margin: 0 -16px;
   }
 }
 </style>
