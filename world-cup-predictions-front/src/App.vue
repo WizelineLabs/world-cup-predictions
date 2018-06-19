@@ -15,12 +15,12 @@
             </v-layout>
           </v-flex>
           <v-flex xs4 class="text-xs-right">
-            <span v-if="!user || !user.id" class="wcp-text-16 hidden-sm-and-down pr-2">
+            <span v-if="!user || !user.id" class="wcp-text-16 pr-2 hidden-sm-and-down">
               Join the game!
             </span>
             <v-btn
               v-if="user && user.id"
-              class="wcp-btn px-2 grey lighten-1 white--text text-transform-none"
+              class="wcp-btn grey lighten-1 white--text text-transform-none"
               @click="signOut"
             >
               Sign Out
@@ -34,7 +34,7 @@
             </v-btn>
           </v-flex>
         </v-layout>
-        <v-layout row wrap class="wcp-navbar-bottom-container">
+        <v-layout row wrap>
           <v-flex xs12>
             <v-tabs
               class="wcp-navbar-tabs mt-2"
@@ -186,6 +186,8 @@ export default {
 
 .wcp-body-container {
   padding-top: 140px;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .toolbar.wcp-navbar {
@@ -338,10 +340,6 @@ export default {
   .wcp-logo-text {
     padding: 4px 0 0;
     width: 100%;
-  }
-
-  .wcp-navbar-bottom-container {
-    margin: 0 -16px;
   }
 
   .wcp-navbar-tabs {
