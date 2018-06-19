@@ -15,8 +15,11 @@ from requests.exceptions import HTTPError
 
 from social_django.utils import psa
 
+import pandas as pd
+
 from api.models import HistoricalGame, Team, Group, WorldCupGame, Prediction, Vote, User
 from api.serializers import HistoricalGameSerializer, TeamSerializer, GroupSerializer, WorldCupGameSerializer, PredictionSerializer, VoteSerializer, UserSerializer, SocialSerializer, LeaderboardSerializer
+from model.worldcup_predictor import predict_group_match, get_defense_capabilities, win_knockout_match, fetch_matches
 
 class HistoricalGameViewSet(viewsets.ModelViewSet):
     queryset = HistoricalGame.objects.all()
@@ -43,13 +46,38 @@ class WorldCupGameViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 class PredictionViewSet(viewsets.ModelViewSet):
-    queryset = Prediction.objects.all()
+    #queryset = Prediction.objects.all()
     serializer_class = PredictionSerializer
     permission_classes = (permissions.IsAuthenticated, )
     http_method_names = ['get']
     def get_queryset(self):
         threshold = timezone.now()
-        return self.queryset.filter(game__date__lte=threshold)
+        finsihed_or_in_progress_games = WorldCupGame.objects.filter(date__lte=threshold)
+        for game in finsihed_or_in_progress_games:
+            try:
+                game_prediction = Prediction.objects.get(game__id=game.id)
+                pass
+            except:
+                previous_games = [historical_game.to_dict() for historical_game in HistoricalGame.objects.all()] + [worldcup_game.to_dict() for worldcup_game in WorldCupGame.objects.exclude(home_score__isnull=True)]
+                history = pd.DataFrame.from_records(previous_games)
+                defense = get_defense_capabilities(history)
+                if game.round in [str(group) for group in Group.objects.all()]:
+                    game_prediction = predict_group_match(str(game.home_team), str(game.away_team),history,defense)
+                    Prediction.objects.create(
+                     game_id=game.id,
+                     home_win=game_prediction['win'],
+                     away_win=game_prediction['lose'],
+                     draw=game_prediction['draw']
+                    )
+                else:
+                    home_win = win_knockout_match(str(game.home_team), str(game.away_team), history, defense)
+                    Prediction.objects.create(
+                     game_id=game.id,
+                     home_win=home_win,
+                     away_win=(1-home_win),
+                     draw=0
+                    )
+        return Prediction.objects.filter(game__date__lte=threshold)
 
 class VoteViewSet(viewsets.ModelViewSet):
     serializer_class = VoteSerializer
