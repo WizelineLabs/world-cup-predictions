@@ -87,6 +87,24 @@
       </v-slide-x-reverse-transition>
     </div>
     <doc-dialog></doc-dialog>
+    <v-dialog v-model="errorDialog" max-width="290">
+      <v-card>
+        <v-card-title class="headline">Sign in error</v-card-title>
+        <v-card-text>
+          Please make sure you are signing in with your Wizeline o Wizeline Teams
+          account to join the game.
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red darken-2" flat="flat" @click.stop="closeErrorDialog">
+            Cancel
+          </v-btn>
+          <v-btn color="red darken-2" flat="flat" @click.stop="tryAgainLogin">
+            Try again
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -100,6 +118,11 @@ export default {
   name: 'App',
   components: {
     DocDialog,
+  },
+  data() {
+    return {
+      errorDialog: false,
+    };
   },
   computed: {
     user() {
@@ -136,17 +159,26 @@ export default {
           });
         },
         (error) => {
+          this.errorDialog = true;
           this.$store.dispatch('user/setLoginMessage', error.data.message);
         },
       );
     },
     onSignInError(error) {
       if (error.error !== POPUP_CLOSED) {
+        this.errorDialog = true;
         this.$store.dispatch('user/setLoginMessage', error);
       }
     },
     handleTabsChange() {
       setTimeout(() => window.scrollTo(0, 0), 300);
+    },
+    tryAgainLogin() {
+      this.closeErrorDialog();
+      this.signIn();
+    },
+    closeErrorDialog() {
+      this.errorDialog = false;
     },
   },
   created() {
@@ -265,11 +297,6 @@ export default {
   }
 }
 
-.xs .solid-tabs .tabs__item {
-  font-size: 18px;
-  padding: 12px;
-}
-
 .wcp-title {
   font-size: 32px;
   font-weight: normal;
@@ -331,6 +358,10 @@ export default {
   font-size: 12px;
 }
 
+.wcp-bold {
+  font-weight: 500;
+}
+
 // Responsiveness
 .xs {
   .container {
@@ -374,6 +405,11 @@ export default {
       top: 0;
       width: 40px;
     }
+  }
+
+  .solid-tabs .tabs__item {
+    font-size: 18px;
+    padding: 12px;
   }
 
   .title {
