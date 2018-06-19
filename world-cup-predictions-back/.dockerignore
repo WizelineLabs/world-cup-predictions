@@ -1,0 +1,17 @@
+.dockerignore
+Dockerfile
+db.sqlite3
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+.tox
+.coverage
+.coverage.*
+.cache
+coverage.xml
+*,cover
+*.log
+.git

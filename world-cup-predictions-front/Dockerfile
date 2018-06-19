@@ -1,4 +1,4 @@
-FROM node:carbon
+FROM node:carbon-alpine
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
