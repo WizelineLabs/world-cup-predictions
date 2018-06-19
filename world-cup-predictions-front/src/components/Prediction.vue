@@ -25,7 +25,7 @@
           <v-tab :key="2" ripple>
             Knockout Phase
           </v-tab>
-          <v-tabs-items>
+          <v-tabs-items touchless>
             <v-tab-item :key="1">
               <group-stage></group-stage>
             </v-tab-item>
