@@ -590,9 +590,4 @@ if not games or not teams or not groups:
     populate_worldCup_matches(group_matches)
     populate_flag_codes()
 
-group_matches = WorldCupGame.objects.filter(pk__lte=48)
-knockout_matches = WorldCupGame.objects.filter(pk__gt=48)
-populate_group_predictions(group_matches)
-populate_knockout_predictions(knockout_matches)
-
 print('Database Population Done')

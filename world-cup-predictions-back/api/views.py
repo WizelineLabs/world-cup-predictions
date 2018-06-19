@@ -232,8 +232,6 @@ def make_prediction(game):
         )
     paul = User.objects.get(email='paul.prediction@wizeline.com')
     paul_vote, created = Vote.objects.get_or_create(user=paul, game=game)
-    print(created)
     paul_choice = get_paul_choice(paul_prediction.home_win, paul_prediction.away_win, paul_prediction.draw)
     paul_vote.choice = paul_choice
-    print('updated')
     paul_vote.save()
