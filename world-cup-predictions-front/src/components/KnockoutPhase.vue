@@ -2,7 +2,7 @@
   <v-container fluid grid-list-xl class="py-0 pl-0 pr-3 my-4">
     <v-layout row wrap>
       <v-flex xs12>
-        <div class="text-xs-left blue--text text--darken-4 hidden-md-and-up">
+        <div class="text-xs-left blue--text text--darken-4 wcp-bold hidden-md-and-up">
           <span class="wcp-subtext pl-3">{{ this.headers[0].text }}</span>
         </div>
         <v-data-table
