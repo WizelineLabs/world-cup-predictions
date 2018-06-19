@@ -20,6 +20,7 @@ services:
         ./wait-for-mysql.sh db 3306 russia world_cup
         python manage.py makemigrations
         python manage.py migrate
+        python populate_database.py
         python update_paul_user.py
         python manage.py runserver 0.0.0.0:8000"
     build: ./world-cup-predictions-back
