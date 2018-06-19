@@ -5402,7 +5402,7 @@ function Vuetify(Vue, args) {
   }, args));
 }
 
-Vuetify.version = '1.0.18';
+Vuetify.version = '1.0.19';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(Vuetify);
@@ -13612,7 +13612,11 @@ __WEBPACK_IMPORTED_MODULE_0__VNavigationDrawer__["a" /* default */].install = fu
         },
         transitionend: function transitionend(e) {
           _this2.$emit('transitionend', e);
-          window.dispatchEvent(new Event('resize'));
+
+          // IE11 does not support new Event('resize')
+          var resizeEvent = document.createEvent('UIEvents');
+          resizeEvent.initUIEvent('resize', true, false, window, 0);
+          window.dispatchEvent(resizeEvent);
         }
       }
     };
