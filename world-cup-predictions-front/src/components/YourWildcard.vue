@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout row wrap class="pa-2 wcp-wildcard-text">
+    <v-layout row wrap class="wcp-wildcard-text">
       <v-flex xs9>
         <p>
           Select the team you think will win the World Cup. If you're correct, we
@@ -61,10 +61,11 @@ export default {
 
 <style lang="scss">
 .wcp-wildcard-text {
+  color: #424242;
   font-size: 16px;
   font-weight: normal;
   line-height: 1.5;
-  color: #424242;
+  padding: 8px;
 
   strong {
     font-weight: 500;
@@ -95,5 +96,12 @@ export default {
   border-top: solid 1px currentColor;
   border-left: solid 1px currentColor;
   border-right: solid 1px currentColor;
+}
+
+// Responsiveness
+.xs {
+  .wcp-wildcard-text {
+    padding: 8px 0;
+  }
 }
 </style>

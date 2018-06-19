@@ -15,12 +15,12 @@
             </v-layout>
           </v-flex>
           <v-flex xs4 class="text-xs-right">
-            <span v-if="!user || !user.id" class="wcp-text-16 hidden-sm-and-down pr-2">
+            <span v-if="!user || !user.id" class="wcp-text-16 pr-2 hidden-sm-and-down">
               Join the game!
             </span>
             <v-btn
               v-if="user && user.id"
-              class="wcp-btn px-2 grey lighten-1 white--text text-transform-none"
+              class="wcp-btn grey lighten-1 white--text text-transform-none"
               @click="signOut"
             >
               Sign Out
@@ -34,7 +34,7 @@
             </v-btn>
           </v-flex>
         </v-layout>
-        <v-layout row wrap class="wcp-navbar-bottom-container">
+        <v-layout row wrap>
           <v-flex xs12>
             <v-tabs
               class="wcp-navbar-tabs mt-2"
@@ -87,6 +87,24 @@
       </v-slide-x-reverse-transition>
     </div>
     <doc-dialog></doc-dialog>
+    <v-dialog v-model="errorDialog" max-width="290">
+      <v-card>
+        <v-card-title class="headline">Sign in error</v-card-title>
+        <v-card-text>
+          Please make sure you are signing in with your Wizeline o Wizeline Teams
+          account to join the game.
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red darken-2" flat="flat" @click.stop="closeErrorDialog">
+            Cancel
+          </v-btn>
+          <v-btn color="red darken-2" flat="flat" @click.stop="tryAgainLogin">
+            Try again
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -100,6 +118,11 @@ export default {
   name: 'App',
   components: {
     DocDialog,
+  },
+  data() {
+    return {
+      errorDialog: false,
+    };
   },
   computed: {
     user() {
@@ -136,17 +159,26 @@ export default {
           });
         },
         (error) => {
+          this.errorDialog = true;
           this.$store.dispatch('user/setLoginMessage', error.data.message);
         },
       );
     },
     onSignInError(error) {
       if (error.error !== POPUP_CLOSED) {
+        this.errorDialog = true;
         this.$store.dispatch('user/setLoginMessage', error);
       }
     },
     handleTabsChange() {
       setTimeout(() => window.scrollTo(0, 0), 300);
+    },
+    tryAgainLogin() {
+      this.closeErrorDialog();
+      this.signIn();
+    },
+    closeErrorDialog() {
+      this.errorDialog = false;
     },
   },
   created() {
@@ -186,6 +218,8 @@ export default {
 
 .wcp-body-container {
   padding-top: 140px;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .toolbar.wcp-navbar {
@@ -263,11 +297,6 @@ export default {
   }
 }
 
-.xs .solid-tabs .tabs__item {
-  font-size: 18px;
-  padding: 12px;
-}
-
 .wcp-title {
   font-size: 32px;
   font-weight: normal;
@@ -329,6 +358,10 @@ export default {
   font-size: 12px;
 }
 
+.wcp-bold {
+  font-weight: 500;
+}
+
 // Responsiveness
 .xs {
   .container {
@@ -338,10 +371,6 @@ export default {
   .wcp-logo-text {
     padding: 4px 0 0;
     width: 100%;
-  }
-
-  .wcp-navbar-bottom-container {
-    margin: 0 -16px;
   }
 
   .wcp-navbar-tabs {
@@ -376,6 +405,11 @@ export default {
       top: 0;
       width: 40px;
     }
+  }
+
+  .solid-tabs .tabs__item {
+    font-size: 18px;
+    padding: 12px;
   }
 
   .title {

@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout row wrap class="pa-2 wcp-tab-text">
+    <v-layout row wrap class="wcp-tab-text">
       <v-flex xs12>
         <p>
           For each right guess, you’ll be granted <strong>10 points</strong>. Paul's prediction
@@ -16,47 +16,47 @@
             hide-slider
             show-arrows
           >
-            <v-tab :key="1">
+            <v-tab :key="0">
               Group Round: 1
             </v-tab>
-            <v-tab :key="2">
+            <v-tab :key="1">
               Group Round: 2
             </v-tab>
-            <v-tab :key="3">
+            <v-tab :key="2">
               Group Round: 3
             </v-tab>
-            <v-tab :key="4" disabled>
+            <v-tab :key="3" disabled>
               Round of 16
             </v-tab>
-            <v-tab :key="5" disabled>
+            <v-tab :key="4" disabled>
               Quarters
             </v-tab>
-            <v-tab :key="6" disabled>
+            <v-tab :key="5" disabled>
               Semis
             </v-tab>
-            <v-tab :key="7" disabled>
+            <v-tab :key="6" disabled>
               3rd & Final
             </v-tab>
             <v-tabs-items class="mt-4">
-              <v-tab-item :key="1">
+              <v-tab-item :key="0">
                 <matchday1></matchday1>
               </v-tab-item>
-              <v-tab-item :key="2">
+              <v-tab-item :key="1">
                 <matchday2></matchday2>
               </v-tab-item>
-              <v-tab-item :key="3">
+              <v-tab-item :key="2">
                 <matchday3></matchday3>
               </v-tab-item>
-              <v-tab-item :key="4">
+              <v-tab-item :key="3">
                 <round-of16></round-of16>
               </v-tab-item>
-              <v-tab-item :key="5">
+              <v-tab-item :key="4">
                 <quarters></quarters>
               </v-tab-item>
-              <v-tab-item :key="6">
+              <v-tab-item :key="5">
                 <semis></semis>
               </v-tab-item>
-              <v-tab-item :key="7">
+              <v-tab-item :key="6">
                 <final></final>
               </v-tab-item>
             </v-tabs-items>
@@ -88,7 +88,7 @@ export default {
   },
   data() {
     return {
-      active: null,
+      active: '1',
     };
   },
 };
@@ -96,10 +96,11 @@ export default {
 
 <style lang="scss">
 .wcp-tab-text {
+  color: #424242;
   font-size: 16px;
   font-weight: normal;
   line-height: 1.5;
-  color: #424242;
+  padding: 8px;
 
   strong {
     font-weight: 500;
@@ -108,6 +109,8 @@ export default {
 }
 
 .solid-tabs.nested-tabs {
+  width: 100%;
+
   .tabs__bar {
     margin: 0 -12px;
   }
@@ -127,10 +130,9 @@ export default {
 }
 
 // Responsiveness
-.xs,
-.sm {
-  .solid-tabs.nested-tabs .tabs__bar {
-    margin: 0 -12px;
+.xs {
+  .wcp-tab-text {
+    padding: 8px 0;
   }
 }
 </style>
