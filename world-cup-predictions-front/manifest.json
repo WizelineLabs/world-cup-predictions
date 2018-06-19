@@ -1,0 +1,14 @@
+{
+  "name": "Wizeline Prediction Game",
+  "icons": [
+    {
+      "src": "/static/faicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "density": 2
+    }
+  ],
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "landscape"
+}

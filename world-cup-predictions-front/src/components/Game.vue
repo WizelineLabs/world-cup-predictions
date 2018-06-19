@@ -52,7 +52,7 @@
             <v-tab :key="3" ripple>
               Leaderboard
             </v-tab>
-            <v-tabs-items>
+            <v-tabs-items touchless>
               <v-tab-item :key="1">
                 <your-predictions></your-predictions>
               </v-tab-item>

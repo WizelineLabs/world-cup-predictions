@@ -12,6 +12,14 @@ const teamsByGroup = (state) => {
   return groups;
 };
 
+// eslint-disable-next-line
+const teamsByWinnerProb = (state) => {
+  const teams = [...state.list].sort(
+    (a, b) => b.pass_final_prob - a.pass_final_prob,
+  );
+  return teams;
+};
+
 const wildcards = (state) => {
   const teams = [...state.list].sort((a, b) => a.id - b.id);
 
@@ -27,5 +35,6 @@ const wildcards = (state) => {
 
 export default {
   teamsByGroup,
+  teamsByWinnerProb,
   wildcards,
 };
