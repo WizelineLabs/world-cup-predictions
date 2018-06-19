@@ -2,6 +2,9 @@
   <v-container fluid grid-list-xl class="py-0 pl-0 pr-3 my-4">
     <v-layout row wrap>
       <v-flex xs12>
+        <div class="text-xs-left blue--text text--darken-4 hidden-md-and-up">
+          <span class="wcp-subtext pl-3">{{ this.headers[0].text }}</span>
+        </div>
         <v-data-table
           :headers="headers"
           :items="teams"
@@ -10,7 +13,7 @@
           class="wcp-table pt-2 pb-1 px-1"
         >
           <template slot="headers" slot-scope="props">
-            <tr class="border-0">
+            <tr class="border-0 hidden-sm-and-down">
               <th class="text-xs-left blue--text text--darken-4 wpc-table-cell-main">
                 <span class="wcp-subtext">{{ props.headers[0].text }}</span>
               </th>
@@ -20,15 +23,23 @@
               <th class="text-xs-center wpc-table-header">{{ props.headers[4].text }}</th>
               <th class="text-xs-center wpc-table-header">{{ props.headers[5].text }}</th>
             </tr>
+            <tr class="border-0 hidden-md-and-up">
+              <th class="text-xs-left blue--text text--darken-4 wpc-table-cell-main"></th>
+              <th class="text-xs-center wpc-table-header">{{ props.headers[1].subtext }}</th>
+              <th class="text-xs-center wpc-table-header">{{ props.headers[2].subtext }}</th>
+              <th class="text-xs-center wpc-table-header">{{ props.headers[3].subtext }}</th>
+              <th class="text-xs-center wpc-table-header">{{ props.headers[4].subtext }}</th>
+              <th class="text-xs-center wpc-table-header">{{ props.headers[5].subtext }}</th>
+            </tr>
           </template>
           <template slot="items" slot-scope="props">
             <tr class="wcp-table-row border-0">
               <!-- Flag and Name Cell -->
               <td class="pr-0">
                 <div
-                  :class="['wcp-flag', 'flag-icon', 'flag-icon-' + props.item.flag_code]"
+                  :class="['wcp-flag', 'mr-1', 'flag-icon', 'flag-icon-' + props.item.flag_code]"
                 ></div>
-                <span class="wcp-table-title">{{ props.item.name }}</span>
+                <span class="wcp-table-title hidden-sm-and-down">{{ props.item.name }}</span>
               </td>
               <!-- Sixteen Cell -->
               <td class="pa-0 text-xs-center border-r-1">
@@ -112,30 +123,35 @@ export default {
         },
         {
           text: 'ROUND OF 16',
+          subtext: 'R16',
           align: 'center',
           sortable: false,
           value: 'sixteen',
         },
         {
           text: 'QUARTERS',
+          subtext: 'QUA',
           align: 'center',
           sortable: false,
           value: 'quarters',
         },
         {
           text: 'SEMIS',
+          subtext: 'SEM',
           align: 'center',
           sortable: false,
           value: 'semi',
         },
         {
           text: 'FINAL',
+          subtext: 'FIN',
           align: 'center',
           sortable: false,
           value: 'final',
         },
         {
           text: 'WINNER',
+          subtext: 'WIN',
           align: 'center',
           sortable: false,
           value: 'winner',
@@ -200,5 +216,23 @@ export default {
   line-height: 24px;
   margin: 0 0 -6px 0;
   width: 32px;
+}
+
+// Responsiveness
+.xs,
+.sm {
+  .wpc-table-cell-main {
+    width: 25%;
+  }
+
+  .wpc-table-header {
+    width: 15%;
+  }
+
+  .wcp-table thead th:first-child,
+  .wcp-table tbody td:first-child,
+  .wcp-table thead th:not(:first-child) {
+    padding: 0 4px;
+  }
 }
 </style>
