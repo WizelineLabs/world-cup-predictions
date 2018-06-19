@@ -33,6 +33,8 @@ class Group(models.Model):
     max_length=1,
     choices=GROUP_CHOICES,
   )
+  def __str__(self):
+    return self.group_label
 
 class Team(models.Model):
   name = models.CharField(max_length=200, db_index=True)
@@ -58,6 +60,14 @@ class HistoricalGame(models.Model):
   home_score = models.IntegerField(default=0)
   away_score = models.IntegerField(default=0)
 
+  def to_dict(self):
+    return {
+      'home_team': str(self.home_team),
+      'away_team': str(self.away_team),
+      'home_score': self.home_score,
+      'away_score': self.away_score
+    }
+
 class WorldCupGame(models.Model):
     home_team = models.ForeignKey(Team, related_name='game_home', on_delete=models.CASCADE, null=True)
     away_team = models.ForeignKey(Team, related_name='game_away', on_delete=models.CASCADE, null=True)
@@ -72,6 +82,14 @@ class WorldCupGame(models.Model):
       if(self.home_score is not None and self.away_score is not None):
         update_users_scores(self)
       super(WorldCupGame, self).save(*args, **kwargs)
+    
+    def to_dict(self):
+      return {
+        'home_team': str(self.home_team),
+        'away_team': str(self.away_team),
+        'home_score': self.home_score,
+        'away_score': self.away_score
+      }
 
 
 class Prediction(models.Model):
