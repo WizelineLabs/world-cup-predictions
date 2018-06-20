@@ -40,7 +40,14 @@
     <!--Players list -->
     <v-layout row class="mt-2 wcp-table-row" v-for=" player in players" :key="player._id">
       <div class="wcp-table-cell-right">
-        <div class="wcp-table-row-border" :class="{'current-user': player.isCurrentUser}">
+        <div
+          class="wcp-table-row-border"
+          :class="{
+            'current-user': player.isCurrentUser,
+            'is-paul': player.isPaul,
+            'top-contender': player.rank === 1
+          }"
+        >
           <v-layout row>
             <v-flex xs2 sm2 md2 class="text-xs-center">
               <v-card flat>
@@ -151,6 +158,16 @@ export default {
     border: 1px solid #dcdedf;
     border-radius: 8px;
     overflow: hidden;
+  }
+
+  .top-contender {
+    background-color: rgba(230, 207, 142, 0.7);
+    border-color: transparent;
+  }
+
+  .is-paul {
+    background-color: rgba(211, 47, 47, 0.2);
+    border-color: transparent;
   }
 
   .current-user {
