@@ -100,7 +100,13 @@
           </v-layout>
         </div>
       </div>
-      <div v-if="editFollowMode" class="wcp-table-cell-right"></div>
+      <div
+        class="wcp-table-cell-right"
+        :class="{
+          'edit-mode': editFollowMode && followViewActive,
+          'transition': followViewActive
+        }"
+      ></div>
     </v-layout>
 
     <!--Players list -->
@@ -153,7 +159,13 @@
           </v-layout>
         </div>
       </div>
-      <div v-if="editFollowMode" class="wcp-table-cell-right">
+      <div
+        class="wcp-table-cell-right"
+        :class="{
+          'edit-mode': editFollowMode && followViewActive,
+          'transition': followViewActive
+        }"
+      >
         <v-btn icon dark color="indigo accent-2" class="elevation-0"
           @click="removePlayer(player)"
         >
@@ -243,10 +255,12 @@ export default {
     },
     toggleLeaderboard() {
       this.followViewActive = !this.followViewActive;
+      this.editFollowMode = false;
     },
     resetFollowList() {
       this.playersSelected = [];
       this.followViewActive = false;
+      this.editFollowMode = false;
     },
     editFollowList() {
       this.editFollowMode = true;
@@ -296,8 +310,12 @@ export default {
 
   .wcp-table-cell-right {
     display: table-cell;
+    opacity: 0;
+    margin: 0;
+    max-width: 0;
+    overflow: hidden;
     text-align: center;
-    width: 56px;
+    width: 0;
 
     > .btn {
       height: 24px;
@@ -307,6 +325,16 @@ export default {
         font-size: 16px;
         padding-left: 1px;
       }
+    }
+
+    &.transition {
+      transition: all 0.3s ease-out;
+    }
+
+    &.edit-mode {
+      opacity: 1;
+      max-width: 56px;
+      width: 56px;
     }
   }
 
