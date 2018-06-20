@@ -13,6 +13,7 @@ router.register(r'user', views.UserViewSet, 'user')
 router.register(r'prediction', views.PredictionViewSet, 'predictions')
 router.register(r'vote', views.VoteViewSet, 'votes')
 router.register(r'leaderboard', views.LeaderboardViewSet)
+router.register(r'myleaderboard', views.MyCustomLeaderboardViewSet, 'myleaderboard')
 router.register(r'topcontenders', views.TopContendersViewSet)
 # The API URLs are now determined automatically by the router.
 # Additionally, we include the login URLs for the browsable API.
@@ -21,5 +22,7 @@ urlpatterns = [
     url(r'^social/(?P<backend>[^/]+)/$', views.exchange_token, name='google_login'),
     url(r'^wildcard/', views.choose_winner, name='choose_wildcard'),
     url(r'^guess/', views.guess_game_result, name='guess_result'),
+    url(r'^follow/', views.follow, name='follow'),
+    url(r'^unfollow/', views.unfollow, name='unfollow'),
     url(r'^logout/', views.Logout.as_view()),
 ]
