@@ -64,7 +64,7 @@ class LeaderboardSerializer(serializers.ModelSerializer):
     rank = serializers.SerializerMethodField()
     class Meta :
         model = User
-        fields = ('first_name', 'last_name', 'score', 'avatar','total_votes', 'correct_votes', 'rank')
+        fields = ('id', 'first_name', 'last_name', 'score', 'avatar','total_votes', 'correct_votes', 'rank')
     
     def get_total_votes(self, obj):
         return obj.votes.exclude(correct__isnull=True).count()

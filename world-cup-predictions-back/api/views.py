@@ -125,11 +125,55 @@ def guess_game_result(request):
 
         return Response(status=status.HTTP_201_CREATED)
 
+@api_view(http_method_names=['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def follow(request):
+    try:
+        current_user = request.user
+        followed_user = User.objects.get(pk=request.data['user_id'])
+        current_user.following.add(followed_user)
+        current_user.save()
+        return Response(status=status.HTTP_201_CREATED)
+    except:
+        return Response(
+                {'errors': "No user found with the provided id"},
+                status=status.HTTP_400_BAD_REQUEST,
+        )
+
+@api_view(http_method_names=['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def unfollow(request):
+    try:
+        current_user = request.user
+        unfollowed_user = User.objects.get(pk=request.data['user_id'])
+        current_user.following.remove(unfollowed_user)
+        current_user.save()
+        return Response(status=status.HTTP_201_CREATED)
+    except:
+        return Response(
+                {'errors': "No user found with the provided id"},
+                status=status.HTTP_400_BAD_REQUEST,
+        )
+
+@api_view(http_method_names=['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def reset_custom_leaderboard(request):
+    request.user.following.clear()
+    return Response(status=status.HTTP_201_CREATED)
+
 class LeaderboardViewSet(viewsets.ModelViewSet):
     queryset = User.objects.filter(is_superuser=False).order_by('-score', 'first_name', 'last_name')
     serializer_class = LeaderboardSerializer
     permission_classes = (permissions.IsAuthenticated, )
     http_method_names = ['get']
+
+class MyCustomLeaderboardViewSet(viewsets.ModelViewSet):
+    serializer_class = LeaderboardSerializer
+    permission_classes = (permissions.IsAuthenticated, )
+    http_method_names = ['get']
+    def get_queryset(self):
+        return self.request.user.following.all()
+
 
 @api_view(http_method_names=['POST'])
 @permission_classes([AllowAny])
