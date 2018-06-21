@@ -155,6 +155,12 @@ def unfollow(request):
                 status=status.HTTP_400_BAD_REQUEST,
         )
 
+@api_view(http_method_names=['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def reset_custom_leaderboard(request):
+    request.user.following.clear()
+    return Response(status=status.HTTP_201_CREATED)
+
 class LeaderboardViewSet(viewsets.ModelViewSet):
     queryset = User.objects.filter(is_superuser=False).order_by('-score', 'first_name', 'last_name')
     serializer_class = LeaderboardSerializer

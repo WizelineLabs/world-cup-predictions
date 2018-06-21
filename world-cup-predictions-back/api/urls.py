@@ -22,7 +22,8 @@ urlpatterns = [
     url(r'^social/(?P<backend>[^/]+)/$', views.exchange_token, name='google_login'),
     url(r'^wildcard/', views.choose_winner, name='choose_wildcard'),
     url(r'^guess/', views.guess_game_result, name='guess_result'),
-    url(r'^follow/', views.follow, name='follow'),
-    url(r'^unfollow/', views.unfollow, name='unfollow'),
+    url(r'^follow/add/', views.follow, name='follow'),
+    url(r'^follow/remove/', views.unfollow, name='unfollow'),
+    url(r'^follow/reset/', views.reset_custom_leaderboard, name='reset'),
     url(r'^logout/', views.Logout.as_view()),
 ]
