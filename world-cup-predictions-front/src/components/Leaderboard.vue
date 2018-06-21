@@ -18,7 +18,7 @@
         >
           <template slot="selection" slot-scope="data"></template>
           <template slot="item" slot-scope="data">
-            <template v-if="data.item.fullname">
+            <template v-if="data.item.id">
               <v-list-tile-avatar>
                 <img :src="data.item.avatar">
               </v-list-tile-avatar>
@@ -33,7 +33,7 @@
         </v-select>
       </v-flex>
       <v-flex xs5 md4 class="pt-1">
-        <template v-if="followPlayers.length">
+        <template v-if="followedPlayers.length">
           <span class="wcp-text-16 pl-4 pr-2 hidden-sm-and-down">Toggle View:</span>
           <v-btn small
             @click="toggleLeaderboard"
@@ -183,7 +183,6 @@ export default {
   data() {
     return {
       selectedPlayer: null,
-      playersSelected: [],
       followViewActive: false,
       editFollowMode: false,
       customFilter(item, queryText) {
@@ -203,15 +202,31 @@ export default {
   computed: {
     players() {
       const list = this.$store.state.leaderboard.list;
+      return this.updateLeaderboardList(list);
+    },
+    participants() {
+      return this.players.length;
+    },
+    user() {
+      return this.$store.state.user.data;
+    },
+    followedPlayers() {
+      const list = this.$store.state.leaderboard.myList;
+      const sortedList = list.sort((a, b) => b.score - a.score);
+      return this.updateLeaderboardList(sortedList);
+    },
+    currentLeaderboard() {
+      if (this.followViewActive) return this.followedPlayers;
+      return this.players;
+    },
+  },
+  methods: {
+    updateLeaderboardList(list) {
       return list.map((row) => {
         const item = row;
         item.fullname = `${item.first_name} ${item.last_name}`;
 
-        if (
-          this.user &&
-          item.first_name === this.user.first_name &&
-          item.last_name === this.user.last_name
-        ) {
+        if (this.user && item.id === this.user.id) {
           item.isCurrentUser = true;
         } else if (
           item.first_name === 'Paul' &&
@@ -224,29 +239,19 @@ export default {
         return item;
       });
     },
-    participants() {
-      return this.players.length;
-    },
-    user() {
-      return this.$store.state.user.data;
-    },
-    followPlayers() {
-      return this.playersSelected;
-    },
-    currentLeaderboard() {
-      if (this.followViewActive) return this.followPlayers;
-      return this.players;
-    },
-  },
-  methods: {
     searchSelectHandler(player) {
-      const playerExist = this.playersSelected.filter(
+      const playerExist = this.followedPlayers.filter(
         // eslint-disable-next-line
-        (p) => p.fullname === player.fullname,
+        (p) => p.id === player.id,
       );
       if (!playerExist.length) {
-        this.playersSelected.push(player);
-        this.playersSelected.sort((a, b) => b.score - a.score);
+        this.$store
+          .dispatch('leaderboard/follow', {
+            user_id: player.id,
+          })
+          .then(() => {
+            this.$store.dispatch('leaderboard/getMyLeaderboard');
+          });
       }
       this.followViewActive = true;
       setTimeout(() => {
@@ -258,9 +263,14 @@ export default {
       this.editFollowMode = false;
     },
     resetFollowList() {
-      this.playersSelected = [];
-      this.followViewActive = false;
-      this.editFollowMode = false;
+      this.$store.dispatch('leaderboard/unfollowAll').then(() => {
+        this.$store.dispatch('leaderboard/getMyLeaderboard').then(() => {
+          if (!this.followedPlayers.length) {
+            this.editFollowMode = false;
+            this.followViewActive = false;
+          }
+        });
+      });
     },
     editFollowList() {
       this.editFollowMode = true;
@@ -269,14 +279,18 @@ export default {
       this.editFollowMode = false;
     },
     removePlayer(player) {
-      this.playersSelected = this.playersSelected.filter(
-        // eslint-disable-next-line
-        (p) => p.fullname !== player.fullname,
-      );
-      if (!this.playersSelected.length) {
-        this.editFollowMode = false;
-        this.followViewActive = false;
-      }
+      this.$store
+        .dispatch('leaderboard/unfollow', {
+          user_id: player.id,
+        })
+        .then(() => {
+          this.$store.dispatch('leaderboard/getMyLeaderboard').then(() => {
+            if (!this.followedPlayers.length) {
+              this.editFollowMode = false;
+              this.followViewActive = false;
+            }
+          });
+        });
     },
   },
 };
@@ -345,18 +359,18 @@ export default {
   }
 
   .top-contender {
-    background-color: rgba(230, 207, 142, 0.6);
-    border-color: transparent;
+    background-color: rgba(255, 236, 179, 0.7);
+    border: solid 1px rgba(203, 186, 131, 0.4);
   }
 
   .is-paul {
     background-color: rgba(211, 47, 47, 0.2);
-    border-color: transparent;
+    border: solid 1px rgba(211, 47, 47, 0.15);
   }
 
   .current-user {
     background-color: rgba(21, 101, 192, 0.3);
-    border-color: transparent;
+    border: solid 1px rgba(21, 101, 192, 0.2);
   }
 
   .card {
