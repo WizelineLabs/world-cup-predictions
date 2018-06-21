@@ -35,7 +35,9 @@
           </v-layout>
         </v-flex>
         <v-flex xs12 class="mt-2">
-          <h1 class="display-1 mt-4 mb-4 text--darken-2 grey--text">Prediction Game</h1>
+          <h1 class="display-1 mt-4 mb-4 text--darken-2 grey--text hidden-sm-and-down">
+            Prediction Game
+          </h1>
           <v-tabs
             class="solid-tabs mt-3"
             v-model="active"
@@ -96,6 +98,7 @@ export default {
     this.$store.dispatch('user/getUser').then(() => {
       this.$store.dispatch('game/getGames');
       this.$store.dispatch('leaderboard/getLeaderboard');
+      this.$store.dispatch('leaderboard/getMyLeaderboard');
     });
   },
 };
