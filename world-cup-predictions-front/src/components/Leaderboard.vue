@@ -303,6 +303,10 @@ export default {
   border: solid 1px #adb6c0;
   max-height: 40px;
   min-height: 40px;
+
+  .input-group--select__autocomplete {
+    padding: 0;
+  }
 }
 
 .search-select-content {
