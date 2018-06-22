@@ -46,7 +46,7 @@
       </v-flex>
       <v-flex xs7 md4 class="follow-toolbox pt-1 text-xs-right">
         <template v-if="!followViewActive">
-          <span class="wcp-text-14 pt-2 d-inline-block">Particpants: </span>
+          <span class="wcp-text-14 pt-2 d-inline-block">Participants: </span>
           <span class="wcp-text-14 pt-2">{{participants}}</span>
         </template>
         <template v-else>
