@@ -2,7 +2,7 @@
   <v-container class="wcp-leaderboard mb-5">
     <v-layout row wrap class="pb-2">
       <v-flex xs12 md4>
-        <!-- <v-select
+        <v-select
           class="search-select mt-1 mb-3"
           content-class="search-select-content elevation-0"
           :items="players"
@@ -30,10 +30,10 @@
               <v-list-tile-content>No data available</v-list-tile-content>
             </template>
           </template>
-        </v-select> -->
+        </v-select>
       </v-flex>
       <v-flex xs5 md4 class="pt-1">
-        <!-- <template v-if="followedPlayers.length">
+        <template v-if="followedPlayers.length">
           <span class="wcp-text-16 pl-4 pr-2 hidden-sm-and-down">Toggle View:</span>
           <v-btn small
             @click="toggleLeaderboard"
@@ -41,7 +41,7 @@
           >
             {{followViewActive ? 'Full players list' : 'My list'}}
           </v-btn>
-        </template> -->
+        </template>
 
       </v-flex>
       <v-flex xs7 md4 class="follow-toolbox pt-1 text-xs-right">
