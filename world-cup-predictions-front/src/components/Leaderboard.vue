@@ -52,7 +52,7 @@
         <template v-else>
           <v-btn small flat
             @click="resetFollowList"
-            class="indigo--text text--accent-2 text-transform-none wcp-text-16 mx-0"
+            class="indigo--text text--accent-2 text-transform-none wcp-text-16 ml-0 mr-2"
           >
             Reset
           </v-btn>
@@ -314,6 +314,10 @@ export default {
   background-color: #fff;
   border: solid 1px #adb6c0;
   margin: 2px 0;
+
+  .list .list__tile--link:hover {
+    background-color: rgba(231, 235, 243, 0.3);
+  }
 }
 
 .wcp-leaderboard {
