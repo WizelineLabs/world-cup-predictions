@@ -32,10 +32,15 @@
         <div class="match-prediction" v-else >
           {{match.home_win | percentage}}
         </div>
-        <div class="match-prediction" v-if="this.matchState === 'open'">?</div>
-        <div class="match-prediction" v-else >
-          {{match.draw | percentage}}
+
+        <div class="match-prediction">
+          <template v-if="!knockoutPhase">
+            <span v-if="this.matchState === 'open'">?</span>
+            <span v-else >{{match.draw | percentage}}</span>
+          </template>
         </div>
+
+
         <div class="match-prediction" v-if="this.matchState === 'open'">?</div>
         <div class="match-prediction" v-else >
           {{match.away_win | percentage}}
@@ -58,7 +63,7 @@
           </label>
         </div>
         <div class="winner-selection-container">
-          <label class="winner-selection-button">
+          <label v-if="!knockoutPhase" class="winner-selection-button">
             <input
               type="radio"
               :name="`winner-match-${match.id}`"
@@ -106,7 +111,7 @@ import moment from 'moment';
 
 export default {
   name: 'MatchCard',
-  props: ['match'],
+  props: ['match', 'knockoutPhase'],
   data() {
     return {
       choiceSelected: this.match.choice || '',
