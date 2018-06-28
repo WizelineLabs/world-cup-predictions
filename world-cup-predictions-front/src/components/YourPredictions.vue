@@ -25,7 +25,7 @@
             <v-tab key="round3">
               Group Round: 3
             </v-tab>
-            <v-tab key="roundOf16" disabled>
+            <v-tab key="roundOf16">
               Round of 16
             </v-tab>
             <v-tab key="quarters" disabled>
@@ -88,7 +88,7 @@ export default {
   },
   data() {
     return {
-      active: '2',
+      active: '3',
     };
   },
   mounted() {
