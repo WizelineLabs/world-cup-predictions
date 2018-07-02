@@ -29,7 +29,7 @@ class WorldCupGameSerializer(serializers.ModelSerializer):
     away_flag = serializers.CharField(source='away_team.flag_code')
     class Meta:
         model = WorldCupGame
-        fields = ('id', 'home', 'home_flag', 'away', 'away_flag', 'home_score', 'away_score', 'home_penalties', 'away_penalties', 'round', 'date')
+        fields = ('id', 'home', 'home_flag', 'away', 'away_flag', 'home_score', 'away_score', 'round', 'date')
 
 class PredictionSerializer(serializers.ModelSerializer):
     game_id = serializers.IntegerField(source='game.id')
