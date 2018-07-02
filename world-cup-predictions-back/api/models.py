@@ -160,12 +160,12 @@ def evaluate_vote(vote, actual_result):
 def get_actual_result(game):
   home_score = game.home_score
   away_score = game.away_score
-  if home_score > away_score
+  if home_score > away_score:
     return HOME_WIN
   elif home_score < away_score:
     return AWAY_WIN
   elif home_score == away_score and game.round in KNOCKOUT_PHASES :
-    if home_penalties > away_penalties:
+    if game.home_penalties > game.away_penalties:
       return HOME_WIN
     else:
       return AWAY_WIN
