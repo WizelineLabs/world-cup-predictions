@@ -28,7 +28,7 @@ def create_votes_from_predictions(predictions):
   paul = User.objects.get(pk=paul_id)
   for prediction in predictions:
     try:
-      vote = Vote.objects.filter(user=paul,game=prediction.game)[0]
+      #vote = Vote.objects.filter(user=paul,game=prediction.game)[0]
       pass
     except:
       paul_choice = get_paul_choice(prediction.home_win,prediction.away_win, prediction.draw)
