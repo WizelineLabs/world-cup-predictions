@@ -7,6 +7,7 @@ logger = logging.getLogger('api.models')
 HOME_WIN = 'H'
 AWAY_WIN = 'A'
 DRAW = 'D'
+KNOCKOUT_PHASES = ['16', '8', '4', '2']
 ONE_CORRECT_VOTE_SCORE = 10
 class Group(models.Model):
   GROUP_A = 'A'
@@ -74,6 +75,8 @@ class WorldCupGame(models.Model):
     home_score = models.IntegerField(null=True)
     away_score = models.IntegerField(null=True)
     round = models.CharField(max_length=50, null=True, db_index=True)
+    home_penalties = models.IntegerField(null=True)
+    away_penalties = models.IntegerField(null=True)
     date = models.DateTimeField(null=True)
     def __str__(self):
         return '%s(%s) - %s(%s)' % (self.home_team, self.home_score, self.away_team, self.away_score)
@@ -161,5 +164,10 @@ def get_actual_result(game):
     return HOME_WIN
   elif home_score < away_score:
     return AWAY_WIN
+  elif home_score == away_score and game.round in KNOCKOUT_PHASES :
+    if game.home_penalties > game.away_penalties:
+      return HOME_WIN
+    else:
+      return AWAY_WIN
   else:
     return DRAW
