@@ -10,8 +10,14 @@
           <span class="match-flag-label d-block mt-2">{{match.home}}</span>
         </div>
         <div class="match-result">
-          {{this.matchState !== 'open' ? match.home_score : ''}} -
-          {{ this.matchState !== 'open' ? match.away_score : ''}}
+          <div class="wcp-text-20">
+            {{this.matchState !== 'open' ? match.home_score : ''}} -
+            {{ this.matchState !== 'open' ? match.away_score : ''}}
+          </div>
+          <div class="wcp-text-14" v-if="match.home_penalties && match.away_penalties">
+            ({{this.matchState !== 'open' && match.home_penalties ? match.home_penalties : ''}} -
+            {{this.matchState !== 'open' && match.away_penalties ? match.away_penalties : ''}})
+          </div>
         </div>
         <div class="d-inline-block match-flag-wrapper">
           <div :class="['match-flag', 'flag-icon', `flag-icon-${match.away_flag}`]"></div>
@@ -240,7 +246,6 @@ export default {
 
 .match-result {
   display: inline-block;
-  font-size: 20px;
   margin: 0 -9px;
   width: 54px;
 }
