@@ -28,7 +28,7 @@
             <v-tab key="roundOf16">
               Round of 16
             </v-tab>
-            <v-tab key="quarters" disabled>
+            <v-tab key="quarters">
               Quarters
             </v-tab>
             <v-tab key="semis" disabled>
@@ -88,7 +88,7 @@ export default {
   },
   data() {
     return {
-      active: '3',
+      active: '4',
     };
   },
   mounted() {
