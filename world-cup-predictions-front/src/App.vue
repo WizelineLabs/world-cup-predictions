@@ -211,6 +211,10 @@ export default {
   }
 }
 
+.container {
+  margin: auto !important;
+}
+
 .wcp-full-container {
   height: 100%;
   width: 100%;
