@@ -189,7 +189,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'vuetify/dist/vuetify.min.css';
+@import '../static/css/vuetify.min.css';
 @import 'flag-icon-css/css/flag-icon.min.css';
 
 @font-face {

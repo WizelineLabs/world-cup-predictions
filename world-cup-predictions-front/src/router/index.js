@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import GoogleAuth from 'vue-google-auth';
-import Vuetify from 'vuetify';
 import Landing from '@/components/Landing';
 import NotFound from '@/components/NotFound';
 import About from '@/components/About';
 import Prediction from '@/components/Prediction';
 import Game from '@/components/Game';
 import User from '@/services/UserService';
+import Vuetify from '../../static/js/vuetify';
 
 Vue.use(Vuetify);
 Vue.use(Router);
