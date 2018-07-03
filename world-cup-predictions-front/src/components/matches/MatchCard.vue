@@ -98,7 +98,7 @@
         </div>
       </v-flex>
 
-      <v-flex xs12 text-xs-center class="mt-3">
+      <v-flex xs12 text-xs-center>
         <span class="match-caption">{{matchCaption}}</span>
       </v-flex>
     </v-layout>
@@ -322,8 +322,8 @@ export default {
 .winner-selection-button-label {
   font-size: 10px;
   line-height: 18px;
-  position: absolute;
-  top: 2px;
+  margin-top: 2px;
+  margin-bottom: 0;
   width: 28px;
 }
 
