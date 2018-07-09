@@ -31,7 +31,7 @@
             <v-tab key="quarters">
               Quarters
             </v-tab>
-            <v-tab key="semis" disabled>
+            <v-tab key="semis">
               Semis
             </v-tab>
             <v-tab key="finals" disabled>
@@ -88,7 +88,7 @@ export default {
   },
   data() {
     return {
-      active: '4',
+      active: '5',
     };
   },
   mounted() {
