@@ -27,7 +27,7 @@ class HistoricalGameViewSet(viewsets.ModelViewSet):
     serializer_class = HistoricalGameSerializer
 
 class TeamViewSet(viewsets.ModelViewSet):
-    queryset = Team.objects.order_by('-pass_final_prob')
+    queryset = Team.objects.order_by('-pass_final_prob','-pass_semis_prob','-pass_quarters_prob','-pass_round16_prob','-pass_group_winner_prob','-pass_group_runner_prob')
     serializer_class = TeamSerializer
     http_method_names = ['get']
 
