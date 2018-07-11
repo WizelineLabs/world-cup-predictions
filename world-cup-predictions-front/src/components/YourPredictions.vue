@@ -34,7 +34,7 @@
             <v-tab key="semis">
               Semis
             </v-tab>
-            <v-tab key="finals" disabled>
+            <v-tab key="finals">
               3rd & Final
             </v-tab>
             <v-tabs-items class="mt-4">
@@ -88,7 +88,7 @@ export default {
   },
   data() {
     return {
-      active: '5',
+      active: '6',
     };
   },
   mounted() {
