@@ -18,7 +18,7 @@ from social_django.utils import psa
 import pandas as pd
 
 from api.models import HistoricalGame, Team, Group, WorldCupGame, Prediction, Vote, User
-from api.serializers import HistoricalGameSerializer, TeamSerializer, GroupSerializer, WorldCupGameSerializer, PredictionSerializer, VoteSerializer, UserSerializer, SocialSerializer, LeaderboardSerializer
+from api.serializers import HistoricalGameSerializer, TeamSerializer, GroupSerializer, WorldCupGameSerializer, PredictionSerializer, VoteSerializer, UserSerializer, SocialSerializer, LeaderboardSerializer, TrendSerializer
 from model.worldcup_predictor import predict_group_match, get_defense_capabilities, win_knockout_match, fetch_matches
 from update_paul_user import get_paul_choice
 
@@ -174,6 +174,11 @@ class MyCustomLeaderboardViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.user.following.all()
 
+class TrendViewSet(viewsets.ModelViewSet):
+    queryset = WorldCupGame.objects.all()
+    serializer_class = TrendSerializer
+    permission_classes = (permissions.IsAuthenticated, )
+    http_method_names = ['get']
 
 @api_view(http_method_names=['POST'])
 @permission_classes([AllowAny])
