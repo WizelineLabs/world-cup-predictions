@@ -21,7 +21,7 @@ const getGames = async (context) => {
     const trend =
       trends.find(
         // eslint-disable-next-line
-        (t) => t.game_id === game.id,
+        (t) => t.id === game.id,
       ) || {};
     return Object.assign(guess, pred, game, trend);
   });
