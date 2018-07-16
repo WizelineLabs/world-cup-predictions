@@ -31,4 +31,18 @@ export default {
 
     return axios(settings);
   },
+
+  getTrends() {
+    const token = localStorage.getItem(WCP_TOKEN);
+
+    const settings = {
+      url: `${API_URL}/trend/`,
+      method: 'GET',
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    };
+
+    return axios(settings);
+  },
 };

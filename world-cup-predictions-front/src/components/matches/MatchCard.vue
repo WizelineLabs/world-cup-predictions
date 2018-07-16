@@ -24,34 +24,72 @@
           <span class="match-flag-label d-block mt-2">{{match.away}}</span>
         </div>
       </v-flex>
-      <v-flex xs12 text-xs-center class="py-1">
-        <span class="match-card-label">Paul's Prediction</span>
-      </v-flex>
-      <v-flex xs12 text-xs-center
-        class="grey--text pt-0 pb-1"
-        :class="{
-          'text--lighten-1': this.matchState === 'open',
-          'text--darken-1': this.matchState !== 'open'
-        }"
-      >
-        <div class="match-prediction" v-if="this.matchState === 'open'">?</div>
-        <div class="match-prediction" v-else >
-          {{match.home_win | percentage}}
-        </div>
+      <v-layout row wrap class="mx-0">
+        <v-flex xs2 class="text-xs-left pt-3 px-0">
+          <button
+            v-if="!showPaulsPrediction"
+            class="match-button"
+            @click="handlePredictionsChange"
+          >
+            <div class="match-button-title">PP</div>
+            <div class="arrow-left icon"></div>
+          </button>
+        </v-flex>
+        <!-- Predictions -->
+        <v-flex xs8 class="px-0">
+          <v-layout column wrap>
+            <v-flex xs12 text-xs-center class="py-1">
+              <span v-if="showPaulsPrediction" class="match-card-label">Paul's Prediction</span>
+              <span v-else class="match-card-label">Wizeline Trend</span>
+            </v-flex>
+            <v-flex xs12 text-xs-center
+              class="grey--text"
+              :class="{
+                'text--lighten-1': this.matchState === 'open',
+                'text--darken-1': this.matchState !== 'open'
+              }"
+            >
+              <v-layout justify-space-between class="match-prediction-wrapper pb-1 pt-0">
+                <div class="match-prediction" v-if="this.matchState === 'open'">?</div>
+                <div class="match-prediction" v-else >
+                  <span v-if="showPaulsPrediction">{{match.home_win | percentage}}</span>
+                  <span v-else>{{match.home_win_trend | percentage}}</span>
+                </div>
 
-        <div class="match-prediction">
-          <template v-if="!knockoutPhase">
-            <span v-if="this.matchState === 'open'">?</span>
-            <span v-else >{{match.draw | percentage}}</span>
-          </template>
-        </div>
+                <div class="match-prediction">
+                  <template v-if="!knockoutPhase">
+                    <span v-if="this.matchState === 'open'">?</span>
+                    <span v-else >
+                      <template v-if="showPaulsPrediction">
+                        {{match.draw | percentage}}
+                      </template>
+                      <template v-else>
+                        {{match.draw_trend | percentage}}
+                      </template>
+                    </span>
+                  </template>
+                </div>
 
-
-        <div class="match-prediction" v-if="this.matchState === 'open'">?</div>
-        <div class="match-prediction" v-else >
-          {{match.away_win | percentage}}
-        </div>
-      </v-flex>
+                <div class="match-prediction" v-if="this.matchState === 'open'">?</div>
+                <div class="match-prediction" v-else >
+                  <span v-if="showPaulsPrediction">{{match.away_win | percentage}}</span>
+                  <span v-else>{{match.away_win_trend | percentage}}</span>
+                </div>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex xs2 class="text-xs-right pt-3 px-0">
+          <button
+            v-if="showPaulsPrediction"
+            class="match-button"
+            @click="handlePredictionsChange"
+          >
+            <div class="match-button-title">WT</div>
+            <div class="arrow-right icon"></div>
+          </button>
+        </v-flex>
+      </v-layout>
 
       <v-flex xs12 text-xs-center>
         <div class="winner-selection-container">
@@ -127,6 +165,7 @@ export default {
       saveStatus: '',
       showSaveStatus: false,
       errorSaving: false,
+      showPaulsPrediction: true,
     };
   },
   computed: {
@@ -200,6 +239,9 @@ export default {
         self.showSaveStatus = false;
         self.errorSaving = false;
       }, 3000);
+    },
+    handlePredictionsChange() {
+      this.showPaulsPrediction = !this.showPaulsPrediction;
     },
   },
 };
@@ -276,11 +318,82 @@ export default {
   letter-spacing: 0.5px;
 }
 
+.match-prediction-wrapper {
+  margin: 0 auto !important;
+  width: 172px;
+}
+
 .match-prediction {
   display: inline-block;
   font-size: 16px;
-  margin: 0 16px;
   width: 32px;
+}
+
+.match-button {
+  background-color: rgba(129, 135, 143, 0.12);
+  border-radius: 2px;
+  color: #929292;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  height: 40px;
+  width: 40px;
+
+  &:hover {
+    opacity: 0.75;
+  }
+
+  .match-button-title {
+    margin-top: -10px;
+  }
+}
+
+.arrow-left.icon {
+  color: #929292;
+  position: absolute;
+  margin-left: -10px;
+  margin-top: 3px;
+  width: 16px;
+  height: 2px;
+  transform: scale(0.6);
+  background-color: currentColor;
+}
+
+.arrow-left.icon:before {
+  content: '';
+  position: absolute;
+  left: 1px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-top: solid 2px currentColor;
+  border-right: solid 2px currentColor;
+  -webkit-transform: rotate(-135deg);
+          transform: rotate(-135deg);
+}
+
+.arrow-right.icon {
+  color: #929292;
+  position: absolute;
+  margin-left: -4px;
+  margin-top: 3px;
+  width: 16px;
+  height: 2px;
+  transform: scale(0.6);
+  background-color: currentColor;
+}
+
+.arrow-right.icon:before {
+  content: '';
+  position: absolute;
+  right: 1px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-top: solid 2px currentColor;
+  border-right: solid 2px currentColor;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
 }
 
 .winner-selection-container {
@@ -358,6 +471,16 @@ export default {
     background-color: #80a3d6;
     border-color: #80a3d6;
   }
+
+  .match-button {
+    background-color: rgba(129, 135, 143, 0.12);
+    color: #929292;
+  }
+
+  .arrow-left,
+  .arrow-right {
+    color: #929292;
+  }
 }
 
 .match-card.no-voted {
@@ -371,6 +494,16 @@ export default {
   .winner-selection-button-check {
     background-color: #eef0f5;
     border-color: #d7dbdf;
+  }
+
+  .match-button {
+    background-color: rgba(129, 135, 143, 0.1);
+    color: #929292;
+  }
+
+  .arrow-left,
+  .arrow-right {
+    color: #929292;
   }
 }
 
@@ -400,6 +533,16 @@ export default {
   .match-caption {
     color: #1565c0;
     font-weight: 500;
+  }
+
+  .match-button {
+    background-color: rgba(21, 101, 192, 0.2);
+    color: #708BB9;
+  }
+
+  .arrow-left,
+  .arrow-right {
+    color: #708BB9;
   }
 }
 
@@ -434,6 +577,16 @@ export default {
   .winner-selection-button input:checked ~ .winner-selection-button-check {
     background-color: #d32f2f;
     border-color: #d32f2f;
+  }
+
+  .match-button {
+    background-color: rgba(211, 47, 47, 0.15);
+    color: #BB7673;
+  }
+
+  .arrow-left,
+  .arrow-right {
+    color: #BB7673;
   }
 }
 </style>

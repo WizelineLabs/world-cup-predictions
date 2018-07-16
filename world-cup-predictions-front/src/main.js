@@ -51,7 +51,7 @@ Vue.filter('HourMin', (value) => {
 });
 
 Vue.filter('percentage', (value) => {
-  if (value) {
+  if (value !== null && value !== undefined) {
     const percentage = (value * 100).toFixed(0);
     return `${percentage}%`;
   }
