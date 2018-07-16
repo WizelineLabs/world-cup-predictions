@@ -119,7 +119,7 @@ class Vote(models.Model):
     (DRAW, 'D'),
   )
   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votes')
-  game = models.ForeignKey(WorldCupGame, on_delete=models.CASCADE)
+  game = models.ForeignKey(WorldCupGame, on_delete=models.CASCADE, related_name='trends')
   choice = models.CharField(
     null=True,
     max_length=1,
