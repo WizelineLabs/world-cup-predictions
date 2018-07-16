@@ -81,3 +81,18 @@ class SocialSerializer(serializers.Serializer):
         allow_blank=False,
         trim_whitespace=True,
     )
+
+class TrendSerializer(serializers.ModelSerializer):
+    home_win_trend = serializers.SerializerMethodField()
+    away_win_trend = serializers.SerializerMethodField()
+    draw_trend = serializers.SerializerMethodField()
+    class Meta :
+        model = WorldCupGame
+        fields = ('id', 'home_win_trend', 'away_win_trend', 'draw_trend')
+
+    def get_home_win_trend(self, obj):
+        return obj.trends.filter(choice='H').count()/(User.objects.all().count() - 2)
+    def get_away_win_trend(self, obj):
+        return obj.trends.filter(choice='A').count()/(User.objects.all().count() - 2)
+    def get_draw_trend(self, obj):
+        return obj.trends.filter(choice='D').count()/(User.objects.all().count() - 2)
