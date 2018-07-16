@@ -91,8 +91,8 @@ class TrendSerializer(serializers.ModelSerializer):
         fields = ('id', 'home_win_trend', 'away_win_trend', 'draw_trend')
 
     def get_home_win_trend(self, obj):
-        return obj.trends.filter(choice='H').count()/(User.objects.all().count() - 2)
+        return obj.trends.filter(choice='H').count()/(Vote.objects.filter(game=obj).count() - 1)
     def get_away_win_trend(self, obj):
-        return obj.trends.filter(choice='A').count()/(User.objects.all().count() - 2)
+        return obj.trends.filter(choice='A').count()/(Vote.objects.filter(game=obj).count() - 1)
     def get_draw_trend(self, obj):
-        return obj.trends.filter(choice='D').count()/(User.objects.all().count() - 2)
+        return obj.trends.filter(choice='D').count()/(Vote.objects.filter(game=obj).count() - 1)
