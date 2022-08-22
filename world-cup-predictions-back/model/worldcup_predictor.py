@@ -1,7 +1,7 @@
 """
 This approach is based on a simulation model for football soccer championships,
 proposed by Ruud H. Koning et. al. in 2002. For details, please refer to the
-paper: http://www-bcf.usc.edu/~ridder/Wpapers/eor_5353_proofs.pdf
+paper: https://core.ac.uk/download/pdf/232381577.pdf
 
 NOTE: The dataset 'International football results from 1872 to 2018' was sourced
 from Kaggle. For details, please refer to
