@@ -14,9 +14,6 @@ const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
 const devWebpackConfig = merge(baseWebpackConfig, {
-  module: {
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
-  },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
 
@@ -58,13 +55,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       inject: true
     }),
     // copy custom static assets
-    new CopyWebpackPlugin([
+    new CopyWebpackPlugin({ patterns: [
       {
         from: path.resolve(__dirname, '../static'),
-        to: config.dev.assetsSubDirectory,
-        ignore: ['.*']
+        to: config.dev.assetsSubDirectory
       }
-    ])
+    ]})
   ]
 })
 
