@@ -10,6 +10,6 @@ social-auth-app-django==2.1.0
 social-auth-core==1.7.0
 requests==2.18.4
 google==2.0.1
-numpy==1.14.3
-pandas==0.23.0
-scipy==1.1.0
+numpy==1.23.4
+pandas==1.5.1
+scipy==1.9.3

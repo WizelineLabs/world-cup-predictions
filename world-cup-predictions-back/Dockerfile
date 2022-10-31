@@ -10,7 +10,7 @@ RUN apt-get update && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1 
 
 ADD ./requirements.txt /app/requirements.txt
-RUN pip install -r ./requirements.txt
+RUN pip3 install -r ./requirements.txt
 ADD . /app
 ENV DJANGO_SETTINGS_MODULE=world_cup_predictions.settings
 EXPOSE 8000
