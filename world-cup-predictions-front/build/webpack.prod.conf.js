@@ -69,14 +69,19 @@ const webpackConfig = merge(baseWebpackConfig, {
         // https://github.com/kangax/html-minifier#options-quick-reference
       }
     }),
-
+    
     // copy custom static assets
-    new CopyWebpackPlugin({ patterns: [
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory
-      }
-    ]})
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, '../static'),
+          to: config.build.assetsSubDirectory,
+          globOptions: {
+            ignore: ['.*']
+          }    
+        }
+      ]
+    })
   ]
 })
 
