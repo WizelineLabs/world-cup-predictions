@@ -16,13 +16,6 @@ const env = process.env.NODE_ENV === 'testing'
   : require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
-  module: {
-    rules: utils.styleLoaders({
-      sourceMap: config.build.productionSourceMap,
-      extract: true,
-      usePostCSS: true
-    })
-  },
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
@@ -32,32 +25,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   optimization: {
     moduleIds: 'deterministic',
     // enable scope hoisting
-    concatenateModules: true,
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendor',
-          chunks: 'all'
-        },
-        manifest: {
-          name: 'manifest',
-          minChunks: Infinity
-        },
-        app: {
-          name: 'app',
-          async: 'vendor-async',
-          children: true,
-          minChunks: 3
-        },
-        styles: {
-          name: "styles",
-          type: "css/mini-extract",
-          chunks: "all",
-          enforce: true,
-        },
-      }
-    }
+    concatenateModules: true
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -99,25 +67,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         removeAttributeQuotes: true
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
-      },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
-    }),
-    
-    // split vendor js into its own file
-    /*new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks (module) {
-        // any required modules inside node_modules are extracted to vendor
-        return (
-          module.resource &&
-          /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            path.join(__dirname, '../node_modules')
-          ) === 0
-        )
       }
-    }),*/
+    }),
     
     // copy custom static assets
     new CopyWebpackPlugin({
