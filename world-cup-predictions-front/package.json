@@ -5,8 +5,8 @@
   "author": "Eduardo Lopez <eduardo.lopez@wizeline.com>",
   "private": true,
   "scripts": {
-    "dev": "vite",
-    "start": "vite preview",
+    "dev": "vite --port 8080",
+    "start": "vite preview --port 8080 --host",
     "test": "vitest",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src test/unit",
     "build": "vite build"
