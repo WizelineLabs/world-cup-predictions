@@ -7,12 +7,12 @@ import About from '@/components/About';
 import Prediction from '@/components/Prediction';
 import Game from '@/components/Game';
 import User from '@/services/UserService';
-import Vuetify from '../../static/js/vuetify';
+import Vuetify from 'vuetify';
 
 Vue.use(Vuetify);
 Vue.use(Router);
 
-Vue.use(GoogleAuth, { client_id: process.env.GOOGLE_AUTH_KEY });
+Vue.use(GoogleAuth, { client_id: import.meta.env.GOOGLE_AUTH_KEY });
 Vue.googleAuth().load();
 Vue.googleAuth().directAccess();
 

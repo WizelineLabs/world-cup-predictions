@@ -190,7 +190,7 @@ export default {
 
 <style lang="scss">
 @import '../static/css/vuetify.min.css';
-@import 'flag-icon-css/css/flag-icon.min.css';
+//@import 'flag-icon-css/css/flag-icon.min.css';
 
 @font-face {
   font-family: 'ProximaNova-Semibold';

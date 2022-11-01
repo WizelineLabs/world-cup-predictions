@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiUrl = process.env.API_URL;
+const apiUrl = import.meta.env.API_URL;
 
 export default {
   getTeams() {
