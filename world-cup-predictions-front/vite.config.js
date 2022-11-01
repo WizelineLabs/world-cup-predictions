@@ -9,6 +9,8 @@ export default defineConfig({
     vue2(),
   ],
   resolve: {
+    // TODO: this line should be removed once all imports to .vue files include the .vue extension
+    //   like `import App from './App';` on "src/main.js"
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
