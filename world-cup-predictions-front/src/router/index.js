@@ -12,7 +12,7 @@ import Vuetify from 'vuetify';
 Vue.use(Vuetify);
 Vue.use(Router);
 
-Vue.use(GoogleAuth, { client_id: import.meta.env.GOOGLE_AUTH_KEY });
+Vue.use(GoogleAuth, { client_id: import.meta.env.VITE_GOOGLE_AUTH_KEY });
 Vue.googleAuth().load();
 Vue.googleAuth().directAccess();
 
