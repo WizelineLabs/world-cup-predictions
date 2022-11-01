@@ -36,7 +36,6 @@ services:
       - db
   frontend:
     build: ./world-cup-predictions-front
-    command: "http-server ./dist"
     restart: always
     depends_on:
       - app

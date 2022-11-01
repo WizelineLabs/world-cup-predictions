@@ -9,5 +9,7 @@ COPY . /usr/src/app/
 
 RUN npm install --legacy-peer-deps && npm run build
 
+EXPOSE 8080
+
 ENTRYPOINT ["npm", "start"]
 

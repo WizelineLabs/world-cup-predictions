@@ -16,4 +16,12 @@ export default defineConfig({
       vue: 'vue/dist/vue.esm.js',
     },
   },
+  server: {
+    host: true,
+    port: 8080
+  },
+  preview: {
+    host: true,
+    port: 8080
+  }
 });
