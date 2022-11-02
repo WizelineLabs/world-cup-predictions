@@ -27,7 +27,7 @@ GROUPS = {'A': ['Russia', 'Saudi Arabia', 'Egypt', 'Uruguay'],
 ORDER = ['A1', 'B2', 'C1', 'D2', 'E1', 'F2', 'G1', 'H2']
 ORDER += ['B1', 'A2', 'D1', 'C2', 'F1', 'E2', 'H1', 'G2']
 
-STRENGTH = pd.Series.from_csv('./country_strength.csv').to_dict()
+STRENGTH = pd.read_csv('./country_strength.csv',squeeze=True).to_dict()
 
 def fetch_matches(filename, threshold, date_format='%Y-%m-%d'):
     """
