@@ -20,6 +20,7 @@ import pandas as pd
 from api.models import HistoricalGame, Team, Group, WorldCupGame, Prediction, Vote, User
 from api.serializers import HistoricalGameSerializer, TeamSerializer, GroupSerializer, WorldCupGameSerializer, PredictionSerializer, VoteSerializer, UserSerializer, SocialSerializer, LeaderboardSerializer, TrendSerializer
 from model.worldcup_predictor import predict_group_match, get_defense_capabilities, win_knockout_match, fetch_matches
+#Comment this import if it is the first time you are running the project in order to let the migrations run ok
 from update_paul_user import get_paul_choice
 
 class HistoricalGameViewSet(viewsets.ModelViewSet):

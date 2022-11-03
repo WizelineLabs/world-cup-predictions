@@ -1,7 +1,7 @@
 Django==2.0.5
 coreapi==2.3.3
 coreschema==0.0.4
-mysqlclient==2.1.1
+mysqlclient
 django-braces==1.13.0
 django-cors-headers==2.2.0
 djangorestframework==3.8.2
