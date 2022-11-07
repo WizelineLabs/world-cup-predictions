@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 from django.contrib.auth import get_user_model
 
-threshold = '2022-11-19'
+threshold = '2016-11-20'
 date_format = '%Y-%m-%dT%H:%M:%S'
 groups = {
     'Qatar': 1,
