@@ -1,3 +1,4 @@
+Country,Strength
 Afghanistan,0.85
 Albania,0.99
 Algeria,0.85
@@ -6,6 +7,7 @@ Angola,0.85
 Antigua and Barbuda,0.85
 Argentina,1.0
 Armenia,0.99
+Aruba,0.85
 Australia,0.85
 Austria,0.99
 Azerbaijan,0.99
@@ -19,7 +21,7 @@ Benin,0.85
 Bermuda,0.85
 Bhutan,0.85
 Bolivia,1.0
-Bosnia-Herzegovina,0.99
+Bosnia and Herzegovina,0.99
 Botswana,0.85
 Brazil,1.0
 Brunei,0.85
@@ -31,15 +33,17 @@ Cambodia,0.85
 Cameroon,0.85
 Canada,0.85
 Cape Verde,0.85
+Cayman Islands,0.85
 Central African Republic,0.85
 Chile,1.0
-China,0.85
+China PR,0.85
 Colombia,1.0
 Comoros,0.85
 Congo,0.85
-Congo DR,0.85
+DR Congo,0.85
 Costa Rica,0.85
 Croatia,0.99
+Cuba,0.85
 Curaçao,0.85
 Cyprus,0.99
 Czech Republic,0.99
@@ -59,7 +63,7 @@ Faroe Islands,0.99
 Fiji,0.85
 Finland,0.99
 France,0.99
-French Guyana,0.85
+French Guiana,0.85
 Gabon,0.85
 Gambia,0.85
 Georgia,0.99
@@ -73,6 +77,7 @@ Guatemala,0.85
 Guinea,0.85
 Guinea-Bissau,0.85
 Guyana,0.85
+Guadeloupe,0.85
 Haiti,0.85
 Honduras,0.85
 Hong Kong,0.85
@@ -82,7 +87,7 @@ India,0.85
 Indonesia,0.85
 Iran,0.85
 Iraq,0.85
-Ireland,0.99
+Republic of Ireland,0.99
 Israel,0.99
 Italy,0.99
 Ivory Coast,0.85
@@ -91,9 +96,10 @@ Japan,0.85
 Jordan,0.85
 Kazakhstan,0.99
 Kenya,0.85
-Korea DPR,0.85
-Korea Republic,0.85
+North Korea,0.85
+South Korea,0.85
 Kosovo,0.99
+Kuwait,0.85
 Kyrgyzstan,0.85
 Laos,0.85
 Latvia,0.99
@@ -106,6 +112,7 @@ Lithuania,0.99
 Luxembourg,0.99
 Macau,0.85
 Macedonia,0.99
+North Macedonia,0.99
 Madagascar,0.85
 Malawi,0.85
 Malaysia,0.85
@@ -121,6 +128,7 @@ Mongolia,0.85
 Montenegro,0.99
 Morocco,0.85
 Mozambique,0.85
+Myanmar,0.85
 Namibia,0.85
 Nepal,0.85
 Netherlands,0.99
@@ -167,6 +175,7 @@ St Vincent and the Grenadines,0.85
 Sudan,0.85
 Suriname,0.85
 Swaziland,0.85
+Eswatini,0.85
 Sweden,0.99
 Switzerland,0.99
 Syria,0.85
@@ -181,7 +190,7 @@ Trinidad and Tobago,0.85
 Tunisia,0.85
 Turkey,0.99
 Turkmenistan,0.85
-USA,0.85
+United States,0.85
 Uganda,0.85
 Ukraine,0.99
 United Arab Emirates,0.85

@@ -10,7 +10,7 @@
               <span
                 class="wcp-logo-text wcp-text-16 grey--text text--darken-1 pl-2 hidden-sm-and-down"
               >
-                Russia World Cup 2018
+                Qatar World Cup 2022
               </span>
             </v-layout>
           </v-flex>

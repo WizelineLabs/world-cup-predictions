@@ -3,7 +3,7 @@
     <v-layout row wrap justify-center>
       <v-flex xs12 class="text-xs-center">
         <h1 class="wcp-landing-title mt-5 blue--text text--darken-4">
-          Predict the Russia World Cup!
+          Predict the Qatar World Cup!
         </h1>
         <h3 class="wcp-landing-subtitle mt-3 grey--text text--darken-2">
           Place your votes, beat Paul and win the game.

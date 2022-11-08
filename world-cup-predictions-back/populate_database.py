@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 from django.contrib.auth import get_user_model
 
-threshold = '2016-11-20'
+threshold = '2018-11-20'
 date_format = '%Y-%m-%dT%H:%M:%S'
 groups = {
     'Qatar': 1,
@@ -24,7 +24,7 @@ groups = {
     'Netherlands': 1,
     'England': 2,
     'Iran': 2,
-    'USA': 2,
+    'United States': 2,
     'Wales': 2,
     'Argentina': 3,
     'Saudi Arabia': 3,
@@ -49,7 +49,7 @@ groups = {
     'Portugal': 8,
     'Ghana': 8,
     'Uruguay': 8,
-    'Korea Republic': 8
+    'South Korea': 8
 }
 group_matches = [
     {
@@ -344,169 +344,164 @@ group_matches = [
 flags = [
     {
         'id': 1,
-        'code': 'ru',
-        'name': 'Russia',
+        'code': 'qa',
+        'name': 'Qatar',
     },
     {
         'id': 2,
-        'code': 'sa',
-        'name': 'Saudi Arabia',
+        'code': 'ec',
+        'name': 'Ecuador',
     },
     {
         'id': 3,
-        'code': 'eg',
-        'name': 'Egypt',
-    },
-    {
-        'id': 4,
-        'code': 'uy',
-        'name': 'Uruguay',
-    },
-    {
-        'id': 5,
-        'code': 'pt',
-        'name': 'Portugal',
-    },
-    {
-        'id': 6,
-        'code': 'es',
-        'name': 'Spain',
-    },
-    {
-        'id': 7,
-        'code': 'ma',
-        'name': 'Morocco',
-    },
-    {
-        'id': 8,
-        'code': 'ir',
-        'name': 'Iran',
-    },
-    {
-        'id': 9,
-        'code': 'fr',
-        'name': 'France',
-    },
-    {
-        'id': 10,
-        'code': 'au',
-        'name': 'Australia',
-    },
-    {
-        'id': 11,
-        'code': 'pe',
-        'name': 'Peru',
-    },
-    {
-        'id': 12,
-        'code': 'dk',
-        'name': 'Denmark',
-    },
-    {
-        'id': 13,
-        'code': 'ar',
-        'name': 'Argentina',
-    },
-    {
-        'id': 14,
-        'code': 'is',
-        'name': 'Iceland',
-    },
-    {
-        'id': 15,
-        'code': 'hr',
-        'name': 'Croatia',
-    },
-    {
-        'id': 16,
-        'code': 'ng',
-        'name': 'Nigeria',
-    },
-    {
-        'id': 17,
-        'code': 'br',
-        'name': 'Brazil',
-    },
-    {
-        'id': 18,
-        'code': 'ch',
-        'name': 'Switzerland',
-    },
-    {
-        'id': 19,
-        'code': 'cr',
-        'name': 'Costa Rica',
-    },
-    {
-        'id': 20,
-        'code': 'rs',
-        'name': 'Serbia',
-    },
-    {
-        'id': 21,
-        'code': 'de',
-        'name': 'Germany',
-    },
-    {
-        'id': 22,
-        'code': 'mx',
-        'name': 'Mexico',
-    },
-    {
-        'id': 23,
-        'code': 'se',
-        'name': 'Sweden',
-    },
-    {
-        'id': 24,
-        'code': 'kr',
-        'name': 'Korea Republic',
-    },
-    {
-        'id': 25,
-        'code': 'be',
-        'name': 'Belgium',
-    },
-    {
-        'id': 26,
-        'code': 'pa',
-        'name': 'Panama',
-    },
-    {
-        'id': 27,
-        'code': 'tn',
-        'name': 'Tunisia',
-    },
-    {
-        'id': 28,
-        'code': 'gb-eng',
-        'name': 'England',
-    },
-    {
-        'id': 29,
-        'code': 'pl',
-        'name': 'Poland',
-    },
-    {
-        'id': 30,
         'code': 'sn',
         'name': 'Senegal',
     },
     {
-        'id': 31,
-        'code': 'co',
-        'name': 'Colombia',
+        'id': 4,
+        'code': 'nl',
+        'name': 'Netherlands',
     },
     {
-        'id': 32,
+        'id': 5,
+        'code': 'gb-eng',
+        'name': 'England',
+    },
+    {
+        'id': 6,
+        'code': 'ir',
+        'name': 'Iran',
+    },
+    {
+        'id': 7,
+        'code': 'us',
+        'name': 'United States',
+    },
+    {
+        'id': 8,
+        'code': 'wales',
+        'name': 'Wales',
+    },
+    {
+        'id': 9,
+        'code': 'ar',
+        'name': 'Argentina',
+    },
+    {
+        'id': 10,
+        'code': 'sa',
+        'name': 'Saudi Arabia',
+    },
+    {
+        'id': 11,
+        'code': 'mx',
+        'name': 'Mexico',
+    },
+    {
+        'id': 12,
+        'code': 'pl',
+        'name': 'Poland',
+    },
+    {
+        'id': 13,
+        'code': 'fr',
+        'name': 'France',
+    },
+    {
+        'id': 14,
+        'code': 'au',
+        'name': 'Australia',
+    },
+    {
+        'id': 15,
+        'code': 'dk',
+        'name': 'Denmark',
+    },
+    {
+        'id': 16,
+        'code': 'tn',
+        'name': 'Tunisia',
+    },
+    {
+        'id': 17,
+        'code': 'es',
+        'name': 'Spain',
+    },
+    {
+        'id': 18,
+        'code': 'cr',
+        'name': 'Costa Rica',
+    },
+    {
+        'id': 19,
+        'code': 'de',
+        'name': 'Germany',
+    },
+    {
+        'id': 20,
         'code': 'jp',
         'name': 'Japan',
     },
     {
-        'id': 33,
-        'code': 'wales',
-        'name': 'Wales',
-    }
+        'id': 21,
+        'code': 'be',
+        'name': 'Belgium',
+    },
+    {
+        'id': 22,
+        'code': 'ca',
+        'name': 'Canada',
+    },
+    {
+        'id': 23,
+        'code': 'ma',
+        'name': 'Morocco',
+    },
+    {
+        'id': 24,
+        'code': 'hr',
+        'name': 'Croatia',
+    },
+    {
+        'id': 25,
+        'code': 'br',
+        'name': 'Brazil',
+    },
+    {
+        'id': 26,
+        'code': 'rs',
+        'name': 'Serbia',
+    },
+    {
+        'id': 27,
+        'code': 'ch',
+        'name': 'Switzerland',
+    },
+    {
+        'id': 28,
+        'code': 'cm',
+        'name': 'Cameroon',
+    },
+    {
+        'id': 29,
+        'code': 'pt',
+        'name': 'Portugal',
+    },
+    {
+        'id': 30,
+        'code': 'gh',
+        'name': 'Ghana',
+    },
+    {
+        'id': 31,
+        'code': 'uy',
+        'name': 'Uruguay',
+    },
+    {
+        'id': 32,
+        'code': 'kr',
+        'name': 'South Korea',
+    },
 ]
 
 def create_superuser():
@@ -523,12 +518,14 @@ def populate_groups():
 
 
 def populate_historical_matches(matches):
+    #print(matches[matches.isna()])
     for match in matches.itertuples(index=True, name='Pandas'):
         game = HistoricalGame(
             home_team=getattr(match, 'home_team'),
             away_team=getattr(match, 'away_team'),
             home_score=getattr(match, 'home_score'),
             away_score=getattr(match, 'away_score'))
+        #Checar los Nan
         game.save()
 
 def populate_flag_codes():
@@ -587,6 +584,9 @@ teams = Team.objects.all()
 groups = Group.objects.all()
 if not games or not teams or not groups:
     historical_matches = fetch_matches('results.csv', threshold)
+
+    print(historical_matches[historical_matches.isna()])
+
     defense = get_defense_capabilities(historical_matches)
     world_cup_predictions = predict_worldcup(historical_matches, defense)
     populate_groups()
