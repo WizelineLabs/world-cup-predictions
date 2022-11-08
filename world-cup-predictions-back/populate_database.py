@@ -110,7 +110,7 @@ group_matches = [
         'round': 'B',
         'home_team': 8,
         'away_team': 6,
-        'date': '2022-11-25T104:00:00',
+        'date': '2022-11-25T04:00:00',
     },
     {
         'round': 'B',
