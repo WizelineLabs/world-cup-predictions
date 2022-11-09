@@ -518,7 +518,6 @@ def populate_groups():
 
 
 def populate_historical_matches(matches):
-    #print(matches[matches.isna()])
     for match in matches.itertuples(index=True, name='Pandas'):
         game = HistoricalGame(
             home_team=getattr(match, 'home_team'),
@@ -584,9 +583,6 @@ teams = Team.objects.all()
 groups = Group.objects.all()
 if not games or not teams or not groups:
     historical_matches = fetch_matches('results.csv', threshold)
-
-    print(historical_matches[historical_matches.isna()])
-
     defense = get_defense_capabilities(historical_matches)
     world_cup_predictions = predict_worldcup(historical_matches, defense)
     populate_groups()
