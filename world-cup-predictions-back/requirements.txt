@@ -9,7 +9,7 @@ django-rest-framework-social-oauth2==1.1.0
 social-auth-app-django==2.1.0
 social-auth-core==1.7.0
 requests==2.18.4
-google==2.0.1
+google
 numpy
 pandas
 scipy==1.7.3
