@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app" :class="[`${$vuetify.breakpoint.name}`]">
+  <v-app id="app" :class="[`${$vuetify?.breakpoint?.name}`]">
     <v-toolbar flat fixed class="wcp-navbar" height="140px">
       <v-container class="py-0 my-0">
         <v-layout row wrap class="wcp-navbar-top-container mt-4 pt-1">
@@ -25,13 +25,10 @@
             >
               Sign Out
             </v-btn>
-            <v-btn
-              v-else
-              class="wcp-btn px-2 red darken-2 white--text text-transform-none"
-              @click="signIn
-            ">
-              Sign In
-            </v-btn>
+            <GoogleSignInButton
+                @success="onSignInSuccess"
+                @error="onSignInError"
+              ></GoogleSignInButton>
           </v-flex>
         </v-layout>
         <v-layout row wrap>
@@ -109,7 +106,9 @@
 </template>
 
 <script>
-import Vue from 'vue';
+import {
+  GoogleSignInButton,
+} from "vue3-google-signin";
 import DocDialog from './components/DocDialog';
 
 const POPUP_CLOSED = 'popup_closed_by_user';
@@ -130,29 +129,16 @@ export default {
     },
   },
   methods: {
-    signIn() {
-      Vue.googleAuth().signIn(this.onSignInSuccess, this.onSignInError);
-    },
-    signOut() {
-      Vue.googleAuth().signOut(
-        () => {
-          this.$store.dispatch('user/logoutUser').then(() => {
-            this.$router.push({ path: '/' });
-          });
-        },
-        (error) => {
-          this.$store.dispatch('user/setLoginMessage', error);
-          this.$router.push({ path: '/' });
-        },
-      );
-    },
-    onSignInSuccess(googleUser) {
-      const authResponse = googleUser.getAuthResponse();
+    onSignInSuccess(response) {
+      console.log("Google Response:")
+      console.log(response)
+      const { credential } = response;
+      
       const data = {
-        access_token: authResponse.access_token,
+        access_token: credential,
       };
 
-      this.$store.dispatch('user/loginUser', data).then(
+      this.$store.dispatch('loginUser', data).then(
         () => {
           this.$store.dispatch('user/getUser').then(() => {
             this.$router.push({ path: '/game' });
@@ -165,6 +151,8 @@ export default {
       );
     },
     onSignInError(error) {
+      console.log("Error")
+      console.log(error)
       if (error.error !== POPUP_CLOSED) {
         this.errorDialog = true;
         this.$store.dispatch('user/setLoginMessage', error);
@@ -175,13 +163,14 @@ export default {
     },
     tryAgainLogin() {
       this.closeErrorDialog();
-      this.signIn();
+      //login();
     },
     closeErrorDialog() {
       this.errorDialog = false;
     },
   },
   created() {
+    console.log(this.$store)
     this.$store.dispatch('user/fetchLocalUser');
     this.$store.dispatch('team/getTeams');
   },

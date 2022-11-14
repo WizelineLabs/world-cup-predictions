@@ -36,8 +36,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
-
 const POPUP_CLOSED = 'popup_closed_by_user';
 
 export default {
@@ -52,7 +50,8 @@ export default {
   },
   methods: {
     signIn() {
-      Vue.googleAuth().signIn(this.onSignInSuccess, this.onSignInError);
+      console.log("signIn")
+      //Vue.googleAuth().signIn(this.onSignInSuccess, this.onSignInError);
     },
     onSignInSuccess(googleUser) {
       const authResponse = googleUser.getAuthResponse();

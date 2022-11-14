@@ -6,8 +6,8 @@
           Select the team you think will win the World Cup. If you're correct, we
           will add <strong>30 points</strong> to your grand total.
           <br />
-          Wildcard selection closes on <strong>{{wildcardDate | MonthDay}}</strong>
-          at <strong>{{wildcardDate | HourMin}} local time</strong>.
+          Wildcard selection closes on <strong>{{$filters.MonthDay(wildcardDate)}}</strong>
+          at <strong>{{$filters.HourMin(wildcardDate)}} local time</strong>.
         </p>
       </v-flex>
       <v-flex xs3 class="text-xs-right">

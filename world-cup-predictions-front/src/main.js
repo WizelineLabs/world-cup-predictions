@@ -1,15 +1,26 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue';
+import { createApp } from 'vue';
 import axios from 'axios';
 import moment from 'moment';
+import GoogleSignInPlugin from "vue3-google-signin"
 import App from './App';
 import router from './router';
 import store from './store';
+// Vuetify
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
+const vuetify = createVuetify({
+  components,
+  directives,
+})
 
 const WCP_TOKEN = 'wcp-token';
 
-Vue.config.productionTip = false;
+//Vue.config.productionTip = false;
 axios.defaults.withCredentials = true;
 
 // Interceptors
@@ -29,41 +40,42 @@ axios.interceptors.response.use(
 );
 
 // Filters
-Vue.filter('formatDate', (value) => {
-  if (value) {
-    return moment(String(value)).format('MMMM DD, H:mm');
+const filters = {
+  formatDate(value) {
+    if (value) {
+      return moment(String(value)).format('MMMM DD, H:mm');
+    }
+    return value;
+  },
+  MonthDay(value) {
+    if (value) {
+      return moment(String(value)).format('MMMM Do');
+    }
+    return value;
+  },
+  HourMin(value){
+    if (value) {
+      return moment(String(value)).format('H:mm');
+    }
+    return value;
+  },
+  percentage(value) {
+    if (value !== null && value !== undefined) {
+      const percentage = Math.floor(value * 100);
+      return `${percentage}%`;
+    }
+    return value;
   }
-  return value;
+}
+
+const app = createApp(App).
+  use(router).
+  use(store).
+  use(vuetify);
+
+app.config.globalProperties.$filters = filters
+app.use(GoogleSignInPlugin, {
+  clientId: import.meta.env.VITE_GOOGLE_AUTH_KEY,
 });
 
-Vue.filter('MonthDay', (value) => {
-  if (value) {
-    return moment(String(value)).format('MMMM Do');
-  }
-  return value;
-});
-
-Vue.filter('HourMin', (value) => {
-  if (value) {
-    return moment(String(value)).format('H:mm');
-  }
-  return value;
-});
-
-Vue.filter('percentage', (value) => {
-  if (value !== null && value !== undefined) {
-    const percentage = Math.floor(value * 100);
-    return `${percentage}%`;
-  }
-  return value;
-});
-
-// Init App
-// eslint-disable-next-line
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>',
-  store,
-});
+app.mount('#app')

@@ -38,7 +38,7 @@
                       'grey--text text--darken-1': !props.item.shaded
                     }"
                   >
-                    {{props.item.advance | percentage}}
+                    {{$filters.percentage(props.item.advance)}}
                   </div>
                 </td>
                 <!-- Advance Second Cell -->
@@ -51,7 +51,7 @@
                       'grey--text text--darken-1': !props.item.second
                     }"
                   >
-                  {{ props.item.pass_group_runner_prob | percentage }}
+                  {{$filters.percentage(props.item.pass_group_runner_prob)}}
                   </div>
                 </td>
                 <!-- Advance First Cell -->
@@ -64,7 +64,7 @@
                       'grey--text text--darken-1': !props.item.first
                     }"
                   >
-                  {{props.item.pass_group_winner_prob | percentage }}
+                  {{$filters.percentage(props.item.pass_group_winner_prob) }}
                   </div>
                 </td>
               </tr>

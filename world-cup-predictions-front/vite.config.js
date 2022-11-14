@@ -1,19 +1,16 @@
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath, URL } from "url";
 
-import { defineConfig } from 'vite'
-import vue2 from '@vitejs/plugin-vue2'
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue2(),
-  ],
+  plugins: [vue()],
   resolve: {
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-      // https://github.com/vitejs/vite/discussions/4158
-      vue: 'vue/dist/vue.esm.js',
+      'vue$': 'vue/dist/vue.esm.js',
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
   server: {

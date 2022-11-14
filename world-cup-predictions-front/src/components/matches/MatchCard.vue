@@ -2,7 +2,7 @@
   <div class="match-card mb-4" :class="[`${matchState}`]">
     <v-layout row wrap>
       <v-flex xs12 text-xs-center class="pt-3 pb-2">
-        <span>{{match.date | formatDate}}</span>
+        <span>{{$filters.MonthDay(match.date)}}</span>
       </v-flex>
       <v-flex xs12 text-xs-center class="match-result-container">
         <div class="d-inline-block match-flag-wrapper">
