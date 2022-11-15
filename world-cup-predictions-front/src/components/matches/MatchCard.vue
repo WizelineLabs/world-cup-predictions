@@ -222,7 +222,7 @@ export default {
           choice: this.choiceSelected,
         })
         .then(() => {
-          this.$store.dispatch('game/getGames');
+          this.$store.dispatch('getGames');
           this.saveStatus = 'Prediction Saved!';
           this.showStatus();
         })

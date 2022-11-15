@@ -57,11 +57,11 @@ export default {
 
       if (this.wildcardSelected) {
         this.$store
-          .dispatch('user/setWildcard', {
+          .dispatch('setWildcard', {
             wildcardId: this.wildcardSelected,
           })
           .then(() => {
-            this.$store.dispatch('user/getUser');
+            this.$store.dispatch('getUser');
             this.saveStatus = 'Wildcard Saved!';
             this.showStatus();
           })

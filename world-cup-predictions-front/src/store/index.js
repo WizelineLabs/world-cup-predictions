@@ -16,7 +16,11 @@ const store = createStore({
     }
   },
   actions: {
-    ...user.actions
+    ...user.actions,
+    ...team.actions,
+    ...game.actions,
+    ...leaderboard.actions,
+    ...dialog.actions,
   }
 });
 

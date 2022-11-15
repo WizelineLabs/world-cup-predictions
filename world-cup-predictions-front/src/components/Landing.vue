@@ -59,20 +59,20 @@ export default {
         access_token: authResponse.access_token,
       };
 
-      this.$store.dispatch('user/loginUser', data).then(
+      this.$store.dispatch('loginUser', data).then(
         () => {
-          this.$store.dispatch('user/getUser').then(() => {
+          this.$store.dispatch('getUser').then(() => {
             this.$router.push({ path: '/game' });
           });
         },
         (error) => {
-          this.$store.dispatch('user/setLoginMessage', error.data.message);
+          this.$store.dispatch('setLoginMessage', error.data.message);
         },
       );
     },
     onSignInError(error) {
       if (error.error !== POPUP_CLOSED) {
-        this.$store.commit('user/setLoginMessage', error);
+        this.$store.commit('setLoginMessage', error);
       }
     },
     goToGame() {

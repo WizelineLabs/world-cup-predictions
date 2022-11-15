@@ -246,11 +246,11 @@ export default {
       );
       if (!playerExist.length) {
         this.$store
-          .dispatch('leaderboard/follow', {
+          .dispatch('follow', {
             user_id: player.id,
           })
           .then(() => {
-            this.$store.dispatch('leaderboard/getMyLeaderboard');
+            this.$store.dispatch('getMyLeaderboard');
           });
       }
       this.followViewActive = true;
@@ -263,8 +263,8 @@ export default {
       this.editFollowMode = false;
     },
     resetFollowList() {
-      this.$store.dispatch('leaderboard/unfollowAll').then(() => {
-        this.$store.dispatch('leaderboard/getMyLeaderboard').then(() => {
+      this.$store.dispatch('unfollowAll').then(() => {
+        this.$store.dispatch('getMyLeaderboard').then(() => {
           if (!this.followedPlayers.length) {
             this.editFollowMode = false;
             this.followViewActive = false;
@@ -280,11 +280,11 @@ export default {
     },
     removePlayer(player) {
       this.$store
-        .dispatch('leaderboard/unfollow', {
+        .dispatch('unfollow', {
           user_id: player.id,
         })
         .then(() => {
-          this.$store.dispatch('leaderboard/getMyLeaderboard').then(() => {
+          this.$store.dispatch('getMyLeaderboard').then(() => {
             if (!this.followedPlayers.length) {
               this.editFollowMode = false;
               this.followViewActive = false;

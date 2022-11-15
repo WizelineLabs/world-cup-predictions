@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     handleDialog() {
-      this.$store.dispatch('dialog/toggle');
+      this.$store.dispatch('toggle');
     },
   },
 };

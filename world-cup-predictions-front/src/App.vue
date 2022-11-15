@@ -140,13 +140,13 @@ export default {
 
       this.$store.dispatch('loginUser', data).then(
         () => {
-          this.$store.dispatch('user/getUser').then(() => {
+          this.$store.dispatch('getUser').then(() => {
             this.$router.push({ path: '/game' });
           });
         },
         (error) => {
           this.errorDialog = true;
-          this.$store.dispatch('user/setLoginMessage', error.data.message);
+          this.$store.dispatch('setLoginMessage', error.data.message);
         },
       );
     },
@@ -155,7 +155,7 @@ export default {
       console.log(error)
       if (error.error !== POPUP_CLOSED) {
         this.errorDialog = true;
-        this.$store.dispatch('user/setLoginMessage', error);
+        this.$store.dispatch('setLoginMessage', error);
       }
     },
     handleTabsChange() {
@@ -171,8 +171,8 @@ export default {
   },
   created() {
     console.log(this.$store)
-    this.$store.dispatch('user/fetchLocalUser');
-    this.$store.dispatch('team/getTeams');
+    this.$store.dispatch('fetchLocalUser');
+    this.$store.dispatch('getTeams');
   },
 };
 </script>

@@ -95,10 +95,10 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('user/getUser').then(() => {
-      this.$store.dispatch('game/getGames');
-      this.$store.dispatch('leaderboard/getLeaderboard');
-      this.$store.dispatch('leaderboard/getMyLeaderboard');
+    this.$store.dispatch('getUser').then(() => {
+      this.$store.dispatch('getGames');
+      this.$store.dispatch('getLeaderboard');
+      this.$store.dispatch('getMyLeaderboard');
     });
   },
 };
