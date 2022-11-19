@@ -36,6 +36,9 @@
 </template>
 
 <script>
+
+import { googleTokenLogin } from "vue3-google-login"
+
 const POPUP_CLOSED = 'popup_closed_by_user';
 
 export default {
@@ -50,13 +53,11 @@ export default {
   },
   methods: {
     signIn() {
-      console.log("signIn")
-      //Vue.googleAuth().signIn(this.onSignInSuccess, this.onSignInError);
+      googleTokenLogin().then(this.onSignInSuccess).catch(this.onSignInError)
     },
-    onSignInSuccess(googleUser) {
-      const authResponse = googleUser.getAuthResponse();
+    onSignInSuccess(response) {
       const data = {
-        access_token: authResponse.access_token,
+        access_token: response.access_token,
       };
 
       this.$store.dispatch('loginUser', data).then(

@@ -13,5 +13,9 @@ RUN pip install -r ./requirements.txt
 RUN pip install mysqlclient
 
 ADD . /app
+
+ENV GOOGLE_OAUTH2_KEY=266500404779-69r7af0h79i0jck1l1vdsnjlqvs9i4s5.apps.googleusercontent.com
+ENV GOOGLE_OAUTH2_SECRET=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
+
 ENV DJANGO_SETTINGS_MODULE=world_cup_predictions.settings
 EXPOSE 8000

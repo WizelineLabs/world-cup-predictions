@@ -6,7 +6,6 @@ const WCP_TOKEN = 'wcp-token';
 
 // eslint-disable-next-line
 const loginUser = (context, data) => {
-  console.log("Login User")
   return new Promise((resolve, reject) => {
     Auth.login(data)
       .then((response) => {

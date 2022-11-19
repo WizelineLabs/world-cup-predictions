@@ -3,7 +3,7 @@
 import { createApp } from 'vue';
 import axios from 'axios';
 import moment from 'moment';
-import GoogleSignInPlugin from "vue3-google-signin"
+import vue3GoogleLogin from 'vue3-google-login'
 import App from './App';
 import router from './router';
 import store from './store';
@@ -74,8 +74,9 @@ const app = createApp(App).
   use(vuetify);
 
 app.config.globalProperties.$filters = filters
-app.use(GoogleSignInPlugin, {
-  clientId: import.meta.env.VITE_GOOGLE_AUTH_KEY,
+
+app.use(vue3GoogleLogin, {
+  clientId: import.meta.env.VITE_GOOGLE_AUTH_KEY
 });
 
 app.mount('#app')

@@ -25,10 +25,14 @@
             >
               Sign Out
             </v-btn>
-            <GoogleSignInButton
-                @success="onSignInSuccess"
-                @error="onSignInError"
-              ></GoogleSignInButton>
+            <v-btn
+              large
+              v-if="!user || !user.id"
+              class="wcp-btn-lg red darken-2 white--text text-transform-none mt-4"
+              @click="signIn"
+            >
+              Join the game!
+            </v-btn>
           </v-flex>
         </v-layout>
         <v-layout row wrap>
@@ -106,9 +110,8 @@
 </template>
 
 <script>
-import {
-  GoogleSignInButton,
-} from "vue3-google-signin";
+import { googleTokenLogin } from "vue3-google-login"
+
 import DocDialog from './components/DocDialog';
 
 const POPUP_CLOSED = 'popup_closed_by_user';
@@ -129,15 +132,13 @@ export default {
     },
   },
   methods: {
+    signIn() {
+      googleTokenLogin().then(this.onSignInSuccess).catch(this.onSignInError)
+    },
     onSignInSuccess(response) {
-      console.log("Google Response:")
-      console.log(response)
-      const { credential } = response;
-      
       const data = {
-        access_token: credential,
+        access_token: response.access_token,
       };
-
       this.$store.dispatch('loginUser', data).then(
         () => {
           this.$store.dispatch('getUser').then(() => {
@@ -151,8 +152,6 @@ export default {
       );
     },
     onSignInError(error) {
-      console.log("Error")
-      console.log(error)
       if (error.error !== POPUP_CLOSED) {
         this.errorDialog = true;
         this.$store.dispatch('setLoginMessage', error);
@@ -163,14 +162,13 @@ export default {
     },
     tryAgainLogin() {
       this.closeErrorDialog();
-      //login();
+      this.signIn();
     },
     closeErrorDialog() {
       this.errorDialog = false;
     },
   },
   created() {
-    console.log(this.$store)
     this.$store.dispatch('fetchLocalUser');
     this.$store.dispatch('getTeams');
   },
