@@ -13,9 +13,6 @@
             </v-layout>
           </v-flex>
           <v-flex xs4 class="text-xs-right">
-            <span v-if="!user || !user.id" class="wcp-text-16 pr-2 hidden-sm-and-down">
-              Join the game!
-            </span>
             <v-btn v-if="user && user.id" class="wcp-btn grey lighten-1 white--text text-transform-none"
               @click="signOut">
               Sign Out

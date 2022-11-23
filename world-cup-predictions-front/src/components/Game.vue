@@ -13,7 +13,7 @@
                 <v-row align="center" no-gutters>
                   <v-col cols="3">
                     <v-avatar color="indigo" size="x-large">
-                      <img :src="user.avatar" :alt="user.first_name">
+                      <img :src="user.avatar" :alt="user.first_name" referrerpolicy="no-referrer" style="object-fit: scale-down;">
                     </v-avatar>
                   </v-col>
                   <v-col cols="9">

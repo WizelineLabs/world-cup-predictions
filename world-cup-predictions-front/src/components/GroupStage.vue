@@ -107,10 +107,6 @@ export default {
     background-color: transparent !important;
   }
 
-  .wpc-group-table-cell-main {
-    width: 34%;
-  }
-
   .wpc-group-table-header {
     width: 22%;
   }
@@ -131,15 +127,21 @@ export default {
     border-right: 1px dashed #d7dbdf;
   }
 
-  .active {
-    background-color: #e7ebf3;
-  }
+  
+}
 
-  .active-text {
-    color: rgba(0, 0, 0, 0.87);
-    font-family: 'ProximaNova-Semibold', 'Roboto', sans-serif;
-    font-weight: 500;
-  }
+.wpc-group-table-cell-main {
+  width: 35%;
+}
+
+.active {
+  background-color: #e7ebf3;
+}
+
+.active-text {
+  color: rgba(0, 0, 0, 0.87);
+  font-family: 'ProximaNova-Semibold', 'Roboto', sans-serif;
+  font-weight: 500;
 }
 
 .wcp-group-table-title {

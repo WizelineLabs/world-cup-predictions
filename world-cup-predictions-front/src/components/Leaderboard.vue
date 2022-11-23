@@ -94,8 +94,8 @@
             <span>{{ player.rank }}</span>
           </v-col>
           <v-col cols="1" class="text-centered wcp-text-14">
-            <v-avatar color="grey lighten-2" size="32px" class="mr-2 hidden-xs-only">
-              <img v-if="player.avatar" :src="player.avatar" :alt="`${player.fullname}`">
+            <v-avatar color="grey lighten-2" class="mr-2 hidden-xs-only">
+              <img v-if="player.avatar" :src="player.avatar" :alt="`${player.fullname}`" referrerpolicy="no-referrer" style="object-fit: scale-down;">
             </v-avatar>
           </v-col>
           <v-col cols="4" class="text-centered wcp-text-14">
