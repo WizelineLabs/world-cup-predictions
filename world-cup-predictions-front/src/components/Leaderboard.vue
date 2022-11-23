@@ -1,23 +1,12 @@
 <template>
-  <v-container class="wcp-leaderboard mb-5">
+  <v-container class="wcp-leaderboard" style="width: 100%;">
     <v-layout row wrap class="pb-2">
       <v-flex xs12 md4>
-        <v-select
-          class="search-select mt-1 mb-3"
-          content-class="search-select-content elevation-0"
-          :items="players"
-          :filter="customFilter"
-          v-model="selectedPlayer"
-          item-text="fullname"
-          placeholder="Follow your friends..."
-          autocomplete
-          append-icon=""
-          solo
-          flat
-          @input="searchSelectHandler"
-        >
-          <template slot="selection" slot-scope="data"></template>
-          <template slot="item" slot-scope="data">
+        <v-select class="search-select mt-1 mb-3" content-class="search-select-content elevation-0" :items="players"
+          :filter="customFilter" v-model="selectedPlayer" item-text="fullname" placeholder="Follow your friends..."
+          autocomplete append-icon="" solo flat @input="searchSelectHandler">
+          <template v-slot:selection="data"></template>
+          <template v-slot:item="data">
             <template v-if="data.item.id">
               <v-list-tile-avatar>
                 <img :src="data.item.avatar">
@@ -35,11 +24,9 @@
       <v-flex xs5 md4 class="pt-1">
         <template v-if="followedPlayers.length">
           <span class="wcp-text-16 pl-4 pr-2 hidden-sm-and-down">Toggle View:</span>
-          <v-btn small
-            @click="toggleLeaderboard"
-            class="elevation-0 grey lighten-2 text-transform-none wcp-text-16 px-1 mx-0"
-          >
-            {{followViewActive ? 'Full players list' : 'My list'}}
+          <v-btn small @click="toggleLeaderboard"
+            class="elevation-0 grey lighten-2 text-transform-none wcp-text-16 px-1 mx-0">
+            {{ followViewActive ? 'Full players list' : 'My list' }}
           </v-btn>
         </template>
 
@@ -47,25 +34,18 @@
       <v-flex xs7 md4 class="follow-toolbox pt-1 text-xs-right">
         <template v-if="!followViewActive">
           <span class="wcp-text-14 pt-2 d-inline-block">Participants: </span>
-          <span class="wcp-text-14 pt-2">{{participants}}</span>
+          <span class="wcp-text-14 pt-2">{{ participants }}</span>
         </template>
         <template v-else>
-          <v-btn small flat
-            @click="resetFollowList"
-            class="indigo--text text--accent-2 text-transform-none wcp-text-16 ml-0 mr-2"
-          >
+          <v-btn small flat @click="resetFollowList"
+            class="indigo--text text--accent-2 text-transform-none wcp-text-16 ml-0 mr-2">
             Reset
           </v-btn>
-          <v-btn v-if="!editFollowMode" small flat
-            @click="editFollowList"
-            class="indigo--text text--accent-2 text-transform-none wcp-text-16 mx-0"
-          >
+          <v-btn v-if="!editFollowMode" small flat @click="editFollowList"
+            class="indigo--text text--accent-2 text-transform-none wcp-text-16 mx-0">
             Edit
           </v-btn>
-          <v-btn v-else small flat
-            @click="doneEditFollowList"
-            class="text-transform-none wcp-text-16 mx-0"
-          >
+          <v-btn v-else small flat @click="doneEditFollowList" class="text-transform-none wcp-text-16 mx-0">
             Done
           </v-btn>
         </template>
@@ -73,102 +53,65 @@
     </v-layout>
 
     <!--Table header -->
-    <v-layout row class="my-3 wcp-table-row">
-      <div class="wcp-table-cell-left">
-        <div>
-          <v-layout row>
-            <v-flex xs2 sm2 md2 class="text-xs-center">
-              <span class="wcp-text-14 grey--text text--darken-1">
-                RANK
-              </span>
-            </v-flex>
-            <v-flex xs8 sm8 md5>
-              <span class="wcp-text-14 grey--text text--darken-1">
-                PLAYER
-              </span>
-            </v-flex>
-            <v-flex md3 class="text-xs-right hidden-sm-and-down">
-              <span class="wcp-text-14 grey--text text--darken-1">
-                CORRECT PREDICTIONS
-              </span>
-            </v-flex>
-            <v-flex xs2 sm2 md2 class="text-xs-right">
-              <span class="wcp-text-14 grey--text text--darken-1 pr-5">
-                SCORE
-              </span>
-            </v-flex>
-          </v-layout>
-        </div>
-      </div>
-      <div
-        class="wcp-table-cell-right"
-        :class="{
+    <v-row align="center" no-gutters>
+      <v-col cols="2" class="text-centered">
+        <span class="wcp-text-14 grey--text text--darken-1">
+          RANK
+        </span>
+      </v-col>
+      <v-col cols="5" class="text-centered">
+        <span class="wcp-text-14 grey--text text--darken-1">
+          PLAYER
+        </span>
+      </v-col>
+      <v-col cols="3" class="text-centered">
+        <span class="wcp-text-14 grey--text text--darken-1">
+          CORRECT PREDICTIONS
+        </span>
+      </v-col>
+      <v-col cols="2" class="text-centered">
+        <span class="wcp-text-14 grey--text text--darken-1 pr-5">
+          SCORE
+        </span>
+      </v-col>
+      <v-col cols="12" class="text-centered">
+        <div class="wcp-table-cell-right" :class="{
           'edit-mode': editFollowMode && followViewActive,
           'transition': followViewActive
-        }"
-      ></div>
-    </v-layout>
+        }"></div>
+      </v-col>
+    </v-row>
 
     <!--Players list -->
-    <v-layout row
-      class="mt-2 wcp-table-row"
-      v-for="player in currentLeaderboard"
-      :key="player._id"
-    >
-      <div class="wcp-table-cell-left">
-        <div
-          class="wcp-table-row-border"
-          :class="{
-            'current-user': player.isCurrentUser,
-            'is-paul': player.isPaul,
-            'top-contender': player.rank === 1
-          }"
-        >
-          <v-layout row>
-            <v-flex xs2 sm2 md2 class="text-xs-center">
-              <v-card flat>
-                <v-card-text class="wcp-text-18">{{player.rank}}</v-card-text>
-              </v-card>
-            </v-flex>
-            <v-flex xs8 sm8 md5>
-              <v-card flat>
-                <v-card-text class="wcp-text-18">
-                  <v-avatar color="grey lighten-2" size="32px" class="mr-2 hidden-xs-only">
-                    <img
-                      v-if="player.avatar"
-                      :src="player.avatar"
-                      :alt="`${player.fullname}`"
-                    >
-                  </v-avatar>
-                  <span>{{player.fullname}}</span>
-                </v-card-text>
-              </v-card>
-            </v-flex>
-            <v-flex md3 class="text-xs-right hidden-sm-and-down">
-              <v-card flat>
-                <v-card-text class="wcp-text-18">
-                  {{player.correct_votes}} out of {{player.total_votes}}
-                  </v-card-text>
-              </v-card>
-            </v-flex>
-            <v-flex xs2 sm2 md2 class="text-xs-right">
-              <v-card flat class="pr-5">
-                <v-card-text class="wcp-text-18">{{player.score}}</v-card-text>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </div>
-      </div>
-      <div
-        class="wcp-table-cell-right"
-        :class="{
-          'edit-mode': editFollowMode && followViewActive,
-          'transition': followViewActive
-        }"
-      >
-        <v-btn icon dark color="indigo accent-2" class="elevation-0"
-          @click="removePlayer(player)"
-        >
+    <v-layout row class="mt-2 wcp-table-row" v-for="player in currentLeaderboard" :key="player._id">
+      <v-card class="wcp-table-row-border" :class="{
+        'current-user': player.isCurrentUser,
+        'is-paul': player.isPaul,
+        'top-contender': player.rank === 1
+      }">
+        <v-row align="center" no-gutters>
+          <v-col cols="2" class="text-centered wcp-text-14">
+            <span>{{ player.rank }}</span>
+          </v-col>
+          <v-col cols="5" class="text-centered wcp-text-14">
+            <v-avatar color="grey lighten-2" size="32px" class="mr-2 hidden-xs-only">
+              <img v-if="player.avatar" :src="player.avatar" :alt="`${player.fullname}`">
+            </v-avatar>
+            <span>{{ player.fullname }}</span>
+          </v-col>
+          <v-col cols="3" class="text-centered wcp-text-14">
+            <span>{{ player.correct_votes }} out of {{ player.total_votes }}</span>
+          </v-col>
+          <v-col cols="2" class="text-centered wcp-text-14">
+            <span>{{ player.score }}</span>
+          </v-col>
+        </v-row>
+      </v-card>
+      <div class="wcp-table-cell-right" :class="{
+        'edit-mode': editFollowMode && followViewActive,
+        'transition': followViewActive
+      }">
+        <v-btn icon dark color="indigo accent-2" class="elevation-0" @click="removePlayer(player)">
           <v-icon>close</v-icon>
         </v-btn>
       </div>
@@ -297,6 +240,10 @@ export default {
 </script>
 
 <style lang="scss">
+.text-centered {
+  text-align: center;
+}
+
 .input-group.search-select {
   border-radius: 4px;
   background-color: #fff;
@@ -339,7 +286,7 @@ export default {
     text-align: center;
     width: 0;
 
-    > .btn {
+    >.btn {
       height: 24px;
       width: 24px;
 

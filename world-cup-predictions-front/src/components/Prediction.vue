@@ -10,30 +10,24 @@
           phase.
           <br /><br />
           For more information on how our model works, have a look at our
-          <a @click.stop="handleDialog" >full documentation</a>.
+          <a @click.stop="handleDialog">full documentation</a>.
         </p>
-        <v-tabs
-          class="solid-tabs mt-3"
-          v-model="active"
-          light
-          color="transparent"
-          hide-slider
-        >
-          <v-tab :key="1" ripple>
+        <v-tabs v-model="active" class="solid-tabs mt-3" light color="transparent" hide-slider>
+          <v-tab value="1">
             Group Stage
           </v-tab>
-          <v-tab :key="2" ripple>
+          <v-tab value="2">
             Knockout Phase
           </v-tab>
-          <v-tabs-items touchless>
-            <v-tab-item :key="1">
-              <group-stage></group-stage>
-            </v-tab-item>
-            <v-tab-item :key="2">
-              <knockout-phase></knockout-phase>
-            </v-tab-item>
-          </v-tabs-items>
         </v-tabs>
+        <v-window v-model="active">
+          <v-window-item value="1">
+            <group-stage></group-stage>
+          </v-window-item>
+          <v-window-item value="2">
+            <knockout-phase></knockout-phase>
+          </v-window-item>
+        </v-window>
       </v-flex>
     </v-layout>
   </v-container>
@@ -63,4 +57,5 @@ export default {
 </script>
 
 <style lang="scss">
+
 </style>

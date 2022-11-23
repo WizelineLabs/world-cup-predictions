@@ -53,7 +53,7 @@ const filters = {
     }
     return value;
   },
-  HourMin(value){
+  HourMin(value) {
     if (value) {
       return moment(String(value)).format('H:mm');
     }

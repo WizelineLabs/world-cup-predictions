@@ -3,6 +3,8 @@ from api.models import User, HistoricalGame, WorldCupGame, Prediction, Vote, Gro
 from datetime import timedelta
 from django.utils import timezone
 
+import logging
+
 class HistoricalGameSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalGame
@@ -82,6 +84,7 @@ class SocialSerializer(serializers.Serializer):
         trim_whitespace=True,
     )
 
+#TODO Check if this try except clause is ok, because I don´t know if division by zero is a bug
 class TrendSerializer(serializers.ModelSerializer):
     home_win_trend = serializers.SerializerMethodField()
     away_win_trend = serializers.SerializerMethodField()
@@ -91,8 +94,17 @@ class TrendSerializer(serializers.ModelSerializer):
         fields = ('id', 'home_win_trend', 'away_win_trend', 'draw_trend')
 
     def get_home_win_trend(self, obj):
-        return obj.trends.filter(choice='H').count()/(Vote.objects.filter(game=obj).count() - 1)
+        try:
+            return obj.trends.filter(choice='H').count()/(Vote.objects.filter(game=obj).count() - 1)
+        except Exception as e:
+            return None
     def get_away_win_trend(self, obj):
-        return obj.trends.filter(choice='A').count()/(Vote.objects.filter(game=obj).count() - 1)
+        try:
+            return obj.trends.filter(choice='A').count()/(Vote.objects.filter(game=obj).count() - 1)
+        except Exception as e:
+            return None
     def get_draw_trend(self, obj):
-        return obj.trends.filter(choice='D').count()/(Vote.objects.filter(game=obj).count() - 1)
+        try:
+            return obj.trends.filter(choice='D').count()/(Vote.objects.filter(game=obj).count() - 1)
+        except Exception as e:
+            return None

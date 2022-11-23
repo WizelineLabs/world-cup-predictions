@@ -1,9 +1,9 @@
 const setGames = (state, games) => {
-  state.list = games;
+  state.games = games;
 };
 
 const removeGames = (state) => {
-  state.list = [];
+  state.games = [];
 };
 
 export default {

@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     quarters() {
-      return this.$store.getters['game/quarters'];
+      return this.$store.getters['quarters'];
     },
   },
 };

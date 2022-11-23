@@ -288,6 +288,7 @@ def make_prediction(game):
         )
     paul = User.objects.get(email='paul.prediction@wizeline.com')
     paul_vote, created = Vote.objects.get_or_create(user=paul, game=game)
+     #Comment this three lines if it is the first time you are running the project in order to let the migrations run ok
     paul_choice = get_paul_choice(paul_prediction.home_win, paul_prediction.away_win, paul_prediction.draw)
     paul_vote.choice = paul_choice
     paul_vote.save()

@@ -1,6 +1,6 @@
 const teamsByGroup = (state) => {
   const groups = {};
-  const teams = [...state.list].sort((a, b) => a.id - b.id);
+  const teams = [...state.teams].sort((a, b) => a.id - b.id);
 
   // Group teams by group name
   teams.forEach((team) => {
@@ -14,14 +14,14 @@ const teamsByGroup = (state) => {
 
 // eslint-disable-next-line
 const teamsByWinnerProb = (state) => {
-  const teams = [...state.list].sort(
+  const teams = [...state.teams].sort(
     (a, b) => b.pass_final_prob - a.pass_final_prob,
   );
   return teams;
 };
 
 const wildcards = (state) => {
-  const teams = [...state.list].sort((a, b) => a.id - b.id);
+  const teams = [...state.teams].sort((a, b) => a.id - b.id);
 
   // eslint-disable-next-line
   return teams.map((team) => {

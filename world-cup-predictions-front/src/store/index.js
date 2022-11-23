@@ -8,12 +8,19 @@ import dialog from '@/store/modules/dialog';
 const store = createStore({
   state() {
     return {
-      user,
-      team,
-      game,
-      leaderboard,
-      dialog,
+      user: user.state,
+      teams: team.state,
+      game: game.state,
+      leaderboard: leaderboard.state,
+      dialog: dialog.state,
     }
+  },
+  getters: {
+    ...user.getters,
+    ...team.getters,
+    ...game.getters,
+    ...leaderboard.getters,
+    ...dialog.getters,
   },
   actions: {
     ...user.actions,
@@ -21,6 +28,13 @@ const store = createStore({
     ...game.actions,
     ...leaderboard.actions,
     ...dialog.actions,
+  },
+  mutations: {
+    ...user.mutations,
+    ...team.mutations,
+    ...game.mutations,
+    ...leaderboard.mutations,
+    ...dialog.mutations,
   }
 });
 

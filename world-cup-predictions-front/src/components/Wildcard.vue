@@ -12,8 +12,8 @@
     <div class="wildcard-container">
       <div class="wildcard-team-container text-xs-center">
         <div
-          class="wildcard-flag flag-icon"
-          :class="[`flag-icon-${team.flag_code}`]"
+          class="wildcard-flag fi"
+          :class="[`fi-${team.flag_code}`]"
         ></div>
         <span class="wildcard-team-name d-block mt-2 text-xs-center">
           {{team.name}}

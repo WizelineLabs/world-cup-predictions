@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     final() {
-      return this.$store.getters['game/final'];
+      return this.$store.getters['getFinal'];
     },
   },
 };

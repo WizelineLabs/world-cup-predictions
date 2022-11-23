@@ -1,106 +1,81 @@
 <template>
   <v-container fluid grid-list-xl class="py-0 pl-0 pr-3 my-4">
-    <v-layout row wrap>
-      <v-flex xs12>
-        <div class="text-xs-left blue--text text--darken-4 wcp-bold hidden-md-and-up">
-          <span class="wcp-subtext pl-3">{{ this.headers[0].text }}</span>
-        </div>
-        <v-data-table
-          :headers="headers"
-          :items="teams"
-          hide-actions
-          flat
-          class="wcp-table pt-2 pb-1 px-1"
-        >
-          <template slot="headers" slot-scope="props">
-            <tr class="border-0 hidden-sm-and-down">
-              <th class="text-xs-left blue--text text--darken-4 wpc-table-cell-main">
-                <span class="wcp-subtext">{{ props.headers[0].text }}</span>
-              </th>
-              <th class="text-xs-center wpc-table-header">{{ props.headers[1].text }}</th>
-              <th class="text-xs-center wpc-table-header">{{ props.headers[2].text }}</th>
-              <th class="text-xs-center wpc-table-header">{{ props.headers[3].text }}</th>
-              <th class="text-xs-center wpc-table-header">{{ props.headers[4].text }}</th>
-              <th class="text-xs-center wpc-table-header">{{ props.headers[5].text }}</th>
-            </tr>
-            <tr class="border-0 hidden-md-and-up">
-              <th class="text-xs-left blue--text text--darken-4 wpc-table-cell-main"></th>
-              <th class="text-xs-center wpc-table-header">{{ props.headers[1].subtext }}</th>
-              <th class="text-xs-center wpc-table-header">{{ props.headers[2].subtext }}</th>
-              <th class="text-xs-center wpc-table-header">{{ props.headers[3].subtext }}</th>
-              <th class="text-xs-center wpc-table-header">{{ props.headers[4].subtext }}</th>
-              <th class="text-xs-center wpc-table-header">{{ props.headers[5].subtext }}</th>
-            </tr>
-          </template>
-          <template slot="items" slot-scope="props">
-            <tr class="wcp-table-row border-0">
-              <!-- Flag and Name Cell -->
-              <td class="pr-0">
-                <div
-                  :class="['wcp-flag', 'mr-1', 'flag-icon', 'flag-icon-' + props.item.flag_code]"
-                ></div>
-                <span class="wcp-table-title hidden-sm-and-down">{{ props.item.name }}</span>
-              </td>
-              <!-- Sixteen Cell -->
-              <td class="pa-0 text-xs-center border-r-1">
-                <div
-                  class="wcp-table-cell-text"
-                  :style="{
-                    'background-color': `rgba(76, 175, 80, ${props.item.advance})`
-                  }"
-                >
-                  {{props.item.advance | percentage}}
-                </div>
-              </td>
-              <!-- Quarter Cell -->
-              <td class="pa-0 text-xs-center border-r-1">
-                <div
-                  class="wcp-table-cell-text"
-                  :style="{
-                    'background-color': `rgba(76, 175, 80, ${props.item.pass_round16_prob})`
-                  }"
-                >
-                  {{props.item.pass_round16_prob | percentage}}
-                </div>
-              </td>
-              <!-- Semis Cell -->
-              <td class=" pa-0 text-xs-center border-r-1">
-                <div
-                  class="wcp-table-cell-text"
-                  :style="{
-                    'background-color': `rgba(76, 175, 80, ${props.item.pass_quarters_prob})`
-                  }"
-                >
-                  {{ props.item.pass_quarters_prob | percentage }}
-                </div>
-              </td>
-              <!-- Final Cell -->
-              <td class="pa-0 text-xs-center border-r-1">
-                <div
-                  class="wcp-table-cell-text"
-                  :style="{
-                    'background-color': `rgba(76, 175, 80, ${props.item.pass_semi_prob})`
-                  }"
-                >
-                  {{props.item.pass_semi_prob | percentage }}
-                </div>
-              </td>
-              <!-- Winner Cell -->
-              <td class="pa-0 text-xs-center">
-                <div
-                  class="wcp-table-cell-text"
-                  :style="{
-                    'background-color': `rgba(76, 175, 80, ${props.item.pass_final_prob})`
-                  }"
-                >
-                  {{props.item.pass_final_prob | percentage }}
-                </div>
-              </td>
-            </tr>
-          </template>
-        </v-data-table>
-      </v-flex>
-    </v-layout>
+    <v-flex xs12>
+      <div class="text-xs-left blue--text text--darken-4 wcp-bold hidden-md-and-up">
+        <span class="wcp-subtext pl-3">{{ this.headers[0].text }}</span>
+      </div>
+      <v-table fixed-header flat class="wcp-table pt-2 pb-1 px-1">
+        <thead>
+          <tr class="border-0 hidden-sm-and-down">
+            <th class="text-xs-left blue--text text--darken-4 wpc-table-cell-main">
+              <span class="wcp-subtext">{{ headers[0].text }}</span>
+            </th>
+            <th class="text-xs-center wpc-table-header">{{ headers[1].text }}</th>
+            <th class="text-xs-center wpc-table-header">{{ headers[2].text }}</th>
+            <th class="text-xs-center wpc-table-header">{{ headers[3].text }}</th>
+            <th class="text-xs-center wpc-table-header">{{ headers[4].text }}</th>
+            <th class="text-xs-center wpc-table-header">{{ headers[5].text }}</th>
+          </tr>
+          <tr class="border-0 hidden-md-and-up">
+            <th class="text-xs-left blue--text text--darken-4 wpc-table-cell-main"></th>
+            <th class="text-xs-center wpc-table-header">{{ headers[1].subtext }}</th>
+            <th class="text-xs-center wpc-table-header">{{ headers[2].subtext }}</th>
+            <th class="text-xs-center wpc-table-header">{{ headers[3].subtext }}</th>
+            <th class="text-xs-center wpc-table-header">{{ headers[4].subtext }}</th>
+            <th class="text-xs-center wpc-table-header">{{ headers[5].subtext }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in teams" :key="item.name" class="wcp-table-row border-0">
+            <!-- Flag and Name Cell -->
+            <td class="pr-0">
+              <div :class="['wcp-flag', 'mr-1', 'fi', 'fi-' + item.flag_code]"></div>
+              <span class="wcp-table-title hidden-sm-and-down">{{ item.name }}</span>
+            </td>
+            <!-- Sixteen Cell -->
+            <td class="pa-0 text-xs-center border-r-1">
+              <div class="wcp-table-cell-text" :style="{
+                'background-color': `rgba(76, 175, 80, ${item.advance})`
+              }">
+                {{ $filters.percentage(item.advance) }}
+              </div>
+            </td>
+            <!-- Quarter Cell -->
+            <td class="pa-0 text-xs-center border-r-1">
+              <div class="wcp-table-cell-text" :style="{
+                'background-color': `rgba(76, 175, 80, ${item.pass_round16_prob})`
+              }">
+                {{ $filters.percentage(item.pass_round16_prob) }}
+              </div>
+            </td>
+            <!-- Semis Cell -->
+            <td class=" pa-0 text-xs-center border-r-1">
+              <div class="wcp-table-cell-text" :style="{
+                'background-color': `rgba(76, 175, 80, ${item.pass_quarters_prob})`
+              }">
+                {{ $filters.percentage(item.pass_quarters_prob) }}
+              </div>
+            </td>
+            <!-- Final Cell -->
+            <td class="pa-0 text-xs-center border-r-1">
+              <div class="wcp-table-cell-text" :style="{
+                'background-color': `rgba(76, 175, 80, ${item.pass_semi_prob})`
+              }">
+                {{ $filters.percentage(item.pass_semi_prob) }}
+              </div>
+            </td>
+            <!-- Winner Cell -->
+            <td class="pa-0 text-xs-center">
+              <div class="wcp-table-cell-text" :style="{
+                'background-color': `rgba(76, 175, 80, ${item.pass_final_prob})`
+              }">
+                {{ $filters.percentage(item.pass_final_prob) }}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+    </v-flex>
   </v-container>
 </template>
 
@@ -109,7 +84,7 @@ export default {
   name: 'KnockoutPhase',
   computed: {
     teams() {
-      return this.$store.getters['team/teamsByWinnerProb'];
+      return this.$store.getters['teamsByWinnerProb'];
     },
   },
   data() {

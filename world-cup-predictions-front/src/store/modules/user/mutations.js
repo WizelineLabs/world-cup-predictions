@@ -1,9 +1,9 @@
 const setUser = (state, user) => {
-  state.data = user;
+  state.user.data = user;
 };
 
 const removeUser = (state) => {
-  state.data = {};
+  state.user = {};
 };
 
 const setToken = (state, token) => {
@@ -15,11 +15,11 @@ const removeToken = (state) => {
 };
 
 const setLoginMessage = (state, message) => {
-  state.loginMessage = message;
+  state.user.loginMessage = message;
 };
 
 const toogleLoading = (state) => {
-  state.loginLoading = !state.loginLoading;
+  state.user.loginLoading = !state.user.loginLoading;
 };
 
 export default {

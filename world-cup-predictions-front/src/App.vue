@@ -39,7 +39,7 @@
           <v-flex xs12>
             <v-tabs
               class="wcp-navbar-tabs mt-2"
-              slot="extension"
+              v-slot="extension"
               color="white"
               slider-color="red"
               @input="handleTabsChange"
@@ -177,7 +177,7 @@ export default {
 
 <style lang="scss">
 @import '../static/css/vuetify.min.css';
-//@import 'flag-icon-css/css/flag-icon.min.css';
+@import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 @font-face {
   font-family: 'ProximaNova-Semibold';
@@ -208,7 +208,7 @@ export default {
 }
 
 .wcp-body-container {
-  padding-top: 140px;
+  padding-top: 100px;
   width: 100%;
   overflow-x: hidden;
 }

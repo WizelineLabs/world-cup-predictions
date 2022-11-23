@@ -1,17 +1,17 @@
 const setLeaderboard = (state, list) => {
-  state.list = list;
+  state.leaderboard.list = list;
 };
 
 const removeLeaderboard = (state) => {
-  state.list = [];
+  state.leaderboard.list = [];
 };
 
 const setMyLeaderboard = (state, list) => {
-  state.myList = list;
+  state.leaderboard.myList = list;
 };
 
 const removeMyLeaderboard = (state) => {
-  state.myList = [];
+  state.leaderboard.myList = [];
 };
 
 export default {
