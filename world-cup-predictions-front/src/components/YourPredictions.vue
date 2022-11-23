@@ -10,7 +10,7 @@
     </v-layout>
     <v-layout row wrap class="wcp-tab-text">
       <v-flex xs12>
-        <v-tabs v-model="active" class="solid-tabs nested-tabs" light color="transparent" hide-slider show-arrows>
+        <v-tabs v-model="active" class="solid-tabs nested-tabs" color="#e93d44" hide-slider show-arrows>
           <v-tab value="round1">
             Group Round: 1
           </v-tab>
