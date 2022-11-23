@@ -61,7 +61,7 @@
       <v-layout wrap justify-center class="mb-4">
         <v-flex xs12 class="mt-2">
 
-          <v-tabs v-model="active" class="solid-tabs mt-3" light color="transparent" hide-slider>
+          <v-tabs v-model="active" class="solid-tabs mt-3" color="#0d47a1" hide-slider>
             <v-tab value="1" ripple>
               Predictions
             </v-tab>

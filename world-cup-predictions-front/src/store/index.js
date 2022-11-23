@@ -9,10 +9,10 @@ const store = createStore({
   state() {
     return {
       user: user.state,
-      teams: team.state,
-      game: game.state,
       leaderboard: leaderboard.state,
       dialog: dialog.state,
+      ...team.state,
+      ...game.state,
     }
   },
   getters: {

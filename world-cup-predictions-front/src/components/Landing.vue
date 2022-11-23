@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout row wrap justify-center>
+    <v-layout row class="d-flex justify-center mb-6">
       <v-flex xs12 class="text-xs-center">
         <h1 class="wcp-landing-title mt-5 blue--text text--darken-4">
           Predict the Qatar World Cup!
@@ -8,22 +8,13 @@
         <h3 class="wcp-landing-subtitle mt-3 grey--text text--darken-2">
           Place your votes, beat Paul and win the game.
         </h3>
-      </v-flex>
-      <v-flex xs12 class="mt-3 mb-5 text-xs-center">
+
         <div class="wcp-illustration pt-2">
-          <v-btn
-            large
-            v-if="!user || !user.id"
-            class="wcp-btn-lg red darken-2 white--text text-transform-none mt-4"
-            @click="signIn"
-          >
+          <v-btn large v-if="!user || !user.id" class="wcp-btn-lg red darken-2 white--text text-transform-none mt-4"
+            @click="signIn">
             Join the game!
           </v-btn>
-          <v-btn v-else
-            large
-            class="wcp-btn-lg red darken-2 white--text text-transform-none mt-4"
-            @click="goToGame"
-          >
+          <v-btn v-else large class="wcp-btn-lg red darken-2 white--text text-transform-none mt-4" @click="goToGame">
             Join the game!
           </v-btn>
           <p class="wcp-subtext mt-2">

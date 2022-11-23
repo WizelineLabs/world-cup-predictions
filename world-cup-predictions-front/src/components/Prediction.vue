@@ -12,7 +12,7 @@
           For more information on how our model works, have a look at our
           <a @click.stop="handleDialog">full documentation</a>.
         </p>
-        <v-tabs v-model="active" class="solid-tabs mt-3" light color="transparent" hide-slider>
+        <v-tabs v-model="active" class="solid-tabs mt-3" color="#0d47a1" hide-slider>
           <v-tab value="1">
             Group Stage
           </v-tab>

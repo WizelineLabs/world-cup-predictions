@@ -93,10 +93,12 @@
           <v-col cols="2" class="text-centered wcp-text-14">
             <span>{{ player.rank }}</span>
           </v-col>
-          <v-col cols="5" class="text-centered wcp-text-14">
+          <v-col cols="1" class="text-centered wcp-text-14">
             <v-avatar color="grey lighten-2" size="32px" class="mr-2 hidden-xs-only">
               <img v-if="player.avatar" :src="player.avatar" :alt="`${player.fullname}`">
             </v-avatar>
+          </v-col>
+          <v-col cols="4" class="text-centered wcp-text-14">
             <span>{{ player.fullname }}</span>
           </v-col>
           <v-col cols="3" class="text-centered wcp-text-14">
