@@ -37,6 +37,7 @@ const getUser = (context) => {
     User.getUser()
       .then((response) => {
         const user = response.length ? response[0] : {};
+
         localStorage.setItem(USER, JSON.stringify(user));
         context.commit('setUser', user);
         resolve(user);

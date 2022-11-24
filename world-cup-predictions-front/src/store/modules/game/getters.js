@@ -6,7 +6,7 @@ const MATCHES_IN_SEMIS = 2;
 const MATCHES_IN_FINALS = 2;
 
 const matchday1 = (state) => {
-  const matches = [...state.list].sort(
+  const matches = [...state.games].sort(
     (a, b) => new Date(a.date) - new Date(b.date),
   );
 
@@ -19,7 +19,7 @@ const matchday1 = (state) => {
 };
 
 const matchday2 = (state) => {
-  const matches = [...state.list].sort(
+  const matches = [...state.games].sort(
     (a, b) => new Date(a.date) - new Date(b.date),
   );
 
@@ -32,7 +32,7 @@ const matchday2 = (state) => {
 };
 
 const matchday3 = (state) => {
-  const matches = [...state.list].sort(
+  const matches = [...state.games].sort(
     (a, b) => new Date(a.date) - new Date(b.date),
   );
 
@@ -45,7 +45,7 @@ const matchday3 = (state) => {
 };
 
 const roundOf16 = (state) => {
-  const matches = [...state.list].sort(
+  const matches = [...state.games].sort(
     (a, b) => new Date(a.date) - new Date(b.date),
   );
 
@@ -84,7 +84,7 @@ const semis = (state) => {
   return [];
 };
 
-const final = (state) => {
+const getFinal = (state) => {
   const matches = [...state.list].sort(
     (a, b) => new Date(a.date) - new Date(b.date),
   );
@@ -117,6 +117,6 @@ export default {
   roundOf16,
   quarters,
   semis,
-  final,
+  getFinal,
   wildcardDate,
 };

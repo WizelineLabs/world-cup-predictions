@@ -1,153 +1,142 @@
 <template>
-  <div class="match-card mb-4" :class="[`${matchState}`]">
-    <v-layout row wrap>
-      <v-flex xs12 text-xs-center class="pt-3 pb-2">
-        <span>{{match.date | formatDate}}</span>
-      </v-flex>
-      <v-flex xs12 text-xs-center class="match-result-container">
-        <div class="d-inline-block match-flag-wrapper">
-          <div :class="['match-flag', 'flag-icon', `flag-icon-${match.home_flag}`]"></div>
-          <span class="match-flag-label d-block mt-2">{{match.home}}</span>
-        </div>
-        <div class="match-result">
-          <div class="wcp-text-20">
-            {{this.matchState !== 'open' ? match.home_score : ''}} -
-            {{ this.matchState !== 'open' ? match.away_score : ''}}
+  <v-card class="match-card mb-4" :class="[`${matchState}`]" width="100%">
+    <!-- Match data -->
+    <v-card-item>
+      <v-row align="center" no-gutters>
+        <v-col cols="4" class="text-centered">
+          <div class="d-inline-block match-flag-wrapper">
+            <div :class="['match-flag', 'fi', `fi-${match.home_flag}`]"></div>
+            <v-card-title class="match-flag-label d-block mt-2">{{ match.home }}</v-card-title>
           </div>
-          <div class="wcp-text-14" v-if="match.home_penalties && match.away_penalties">
-            ({{this.matchState !== 'open' && match.home_penalties ? match.home_penalties : ''}} -
-            {{this.matchState !== 'open' && match.away_penalties ? match.away_penalties : ''}})
+        </v-col>
+        <v-col cols="4" class="text-centered">
+          <div class="match-result">
+            <div class="wcp-text-20">
+              {{ this.matchState !== 'open' ? match.home_score : '0' }} -
+              {{ this.matchState !== 'open' ? match.away_score : '0' }}
+            </div>
+            <div class="wcp-text-14" v-if="match.home_penalties && match.away_penalties">
+              ({{ this.matchState !== 'open' && match.home_penalties ? match.home_penalties : '0' }} -
+              {{ this.matchState !== 'open' && match.away_penalties ? match.away_penalties : '0' }})
+            </div>
           </div>
-        </div>
-        <div class="d-inline-block match-flag-wrapper">
-          <div :class="['match-flag', 'flag-icon', `flag-icon-${match.away_flag}`]"></div>
-          <span class="match-flag-label d-block mt-2">{{match.away}}</span>
-        </div>
-      </v-flex>
-      <v-layout row wrap class="mx-0">
-        <v-flex xs2 class="text-xs-left pt-3 px-0">
-          <button
-            v-if="!showPaulsPrediction"
-            class="match-button"
-            @click="handlePredictionsChange"
-          >
+        </v-col>
+        <v-col cols="4" class="text-centered">
+          <div class="d-inline-block match-flag-wrapper">
+            <div :class="['match-flag', 'fi', `fi-${match.away_flag}`]"></div>
+            <v-card-title class="match-flag-label d-block mt-2">{{ match.away }}</v-card-title>
+          </div>
+        </v-col>
+      </v-row>
+    </v-card-item>
+    <v-card-subtitle class="text-centered">
+      {{ $filters.MonthDay(match.date) }}
+    </v-card-subtitle>
+    <!-- Predictions -->
+    <v-card-item>
+      <v-card-subtitle v-if="showPaulsPrediction" class="text-centered">Paul's Prediction</v-card-subtitle>
+      <v-card-subtitle v-else class="text-centered">Wizeline Trend</v-card-subtitle>
+      <v-row align="center" no-gutters>
+        <v-col cols="2">
+          <button v-if="!showPaulsPrediction" class="match-button" @click="handlePredictionsChange">
             <div class="match-button-title">PP</div>
             <div class="arrow-left icon"></div>
           </button>
-        </v-flex>
-        <!-- Predictions -->
-        <v-flex xs8 class="px-0">
-          <v-layout column wrap>
-            <v-flex xs12 text-xs-center class="py-1">
-              <span v-if="showPaulsPrediction" class="match-card-label">Paul's Prediction</span>
-              <span v-else class="match-card-label">Wizeline Trend</span>
-            </v-flex>
-            <v-flex xs12 text-xs-center
-              class="grey--text"
-              :class="{
-                'text--lighten-1': this.matchState === 'open',
-                'text--darken-1': this.matchState !== 'open'
-              }"
-            >
-              <v-layout justify-space-between class="match-prediction-wrapper pb-1 pt-0">
-                <div class="match-prediction" v-if="this.matchState === 'open'">?</div>
-                <div class="match-prediction" v-else >
-                  <span v-if="showPaulsPrediction">{{match.home_win | percentage}}</span>
-                  <span v-else>{{match.home_win_trend | percentage}}</span>
-                </div>
-
-                <div class="match-prediction">
-                  <template v-if="!knockoutPhase">
-                    <span v-if="this.matchState === 'open'">?</span>
-                    <span v-else >
-                      <template v-if="showPaulsPrediction">
-                        {{match.draw | percentage}}
-                      </template>
-                      <template v-else>
-                        {{match.draw_trend | percentage}}
-                      </template>
-                    </span>
-                  </template>
-                </div>
-
-                <div class="match-prediction" v-if="this.matchState === 'open'">?</div>
-                <div class="match-prediction" v-else >
-                  <span v-if="showPaulsPrediction">{{match.away_win | percentage}}</span>
-                  <span v-else>{{match.away_win_trend | percentage}}</span>
-                </div>
-              </v-layout>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-        <v-flex xs2 class="text-xs-right pt-3 px-0">
-          <button
-            v-if="showPaulsPrediction"
-            class="match-button"
-            @click="handlePredictionsChange"
-          >
+        </v-col>
+        <v-col cols="3" class="grey--text text-centered" :class="{
+          'text--lighten-1': this.matchState === 'open',
+          'text--darken-1': this.matchState !== 'open'
+        }">
+          <div class="match-prediction" v-if="this.matchState === 'open'">?</div>
+          <div class="match-prediction" v-else>
+            <span v-if="showPaulsPrediction">{{ $filters.percentage(match.home_win) }}</span>
+            <span v-else>{{ $filters.percentage(match.home_win_trend) ?? '-' }}</span>
+          </div>
+        </v-col>
+        <v-col cols="2" class="grey--text text-centered" :class="{
+          'text--lighten-1': this.matchState === 'open',
+          'text--darken-1': this.matchState !== 'open'
+        }">
+          <template v-if="!knockoutPhase">
+            <span v-if="this.matchState === 'open'">?</span>
+            <span v-else>
+              <template v-if="showPaulsPrediction">
+                {{ $filters.percentage(match.draw) }}
+              </template>
+              <template v-else>
+                {{ $filters.percentage(match.draw_trend) ?? '-' }}
+              </template>
+            </span>
+          </template>
+        </v-col>
+        <v-col cols="3" class="grey--text text-centered" :class="{
+          'text--lighten-1': this.matchState === 'open',
+          'text--darken-1': this.matchState !== 'open'
+        }">
+          <div class="match-prediction" v-if="this.matchState === 'open'">?</div>
+          <div class="match-prediction" v-else>
+            <span v-if="showPaulsPrediction">{{ $filters.percentage(match.away_win) }}</span>
+            <span v-else>{{ $filters.percentage(match.away_win_trend) ?? '-' }}</span>
+          </div>
+        </v-col>
+        <v-col cols="2">
+          <button v-if="showPaulsPrediction" class="match-button" @click="handlePredictionsChange">
             <div class="match-button-title">WT</div>
             <div class="arrow-right icon"></div>
           </button>
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
+    </v-card-item>
+    <!-- Actions -->
+    <v-card-actions>
+      <v-row align="center" no-gutters>
+        <v-col cols="2"></v-col>
+        <v-col cols="3" class="text-centered">
+          <div class="winner-selection-container">
+            <label class="winner-selection-button">
+              <input type="radio" :name="`winner-match-${match.id}`" value="H" :checked="'H' === choiceSelected"
+                @click="handleChoiceSelected" :disabled="this.matchState !== 'open'" />
+              <span class="winner-selection-button-check"></span>
+              <p class="winner-selection-button-label">WIN</p>
+            </label>
+          </div>
+        </v-col>
+        <v-col cols="2" class="text-centered">
+          <div class="winner-selection-container">
+            <label v-if="!knockoutPhase" class="winner-selection-button">
+              <input type="radio" :name="`winner-match-${match.id}`" value="D" :checked="'D' === choiceSelected"
+                @click="handleChoiceSelected" :disabled="this.matchState !== 'open'" />
+              <span class="winner-selection-button-check"></span>
+              <p class="winner-selection-button-label">DRAW</p>
+            </label>
+          </div>
+        </v-col>
+        <v-col cols="3" class="text-centered">
+          <div class="winner-selection-container">
+            <label class="winner-selection-button">
+              <input type="radio" :name="`winner-match-${match.id}`" value="A" :checked="'A' === choiceSelected"
+                @click="handleChoiceSelected" :disabled="this.matchState !== 'open'" />
+              <span class="winner-selection-button-check"></span>
+              <p class="winner-selection-button-label">WIN</p>
+            </label>
+          </div>
+        </v-col>
+        <v-col cols="2"></v-col>
+      </v-row>
+    </v-card-actions>
+    <v-layout row wrap>
 
       <v-flex xs12 text-xs-center>
-        <div class="winner-selection-container">
-          <label class="winner-selection-button">
-            <input
-              type="radio"
-              :name="`winner-match-${match.id}`"
-              value="H"
-              :checked="'H' === choiceSelected"
-              @click="handleChoiceSelected"
-              :disabled="this.matchState !== 'open'"
-            />
-            <span class="winner-selection-button-check"></span>
-            <p class="winner-selection-button-label">WIN</p>
-          </label>
-        </div>
-        <div class="winner-selection-container">
-          <label v-if="!knockoutPhase" class="winner-selection-button">
-            <input
-              type="radio"
-              :name="`winner-match-${match.id}`"
-              value="D"
-              :checked="'D' === choiceSelected"
-              @click="handleChoiceSelected"
-              :disabled="this.matchState !== 'open'"
-            />
-            <span class="winner-selection-button-check"></span>
-            <p class="winner-selection-button-label">DRAW</p>
-          </label>
-        </div>
-        <div class="winner-selection-container">
-          <label class="winner-selection-button">
-            <input
-              type="radio"
-              :name="`winner-match-${match.id}`"
-              value="A"
-              :checked="'A' === choiceSelected"
-              @click="handleChoiceSelected"
-              :disabled="this.matchState !== 'open'"
-            />
-            <span class="winner-selection-button-check"></span>
-            <p class="winner-selection-button-label">WIN</p>
-          </label>
-        </div>
-      </v-flex>
-
-      <v-flex xs12 text-xs-center>
-        <span class="match-caption">{{matchCaption}}</span>
+        <span class="match-caption">{{ matchCaption }}</span>
       </v-flex>
     </v-layout>
-    <div class="match-card-save-status"
-      :class="{
-        show: showSaveStatus,
-        'status-error': errorSaving
-      }">
-      {{saveStatus}}
+    <div class="match-card-save-status" :class="{
+      show: showSaveStatus,
+      'status-error': errorSaving
+    }">
+      {{ saveStatus }}
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -216,13 +205,17 @@ export default {
       const value = event.target.value;
       this.choiceSelected = this.choiceSelected === value ? '' : value;
 
+      console.log("event: ", event);
+      console.log("value: ", value);
+      console.log("choiceSelected: ", this.choiceSelected);
+
       this.$store
-        .dispatch('user/setGuess', {
+        .dispatch('setGuess', {
           game_id: this.match.id,
           choice: this.choiceSelected,
         })
         .then(() => {
-          this.$store.dispatch('game/getGames');
+          this.$store.dispatch('getGames');
           this.saveStatus = 'Prediction Saved!';
           this.showStatus();
         })
@@ -248,6 +241,10 @@ export default {
 </script>
 
 <style lang="scss">
+.text-centered {
+  text-align: center;
+}
+
 .match-card {
   border-radius: 8px;
   border: solid 1px #adb6c0;
@@ -369,7 +366,7 @@ export default {
   border-top: solid 2px currentColor;
   border-right: solid 2px currentColor;
   -webkit-transform: rotate(-135deg);
-          transform: rotate(-135deg);
+  transform: rotate(-135deg);
 }
 
 .arrow-right.icon {
@@ -393,7 +390,7 @@ export default {
   border-top: solid 2px currentColor;
   border-right: solid 2px currentColor;
   -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
 .winner-selection-container {
@@ -410,7 +407,7 @@ export default {
   user-select: none;
 }
 
-.winner-selection-button > input {
+.winner-selection-button>input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -427,7 +424,7 @@ export default {
   width: 28px;
 }
 
-.winner-selection-button input:checked ~ .winner-selection-button-check {
+.winner-selection-button input:checked~.winner-selection-button-check {
   background-color: #1565c0;
   border-color: #1565c0;
 }
@@ -449,7 +446,7 @@ export default {
 }
 
 .match-card.open {
-  .winner-selection-button:hover input ~ .winner-selection-button-check {
+  .winner-selection-button:hover input~.winner-selection-button-check {
     border-color: #1565c0;
   }
 }
@@ -467,7 +464,7 @@ export default {
     cursor: default;
   }
 
-  .winner-selection-button input:checked ~ .winner-selection-button-check {
+  .winner-selection-button input:checked~.winner-selection-button-check {
     background-color: #80a3d6;
     border-color: #80a3d6;
   }
@@ -574,7 +571,7 @@ export default {
     font-weight: 500;
   }
 
-  .winner-selection-button input:checked ~ .winner-selection-button-check {
+  .winner-selection-button input:checked~.winner-selection-button-check {
     background-color: #d32f2f;
     border-color: #d32f2f;
   }

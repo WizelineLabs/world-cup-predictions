@@ -1,79 +1,41 @@
 <template>
-  <v-app id="app" :class="[`${$vuetify.breakpoint.name}`]">
+  <v-app id="app" :class="[`${$vuetify?.breakpoint?.name}`]">
     <v-toolbar flat fixed class="wcp-navbar" height="140px">
       <v-container class="py-0 my-0">
-        <v-layout row wrap class="wcp-navbar-top-container mt-4 pt-1">
+        <v-layout row wrap class="wcp-navbar-top-container d-flex justify-space-between mb-6 mt-4 pt-1">
           <v-flex xs8>
             <v-layout row wrap>
               <img src="/static/wizeline-logo.svg" alt="Wizeline" />
               <span class="wcp-logo-text wcp-text-16">Prediction Game</span>
-              <span
-                class="wcp-logo-text wcp-text-16 grey--text text--darken-1 pl-2 hidden-sm-and-down"
-              >
-                Russia World Cup 2018
+              <span class="wcp-logo-text wcp-text-16 grey--text text--darken-1 pl-2 hidden-sm-and-down">
+                Qatar World Cup 2022
               </span>
             </v-layout>
           </v-flex>
           <v-flex xs4 class="text-xs-right">
-            <span v-if="!user || !user.id" class="wcp-text-16 pr-2 hidden-sm-and-down">
-              Join the game!
-            </span>
-            <v-btn
-              v-if="user && user.id"
-              class="wcp-btn grey lighten-1 white--text text-transform-none"
-              @click="signOut"
-            >
+            <v-btn v-if="user && user.id" class="wcp-btn grey lighten-1 white--text text-transform-none"
+              @click="signOut">
               Sign Out
             </v-btn>
-            <v-btn
-              v-else
-              class="wcp-btn px-2 red darken-2 white--text text-transform-none"
-              @click="signIn
-            ">
-              Sign In
+            <v-btn large v-if="!user || !user.id" class="wcp-btn-lg red darken-2 white--text text-transform-none mt-4"
+              @click="signIn">
+              Join the game!
             </v-btn>
           </v-flex>
         </v-layout>
         <v-layout row wrap>
           <v-flex xs12>
-            <v-tabs
-              class="wcp-navbar-tabs mt-2"
-              slot="extension"
-              color="white"
-              slider-color="red"
-              @input="handleTabsChange"
-            >
-              <v-tab
-                class="text-transform-none"
-                key="home"
-                to="/"
-                router
-              >
+            <v-tabs v-slot="extension" color="#e93d44" slider-color="#e93d44" @input="handleTabsChange">
+              <v-tab class="text-transform-none" key="home" to="/" router>
                 Home
               </v-tab>
-              <v-tab
-                class="text-transform-none"
-                key="about"
-                to="/about"
-                router
-              >
+              <v-tab class="text-transform-none" key="about" to="/about" router>
                 About the Game
               </v-tab>
-              <v-tab
-                class="text-transform-none"
-                key="prediction"
-                to="/prediction"
-                router
-              >
+              <v-tab class="text-transform-none" key="prediction" to="/prediction" router>
                 Prediction Tool
               </v-tab>
-              <v-tab
-                v-if="user && user.id"
-                class="text-transform-none"
-                key="game"
-                to="/game"
-                router
-              >
+              <v-tab v-if="user && user.id" class="text-transform-none" key="game" to="/game" router>
                 Prediction Game
               </v-tab>
             </v-tabs>
@@ -82,8 +44,8 @@
       </v-container>
     </v-toolbar>
     <div class="wcp-body-container">
-      <v-slide-x-reverse-transition >
-        <router-view/>
+      <v-slide-x-reverse-transition>
+        <router-view />
       </v-slide-x-reverse-transition>
     </div>
     <doc-dialog></doc-dialog>
@@ -109,7 +71,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
+import { googleTokenLogin, googleLogout } from "vue3-google-login"
+
 import DocDialog from './components/DocDialog';
 
 const POPUP_CLOSED = 'popup_closed_by_user';
@@ -131,43 +94,34 @@ export default {
   },
   methods: {
     signIn() {
-      Vue.googleAuth().signIn(this.onSignInSuccess, this.onSignInError);
+      googleTokenLogin().then(this.onSignInSuccess).catch(this.onSignInError)
     },
     signOut() {
-      Vue.googleAuth().signOut(
-        () => {
-          this.$store.dispatch('user/logoutUser').then(() => {
-            this.$router.push({ path: '/' });
-          });
-        },
-        (error) => {
-          this.$store.dispatch('user/setLoginMessage', error);
-          this.$router.push({ path: '/' });
-        },
-      );
+      googleLogout();
+      this.$store.dispatch('logoutUser').then(() => {
+        this.$router.push({ path: '/' });
+      });
     },
-    onSignInSuccess(googleUser) {
-      const authResponse = googleUser.getAuthResponse();
+    onSignInSuccess(response) {
       const data = {
-        access_token: authResponse.access_token,
+        access_token: response.access_token,
       };
-
-      this.$store.dispatch('user/loginUser', data).then(
+      this.$store.dispatch('loginUser', data).then(
         () => {
-          this.$store.dispatch('user/getUser').then(() => {
+          this.$store.dispatch('getUser').then(() => {
             this.$router.push({ path: '/game' });
           });
         },
         (error) => {
           this.errorDialog = true;
-          this.$store.dispatch('user/setLoginMessage', error.data.message);
+          this.$store.dispatch('setLoginMessage', error.data.message);
         },
       );
     },
     onSignInError(error) {
       if (error.error !== POPUP_CLOSED) {
         this.errorDialog = true;
-        this.$store.dispatch('user/setLoginMessage', error);
+        this.$store.dispatch('setLoginMessage', error);
       }
     },
     handleTabsChange() {
@@ -182,23 +136,21 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('user/fetchLocalUser');
-    this.$store.dispatch('team/getTeams');
+    this.$store.dispatch('fetchLocalUser');
+    this.$store.dispatch('getTeams');
   },
 };
 </script>
 
 <style lang="scss">
 @import '../static/css/vuetify.min.css';
-@import 'flag-icon-css/css/flag-icon.min.css';
+@import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 @font-face {
   font-family: 'ProximaNova-Semibold';
   src: url('/static/fonts/ProximaNova-Semibold.eot');
-  src: url('/static/fonts/ProximaNova-Semibold.eot?#iefix')
-      format('embedded-opentype'),
-    url('/static/fonts/ProximaNova-Semibold.svg#ProximaNova-Semibold')
-      format('svg');
+  src: url('/static/fonts/ProximaNova-Semibold.eot?#iefix') format('embedded-opentype'),
+    url('/static/fonts/ProximaNova-Semibold.svg#ProximaNova-Semibold') format('svg');
   font-weight: 600;
   font-style: normal;
 }
@@ -221,7 +173,7 @@ export default {
 }
 
 .wcp-body-container {
-  padding-top: 140px;
+  padding-top: 100px;
   width: 100%;
   overflow-x: hidden;
 }
@@ -273,7 +225,7 @@ export default {
     font-weight: 400;
     text-transform: none;
 
-    > .tabs__item {
+    >.tabs__item {
       padding: 0 16px;
     }
   }
@@ -381,11 +333,9 @@ export default {
     position: relative;
 
     &::before {
-      background: linear-gradient(
-        -90deg,
-        rgba(255, 255, 255, 0.001),
-        rgb(255, 255, 255)
-      );
+      background: linear-gradient(-90deg,
+          rgba(255, 255, 255, 0.001),
+          rgb(255, 255, 255));
       content: '';
       height: 44px;
       left: 0;
@@ -395,12 +345,11 @@ export default {
       width: 30px;
       z-index: 10;
     }
+
     &::after {
-      background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.001),
-        rgb(255, 255, 255) 80%
-      );
+      background: linear-gradient(90deg,
+          rgba(255, 255, 255, 0.001),
+          rgb(255, 255, 255) 80%);
       content: '';
       height: 44px;
       right: 0;

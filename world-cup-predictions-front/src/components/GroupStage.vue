@@ -1,79 +1,59 @@
 <template>
-  <div>
-    <v-container fluid grid-list-xl class="py-0 pl-0 pr-3 my-4">
-      <v-layout row wrap>
-        <v-flex v-for="(list, group) in teams" :key="`group-${group}`" xs12 lg6>
-          <v-data-table
-            :headers="headers"
-            :items="list"
-            hide-actions
-            class="wcp-group-table elevation-0 pt-2 pb-1 px-1"
-          >
-            <template slot="headers" slot-scope="props">
-              <tr class="border-0">
-                <th class="text-xs-left title blue--text text--darken-4 wpc-group-table-cell-main">
-                  {{ props.headers[0].text + ' ' + group }}
-                </th>
-                <th class="text-xs-center wpc-group-table-header">{{ props.headers[1].text }}</th>
-                <th class="text-xs-center wpc-group-table-header">{{ props.headers[2].text }}</th>
-                <th class="text-xs-center wpc-group-table-header">{{ props.headers[3].text }}</th>
-              </tr>
-            </template>
-            <template slot="items" slot-scope="props">
-              <tr class="wcp-group-table-row border-0">
-                <!-- Flag and Name Cell -->
-                <td class="pr-0">
-                  <div
-                    :class="['wcp-flag', 'flag-icon', 'flag-icon-' + props.item.flag_code]"
-                  ></div>
-                  <span class="wcp-group-table-title hidden-xs-only">{{ props.item.name }}</span>
-                </td>
-                <!-- Advance Cell -->
-                <td class="wcp-group-table-cell text-xs-center border-r-1">
-                  <div
-                    class="wcp-group-table-cell-text"
-                    :class="{
-                      active: props.item.shaded,
-                      'active-text': props.item.shaded,
-                      'grey--text text--darken-1': !props.item.shaded
-                    }"
-                  >
-                    {{props.item.advance | percentage}}
-                  </div>
-                </td>
-                <!-- Advance Second Cell -->
-                <td class=" wcp-group-table-cell text-xs-center">
-                  <div
-                    class="wcp-group-table-cell-text"
-                    :class="{
-                      active: props.item.second || props.item.first,
-                      'active-text': props.item.second,
-                      'grey--text text--darken-1': !props.item.second
-                    }"
-                  >
-                  {{ props.item.pass_group_runner_prob | percentage }}
-                  </div>
-                </td>
-                <!-- Advance First Cell -->
-                <td class="wcp-group-table-cell text-xs-center">
-                  <div
-                    class="wcp-group-table-cell-text"
-                    :class="{
-                      active: props.item.first,
-                      'active-text': props.item.first,
-                      'grey--text text--darken-1': !props.item.first
-                    }"
-                  >
-                  {{props.item.pass_group_winner_prob | percentage }}
-                  </div>
-                </td>
-              </tr>
-            </template>
-          </v-data-table>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </div>
+  <v-container fluid grid-list-xl class="py-0 pl-0 pr-3 my-4">
+    <v-flex v-for="(list, group) in teams" :key="`group-${group}`">
+      <v-table fixed-header>
+        <thead>
+          <tr class="border-0">
+            <th class="text-xs-left title blue--text text--darken-4 wpc-group-table-cell-main">
+              {{ headers[0].text + ' ' + group }}
+            </th>
+            <th class="text-xs-center wpc-group-table-header">{{ headers[1].text }}</th>
+            <th class="text-xs-center wpc-group-table-header">{{ headers[2].text }}</th>
+            <th class="text-xs-center wpc-group-table-header">{{ headers[3].text }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in list" :key="item.name" class="wcp-group-table-row border-0">
+            <!-- Flag and Name Cell -->
+            <td class="pr-0">
+              <div :class="['wcp-flag', 'fi', 'fi-' + item.flag_code]"></div>
+              <span class="wcp-group-table-title hidden-xs-only">{{ item.name }}</span>
+            </td>
+            <!-- Advance Cell -->
+            <td class="wcp-group-table-cell text-xs-center border-r-1">
+              <div class="wcp-group-table-cell-text" :class="{
+                active: item.shaded,
+                'active-text': item.shaded,
+                'grey--text text--darken-1': !item.shaded
+              }">
+                {{ $filters.percentage(item.advance) }}
+              </div>
+            </td>
+            <!-- Advance Second Cell -->
+            <td class=" wcp-group-table-cell text-xs-center">
+              <div class="wcp-group-table-cell-text" :class="{
+                active: item.second || item.first,
+                'active-text': item.second,
+                'grey--text text--darken-1': !item.second
+              }">
+                {{ $filters.percentage(item.pass_group_runner_prob) }}
+              </div>
+            </td>
+            <!-- Advance First Cell -->
+            <td class="wcp-group-table-cell text-xs-center">
+              <div class="wcp-group-table-cell-text" :class="{
+                active: item.first,
+                'active-text': item.first,
+                'grey--text text--darken-1': !item.first
+              }">
+                {{ $filters.percentage(item.pass_group_winner_prob) }}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+    </v-flex>
+  </v-container>
 </template>
 
 <script>
@@ -81,7 +61,7 @@ export default {
   name: 'GroupStage',
   computed: {
     teams() {
-      return this.$store.getters['team/teamsByGroup'];
+      return this.$store.getters['teamsByGroup'];
     },
   },
   data() {
@@ -127,10 +107,6 @@ export default {
     background-color: transparent !important;
   }
 
-  .wpc-group-table-cell-main {
-    width: 34%;
-  }
-
   .wpc-group-table-header {
     width: 22%;
   }
@@ -151,15 +127,21 @@ export default {
     border-right: 1px dashed #d7dbdf;
   }
 
-  .active {
-    background-color: #e7ebf3;
-  }
+  
+}
 
-  .active-text {
-    color: rgba(0, 0, 0, 0.87);
-    font-family: 'ProximaNova-Semibold', 'Roboto', sans-serif;
-    font-weight: 500;
-  }
+.wpc-group-table-cell-main {
+  width: 35%;
+}
+
+.active {
+  background-color: #e7ebf3;
+}
+
+.active-text {
+  color: rgba(0, 0, 0, 0.87);
+  font-family: 'ProximaNova-Semibold', 'Roboto', sans-serif;
+  font-weight: 500;
 }
 
 .wcp-group-table-title {

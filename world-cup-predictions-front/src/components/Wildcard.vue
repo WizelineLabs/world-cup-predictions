@@ -12,8 +12,8 @@
     <div class="wildcard-container">
       <div class="wildcard-team-container text-xs-center">
         <div
-          class="wildcard-flag flag-icon"
-          :class="[`flag-icon-${team.flag_code}`]"
+          class="wildcard-flag fi"
+          :class="[`fi-${team.flag_code}`]"
         ></div>
         <span class="wildcard-team-name d-block mt-2 text-xs-center">
           {{team.name}}
@@ -57,11 +57,11 @@ export default {
 
       if (this.wildcardSelected) {
         this.$store
-          .dispatch('user/setWildcard', {
+          .dispatch('setWildcard', {
             wildcardId: this.wildcardSelected,
           })
           .then(() => {
-            this.$store.dispatch('user/getUser');
+            this.$store.dispatch('getUser');
             this.saveStatus = 'Wildcard Saved!';
             this.showStatus();
           })

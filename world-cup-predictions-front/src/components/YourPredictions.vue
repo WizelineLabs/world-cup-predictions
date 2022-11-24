@@ -7,60 +7,55 @@
           for the matchup will be visible once your vote is locked and the match is in progress.
         </p>
       </v-flex>
-      <v-flex xs12 >
-        <v-tabs
-            class="solid-tabs nested-tabs"
-            v-model="active"
-            light
-            color="transparent"
-            hide-slider
-            show-arrows
-          >
-            <v-tab key="round1">
-              Group Round: 1
-            </v-tab>
-            <v-tab key="round2">
-              Group Round: 2
-            </v-tab>
-            <v-tab key="round3">
-              Group Round: 3
-            </v-tab>
-            <v-tab key="roundOf16">
-              Round of 16
-            </v-tab>
-            <v-tab key="quarters">
-              Quarters
-            </v-tab>
-            <v-tab key="semis">
-              Semis
-            </v-tab>
-            <v-tab key="finals">
-              3rd & Final
-            </v-tab>
-            <v-tabs-items class="mt-4">
-              <v-tab-item key="round1">
-                <matchday1></matchday1>
-              </v-tab-item>
-              <v-tab-item key="round2">
-                <matchday2></matchday2>
-              </v-tab-item>
-              <v-tab-item key="round3">
-                <matchday3></matchday3>
-              </v-tab-item>
-              <v-tab-item key="roundOf16">
-                <round-of16></round-of16>
-              </v-tab-item>
-              <v-tab-item key="quarters">
-                <quarters></quarters>
-              </v-tab-item>
-              <v-tab-item key="semis">
-                <semis></semis>
-              </v-tab-item>
-              <v-tab-item key="finals">
-                <final></final>
-              </v-tab-item>
-            </v-tabs-items>
-          </v-tabs>
+    </v-layout>
+    <v-layout row wrap class="wcp-tab-text">
+      <v-flex xs12>
+        <v-tabs v-model="active" class="solid-tabs nested-tabs" color="#e93d44" hide-slider show-arrows>
+          <v-tab value="round1">
+            Group Round: 1
+          </v-tab>
+          <v-tab value="round2">
+            Group Round: 2
+          </v-tab>
+          <v-tab value="round3">
+            Group Round: 3
+          </v-tab>
+          <v-tab value="roundOf16">
+            Round of 16
+          </v-tab>
+          <v-tab value="quarters">
+            Quarters
+          </v-tab>
+          <v-tab value="semis">
+            Semis
+          </v-tab>
+          <v-tab value="finals">
+            3rd & Final
+          </v-tab>
+        </v-tabs>
+        <v-window v-model="active">
+          <v-window-item value="round1">
+            <matchday1></matchday1>
+          </v-window-item>
+          <v-window-item value="round2">
+            <matchday2></matchday2>
+          </v-window-item>
+          <v-window-item value="round3">
+            <matchday3></matchday3>
+          </v-window-item>
+          <v-window-item value="roundOf16">
+            <round-of16></round-of16>
+          </v-window-item>
+          <v-window-item value="quarters">
+            <quarters></quarters>
+          </v-window-item>
+          <v-window-item value="semis">
+            <semis></semis>
+          </v-window-item>
+          <v-window-item value="finals">
+            <final></final>
+          </v-window-item>
+        </v-window>
       </v-flex>
     </v-layout>
   </v-container>

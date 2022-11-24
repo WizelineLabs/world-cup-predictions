@@ -1,29 +1,20 @@
 <template>
   <v-container>
-    <v-layout row wrap justify-center>
+    <v-layout row class="d-flex justify-center mb-6">
       <v-flex xs12 class="text-xs-center">
         <h1 class="wcp-landing-title mt-5 blue--text text--darken-4">
-          Predict the Russia World Cup!
+          Predict the Qatar World Cup!
         </h1>
         <h3 class="wcp-landing-subtitle mt-3 grey--text text--darken-2">
           Place your votes, beat Paul and win the game.
         </h3>
-      </v-flex>
-      <v-flex xs12 class="mt-3 mb-5 text-xs-center">
+
         <div class="wcp-illustration pt-2">
-          <v-btn
-            large
-            v-if="!user || !user.id"
-            class="wcp-btn-lg red darken-2 white--text text-transform-none mt-4"
-            @click="signIn"
-          >
+          <v-btn large v-if="!user || !user.id" class="wcp-btn-lg red darken-2 white--text text-transform-none mt-4"
+            @click="signIn">
             Join the game!
           </v-btn>
-          <v-btn v-else
-            large
-            class="wcp-btn-lg red darken-2 white--text text-transform-none mt-4"
-            @click="goToGame"
-          >
+          <v-btn v-else large class="wcp-btn-lg red darken-2 white--text text-transform-none mt-4" @click="goToGame">
             Join the game!
           </v-btn>
           <p class="wcp-subtext mt-2">
@@ -36,7 +27,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
+
+import { googleTokenLogin } from "vue3-google-login"
 
 const POPUP_CLOSED = 'popup_closed_by_user';
 
@@ -52,28 +44,27 @@ export default {
   },
   methods: {
     signIn() {
-      Vue.googleAuth().signIn(this.onSignInSuccess, this.onSignInError);
+      googleTokenLogin().then(this.onSignInSuccess).catch(this.onSignInError)
     },
-    onSignInSuccess(googleUser) {
-      const authResponse = googleUser.getAuthResponse();
+    onSignInSuccess(response) {
       const data = {
-        access_token: authResponse.access_token,
+        access_token: response.access_token,
       };
 
-      this.$store.dispatch('user/loginUser', data).then(
+      this.$store.dispatch('loginUser', data).then(
         () => {
-          this.$store.dispatch('user/getUser').then(() => {
+          this.$store.dispatch('getUser').then(() => {
             this.$router.push({ path: '/game' });
           });
         },
         (error) => {
-          this.$store.dispatch('user/setLoginMessage', error.data.message);
+          this.$store.dispatch('setLoginMessage', error.data.message);
         },
       );
     },
     onSignInError(error) {
       if (error.error !== POPUP_CLOSED) {
-        this.$store.commit('user/setLoginMessage', error);
+        this.$store.commit('setLoginMessage', error);
       }
     },
     goToGame() {

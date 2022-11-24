@@ -1,9 +1,9 @@
 const setTeams = (state, teams) => {
-  state.list = teams;
+  state.teams = teams;
 };
 
 const removeTeams = (state) => {
-  state.list = [];
+  state.teams = [];
 };
 
 export default {

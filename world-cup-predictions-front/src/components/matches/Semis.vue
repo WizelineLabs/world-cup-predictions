@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     semis() {
-      return this.$store.getters['game/semis'];
+      return this.$store.getters['semis'];
     },
   },
 };

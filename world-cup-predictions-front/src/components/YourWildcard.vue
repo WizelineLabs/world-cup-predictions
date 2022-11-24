@@ -1,15 +1,17 @@
 <template>
   <v-container>
-    <v-layout row wrap class="wcp-wildcard-text">
-      <v-flex xs9>
+    <v-layout row wrap class="wcp-tab-text">
+      <v-flex xs12>
         <p>
           Select the team you think will win the World Cup. If you're correct, we
           will add <strong>30 points</strong> to your grand total.
           <br />
-          Wildcard selection closes on <strong>{{wildcardDate | MonthDay}}</strong>
-          at <strong>{{wildcardDate | HourMin}} local time</strong>.
+          Wildcard selection closes on <strong>{{ $filters.MonthDay(wildcardDate) }}</strong>
+          at <strong>{{ $filters.HourMin(wildcardDate) }} local time</strong>.
         </p>
       </v-flex>
+    </v-layout>
+    <v-layout row wrap justify-center class="mb-4">
       <v-flex xs3 class="text-xs-right">
         <p v-if="matchState === 'locked'" class="mr-3">
           <span class="lock-icon"></span>
@@ -17,13 +19,15 @@
         </p>
       </v-flex>
     </v-layout>
-    <v-container fluid grid-list-lg class="px-1 mt-3">
-      <v-layout row wrap>
-          <v-flex xs6 sm4 md3 lg2 v-for="team in wildcards" :key="`match-card-${team.id}`">
+    <v-layout row wrap class="wcp-tab-text">
+      <v-flex xs12>
+        <v-row>
+          <v-col v-for="team in wildcards" :key="`match-card-${team.id}`" cols="2">
             <wildcard :team="team" :matchState="matchState"></wildcard>
-          </v-flex>
-        </v-layout>
-    </v-container>
+          </v-col>
+        </v-row>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -38,7 +42,7 @@ export default {
   },
   computed: {
     wildcardDate() {
-      return this.$store.getters['game/wildcardDate'];
+      return this.$store.getters['wildcardDate'];
     },
     matchStartTime() {
       return moment(this.wildcardDate);
@@ -48,7 +52,7 @@ export default {
       return 'locked';
     },
     wildcards() {
-      return this.$store.getters['team/wildcards'];
+      return this.$store.getters['wildcards'];
     },
   },
   data() {

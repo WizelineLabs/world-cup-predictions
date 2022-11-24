@@ -15,19 +15,21 @@ from datetime import datetime
 from itertools import chain, combinations
 from scipy.stats import skellam
 
-GROUPS = {'A': ['Russia', 'Saudi Arabia', 'Egypt', 'Uruguay'],
-          'B': ['Portugal', 'Spain','Morocco', 'Iran'],
-          'C': ['France', 'Australia', 'Peru', 'Denmark'],
-          'D': ['Argentina', 'Iceland', 'Croatia', 'Nigeria'],
-          'E': ['Brazil', 'Switzerland', 'Costa Rica', 'Serbia'],
-          'F': ['Germany', 'Mexico', 'Sweden', 'Korea Republic'],
-          'G': ['Belgium', 'Panama', 'Tunisia', 'England'],
-          'H': ['Poland', 'Senegal', 'Colombia', 'Japan']}
+import logging
+
+GROUPS = {'A': ['Qatar', 'Ecuador', 'Senegal', 'Netherlands'],
+          'B': ['England', 'Iran','United States', 'Wales'],
+          'C': ['Argentina', 'Saudi Arabia', 'Mexico', 'Poland'],
+          'D': ['France', 'Australia', 'Denmark', 'Tunisia'],
+          'E': ['Spain', 'Costa Rica', 'Germany', 'Japan'],
+          'F': ['Belgium', 'Canada', 'Morocco', 'Croatia'],
+          'G': ['Brazil', 'Serbia', 'Switzerland', 'Cameroon'],
+          'H': ['Portugal', 'Ghana', 'Uruguay', 'South Korea']}
 
 ORDER = ['A1', 'B2', 'C1', 'D2', 'E1', 'F2', 'G1', 'H2']
 ORDER += ['B1', 'A2', 'D1', 'C2', 'F1', 'E2', 'H1', 'G2']
 
-STRENGTH = pd.Series.from_csv('./country_strength.csv').to_dict()
+STRENGTH = dict(pd.read_csv('./country_strength.csv').values)
 
 def fetch_matches(filename, threshold, date_format='%Y-%m-%d'):
     """
@@ -52,8 +54,7 @@ def fetch_matches(filename, threshold, date_format='%Y-%m-%d'):
     """
     past = pd.read_csv(filename)
     threshold = datetime.strptime(threshold, date_format)
-    past['date'] = past['date'].apply(lambda x: 
-                                        datetime.strptime(x, date_format))
+    past['date'] = past['date'].apply(lambda x: datetime.strptime(x, date_format))
     recent = past['date'] >= threshold
     friendly = past['tournament'] == 'Friendly'
     return past[recent & ~friendly]
@@ -98,6 +99,7 @@ def _triangulate(source_data, source_status, target, defense):
     """
     inflated_sum = 0
     source = {word == source_status: word for word in ['home', 'away']}
+    
     for i in range(source_data.shape[0]):
         source_score = source_data[source[True]+'_score'].iloc[i]
         pivot = source_data[source[not True]+'_team'].iloc[i]
@@ -119,6 +121,7 @@ def _estimate_goal_intensity(source, target, matches, defense):
     home_sum = _triangulate(as_home, 'home', target, defense)
     away_sum = _triangulate(as_away, 'away', target, defense)
     matches_played = as_home.shape[0] + as_away.shape[0]
+
     return (home_sum + away_sum) / matches_played  
 
 

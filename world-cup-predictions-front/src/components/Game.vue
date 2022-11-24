@@ -1,71 +1,89 @@
 <template>
   <div>
-    <v-container v-if="user && user.id" class="mb-5">
-      <v-layout row wrap>
-        <v-flex xs12 sm12 md5 class="pt-4">
-          <div class="wcp-flex align-center pt-2">
-            <v-avatar color="indigo">
-              <img :src="user.avatar" :alt="user.first_name">
-            </v-avatar>
-            <span class="wcp-text-24 pl-3">
-              {{user.first_name}} {{user.last_name}}
-            </span>
-          </div>
-        </v-flex>
-        <v-flex xs12 sm12 md7 class="text-md-right pt-34 hidden-sm-and-down">
-          <span class="wcp-text-12 mr-1">CORRECT PREDICTIONS</span>
-          <span class="wcp-text-28 mr-5">
-            {{user.correct_votes}} out of {{user.total_votes}}
-          </span>
-          <span class="wcp-text-12 mr-1">RANK</span>
-          <span class="wcp-text-28 mr-5">{{user.rank}}</span>
-          <span class="wcp-text-12 mr-1">SCORE</span>
-          <span class="wcp-text-28">{{user.score}}</span>
-        </v-flex>
-        <v-flex xs12 sm12 md7 class="pt-4 hidden-md-and-up">
-          <v-layout row wrap class="pt-2">
-            <v-flex xs6>
-              <span class="wcp-text-12 d-block">RANK</span>
-              <span class="wcp-text-28">{{user.rank}}</span>
-            </v-flex>
-            <v-flex xs6>
-              <span class="wcp-text-12 d-block">SCORE</span>
-              <span class="wcp-text-28">{{user.score}}</span>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-        <v-flex xs12 class="mt-2">
-          <h1 class="display-1 mt-4 mb-4 text--darken-2 grey--text hidden-sm-and-down">
+    <v-container v-if="user && user.id">
+      <v-layout row wrap justify-center class="mb-4">
+        <v-flex xs10>
+          <h1 class="display-1 mt-5 mb-4 text--darken-2 grey--text">
             Prediction Game
           </h1>
-          <v-tabs
-            class="solid-tabs mt-3"
-            v-model="active"
-            light
-            color="transparent"
-            hide-slider
-          >
-            <v-tab :key="1" ripple>
+
+          <div class="wcp-flex align-center pt-2">
+            <v-card class="mx-auto" color="#f9fafc">
+              <v-card-item>
+                <v-row align="center" no-gutters>
+                  <v-col cols="3">
+                    <v-avatar color="indigo" size="x-large">
+                      <img :src="user.avatar" :alt="user.first_name" referrerpolicy="no-referrer" style="object-fit: scale-down;">
+                    </v-avatar>
+                  </v-col>
+                  <v-col cols="9">
+                    <v-card-title>{{ user.first_name }} {{ user.last_name }}</v-card-title>
+                    <v-card-subtitle>
+                      {{ user.email }}
+                    </v-card-subtitle>
+                  </v-col>
+                </v-row>
+              </v-card-item>
+
+              <v-card-text class="mx-auto my-12">
+                <v-row align="center" no-gutters>
+                  <v-col cols="6">
+                    <v-card-title>Correct Predictions</v-card-title>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-card-title>Rank</v-card-title>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-card-title>Score</v-card-title>
+                  </v-col>
+                </v-row>
+                <v-row align="center" no-gutters>
+                  <v-col cols="6">
+                    <v-card-subtitle>
+                      {{ user.correct_votes }} out of {{ user.total_votes }}
+                    </v-card-subtitle>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-card-subtitle>{{ user.rank }}</v-card-subtitle>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-card-subtitle>{{ user.score }}</v-card-subtitle>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+
+            </v-card>
+          </div>
+
+        </v-flex>
+      </v-layout>
+
+      <v-layout wrap justify-center class="mb-4">
+        <v-flex xs12 class="mt-2">
+
+          <v-tabs v-model="active" class="solid-tabs mt-3" color="#0d47a1" hide-slider>
+            <v-tab value="1" ripple>
               Predictions
             </v-tab>
-            <v-tab :key="2" ripple>
+            <v-tab value="2" ripple>
               Wildcard
             </v-tab>
-            <v-tab :key="3" ripple>
+            <v-tab value="3" ripple>
               Leaderboard
             </v-tab>
-            <v-tabs-items touchless>
-              <v-tab-item :key="1">
-                <your-predictions></your-predictions>
-              </v-tab-item>
-              <v-tab-item :key="2">
-                <your-wildcard></your-wildcard>
-              </v-tab-item>
-              <v-tab-item :key="3">
-                <leaderboard></leaderboard>
-              </v-tab-item>
-            </v-tabs-items>
           </v-tabs>
+          <v-window v-model="active">
+            <v-window-item value="1">
+              <your-predictions></your-predictions>
+            </v-window-item>
+            <v-window-item value="2">
+              <your-wildcard></your-wildcard>
+            </v-window-item>
+            <v-window-item value="3">
+              <leaderboard></leaderboard>
+            </v-window-item>
+          </v-window>
+
         </v-flex>
       </v-layout>
     </v-container>
@@ -95,10 +113,10 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('user/getUser').then(() => {
-      this.$store.dispatch('game/getGames');
-      this.$store.dispatch('leaderboard/getLeaderboard');
-      this.$store.dispatch('leaderboard/getMyLeaderboard');
+    this.$store.dispatch('getUser').then(() => {
+      this.$store.dispatch('getGames');
+      this.$store.dispatch('getLeaderboard');
+      this.$store.dispatch('getMyLeaderboard');
     });
   },
 };

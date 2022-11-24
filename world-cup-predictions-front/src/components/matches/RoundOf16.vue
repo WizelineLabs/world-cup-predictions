@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     roundOf16() {
-      return this.$store.getters['game/roundOf16'];
+      return this.$store.getters['roundOf16'];
     },
   },
 };

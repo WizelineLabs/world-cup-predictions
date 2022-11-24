@@ -4046,7 +4046,7 @@ video {
 }
 .picker-transition-enter-to,
 .picker-reverse-transition-enter-to {
-  transtion: translate(0, 0);
+  transition: translate(0, 0);
 }
 .picker-transition-leave,
 .picker-reverse-transition-leave,
